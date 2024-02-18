@@ -7,11 +7,6 @@ use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 class Ambil extends R_Controller
 {
   public Addons $addons;
-  public function __construct()
-  {
-    parent::__construct();
-    $this->load->library("addons");
-  }
 
   public function index()
   {
@@ -93,7 +88,7 @@ class Ambil extends R_Controller
   {
     try {
       //code...
-      $connector = new NetworkPrintConnector("192.168.0.188", 9100, 6000);
+      $connector = new NetworkPrintConnector("192.168.0.188", 9100, 3000);
       $printer = new Printer($connector);
       $printer->initialize();
 
@@ -137,7 +132,7 @@ class Ambil extends R_Controller
 
   public function print_belakang($data)
   {
-    $connector = new NetworkPrintConnector("192.168.0.187", 9100, 6000);
+    $connector = new NetworkPrintConnector("192.168.0.187", 9100, 3000);
     $printer = new Printer($connector);
     $printer->initialize();
 

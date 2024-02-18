@@ -12,22 +12,13 @@
       </li>
       <li class="sidebar-list">
         <i class="fa fa-thumb-tack"></i>
-        <a class="sidebar-link sidebar-title" href="<?= base_url('/dashboard') ?>">
+        <a class="sidebar-link sidebar-title" href="<?= base_url('/persidangan') ?>">
           <svg class="stroke-icon">
             <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-home"></use>
           </svg>
           <svg class="fill-icon">
             <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#fill-home"></use>
           </svg><span>Antrian Sidang</span>
-        </a>
-      </li>
-      <li class="sidebar-list">
-        <i class="fa fa-thumb-tack"></i>
-        <a class="sidebar-link sidebar-title" href="<?= base_url('/persidangan') ?>">
-          <svg class="stroke-icon">
-            <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-user"></use>
-          </svg>
-          <span>Di Ruang Tunggu</span>
         </a>
       </li>
       <li class="sidebar-list">

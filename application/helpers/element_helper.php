@@ -18,3 +18,18 @@ if (!function_exists("form_ambil_antrian_sidang")) {
     <button type="submit" name="yang_ambil" value="' . $yang_ambil . '" class="btn btn-success">' . $nama_pihak . '</button></form>';
   }
 }
+
+if (!function_exists("badge_status_antrian_sidang")) {
+  function badge_status_antrian_sidang($status)
+  {
+    $typeAndMessage = [
+      ["type" => "danger", "message" => "Belum Dipanggil"],
+      ["type" => "warning", "message" => "Menunggu Di Ruang Tunggu"],
+      ["type" => "info", "message" => "Di Ruang Sidang"],
+      ["type" => "success", "message" => "Sudah Di Panggil"],
+      ["type" => "dark", "message" => "Di Skors"],
+    ];
+    $ci = &get_instance();
+    return  $ci->load->component("badge/badge_status_antrian_sidang", $typeAndMessage[$status]);
+  }
+}
