@@ -114,7 +114,11 @@
 						<div class="toggle-sidebar"><i class="status_toggle middle sidebar-toggle" data-feather="grid"> </i></div>
 					</div>
 					<div class="logo-icon-wrapper"><a href="index.html"><img class="img-fluid" src="../assets/images/logo/logo-icon.png" alt=""></a></div>
-					<?= $this->load->component(Constanta::COMPONENT_NAV) ?>
+					<?php if ($this->uri->segment(1) == "persidangan") {
+						echo $this->load->component(Constanta::COMPONENT_NAV_PERSIDANGAN);
+					} else {
+						echo $this->load->component(Constanta::COMPONENT_NAV);
+					} ?>
 				</div>
 			</div>
 			<!-- Page Sidebar Ends-->

@@ -3,6 +3,7 @@
     <div class="login-card login-dark">
       <div class="login-main" style="width: max-content;">
         <?= $this->session->flashdata('flash_error') ?>
+        <?= $this->session->flashdata('flash_alert') ?>
         <h4>Halaman Pengambilan Antrian Sidang. Silahkan Pilih Nama Anda</h4>
         <p>Pastikan anda sidang hari ini. Periksa kembali surat panggilan. Apabila tidak ada nama anda, Silahkan hubungi petugas.</p>
 
@@ -10,7 +11,7 @@
           <h6>Cari Berdasarkan Tanggal</h6>
           <div class="input-group mt-2">
             <input class="form-control date-picker" type="text" name="tanggal_sidang" required="Harap Isi Bidang ini">
-            <button class="btn btn-outline-warning" id="button-addon2" type="submit">Submit</button>
+            <button class="btn btn-outline-warning" id="button-addon2" type="submit">Cari</button>
             <a href="<?= base_url('/ambil') ?>" class="btn btn-outline-danger" id="button-addon3" type="reset">Reset</a>
           </div>
         </form>
@@ -21,29 +22,36 @@
               <th>No</th>
               <th>Pekara</th>
               <th>Pihak P </th>
+              <th>Kuasa P</th>
               <th>Pihak T </th>
-              <th>Kuasa </th>
+              <th>Kuasa T</th>
               <th>Ruangan</th>
               <th>Majelis</th>
             </tr>
           </thead>
           <tbody>
             <?php foreach ($daftar_sidang as $n => $ds) { ?>
-              <tr onclick="handleRowClick(<?= $ds->perkara_id ?>)">
+              <tr onclick="handleRowClick(<?= $ds->id ?>)">
                 <td><?= ++$n ?></td>
                 <td><?= $ds->perkara->nomor_perkara ?><br><?= $ds->perkara->jenis_perkara_nama ?></td>
                 <td>
-                  <form action="<?= base_url('/ambil') ?>" style="width: 500px;" class="my-3" method="POST">
-                    <input type="hidden" name="perkara_id" value="<?= $ds->perkara_id ?>">
-                    <input type="hidden" name="nomor_ruang" value="<?= $ds->ruangan_id ?>">
-                    <input type="hidden" name="nama_ruang" value="<?= $ds->ruangan ?>">
-                    <input type="hidden" name="nomor_perkara" value="<?= $ds->perkara->nomor_perkara ?>">
-                    <input type="hidden" name="pihak_satu" value="<?= $ds->perkara->nomor_perkara ?>">
-                    <input type="hidden" name="pihak_dua" value="<?= $ds->perkara->nomor_perkara ?>">
-                    <button class="btn btn-outline-success"><?= $ds->perkara->pihak_satu[0]->nama ?></button>
-                  </form>
-                <td> <?= count($ds->perkara->pihak_dua) == 0 ? null : $ds->perkara->pihak_dua[0]->nama  ?></td>
-                <td> <?= count($ds->perkara->pengacara) == 0 ? null : $ds->perkara->pengacara[0]->nama ?></td>
+                  <?= $ds->perkara->pihak_satu[0]->nama ?>
+                </td>
+                <td>
+                  <?php if (count($ds->perkara->pengacara_satu) > 0) {
+                    echo  $ds->perkara->pengacara_satu[0]->nama;
+                  } ?>
+                </td>
+                <td>
+                  <?php if (count($ds->perkara->pihak_dua) !== 0) {
+                    echo  $ds->perkara->pihak_dua[0]->nama;
+                  }  ?>
+                </td>
+                <td>
+                  <?php if (count($ds->perkara->pengacara_dua) > 0) {
+                    echo  $ds->perkara->pengacara_dua[0]->nama;
+                  } ?>
+                </td>
                 <td><?= $ds->ruangan ?><br><?= str_replace("Panitera Pengganti:", "", $ds->perkara->penetapan->panitera_pengganti_text)  ?></td>
                 <td><?= $ds->perkara->penetapan->majelis_hakim_nama ?></td>
               </tr>
@@ -90,7 +98,24 @@
     );
   })
 
-  const handleRowClick = (perkara_id) => {
-    Swal.fire()
+  document.getElementById("checkInModal").addEventListener("hide.bs.modal", () => {
+    $("#checkInModal-body").html(" <div class=\"text-center\"><h4>Mohon Tunggu ...</h4></div>")
+  })
+
+  const handleRowClick = (sidang_id) => {
+    checkInModal.show()
+    $.ajax({
+      url: "<?= base_url("ambil/fetch_table_checkin") ?>",
+      method: "POST",
+      data: {
+        sidang_id: sidang_id
+      },
+      success(html) {
+        $("#checkInModal-body").html(html)
+      },
+      error(err) {
+        $("#checkInModal-body").html(err.responseText && err.message)
+      }
+    })
   }
 </script>

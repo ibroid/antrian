@@ -15,10 +15,8 @@ class R_Controller extends CI_Controller
 
             $this->session->set_flashdata(
                 'flash_error',
-                $this->load->component('flash_alert', [
-                    'type' => 'secondary',
-                    'mesg' => 'Anda perlu login terlebih dahulu',
-                    'text' => 'Silahkan masukan kredensi anda. Pastikan Semuanya benar'
+                $this->load->component(Constanta::ALERT_ERROR, [
+                    'message' => 'Anda perlu login terlebih dahulu. <br> Silahkan masukan kredensi anda. Pastikan Semuanya benar',
                 ])
             );
 

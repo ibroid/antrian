@@ -10,4 +10,5 @@ class Constanta
   const COMPONENT_FOOTER = "layout/footer";
   const COMPONENT_USER_BAR = "layout/user_bar";
   const COMPONENT_NAV = "layout/nav";
+  const COMPONENT_NAV_PERSIDANGAN = "layout/nav_persidangan";
 }

@@ -8,13 +8,14 @@ class Auth extends CI_Controller
   public function __construct()
   {
     parent::__construct();
+    $this->load->library("Addons");
   }
 
   public function index()
   {
     if (!empty($this->session->userdata('user_login'))) {
 
-      redirect(base_url('dashboard'));
+      redirect(base_url('menu'));
     }
     $this->load->page("public/login")->layout('auth_layout');
   }
@@ -23,7 +24,7 @@ class Auth extends CI_Controller
   {
     if (!empty($this->session->userdata('user_login'))) {
 
-      redirect(base_url('dashboard'));
+      redirect(base_url('menu'));
     }
     try {
       $u = $this->mathcIdentifier();
@@ -31,7 +32,7 @@ class Auth extends CI_Controller
 
       $this->storeSession($u->toArray());
 
-      redirect(base_url("/dashboard"));
+      redirect(base_url("/menu"));
     } catch (\Throwable $th) {
 
       $this->session->set_flashdata('flash_error', $this->load->component(Constanta::ALERT_ERROR, [
@@ -51,7 +52,7 @@ class Auth extends CI_Controller
 
   private function mathcIdentifier()
   {
-    $u = UsersModel::with("role")->where('identifier', R_Input::pos('login')['identifier'])->first();
+    $u = Users::with("role")->where('identifier', R_Input::pos('login')['identifier'])->first();
     if (!$u) {
       throw new Exception("User tidak ditemukan", 1);
     }

@@ -1,7 +1,7 @@
 <?php
 
 
-class Publik extends CI_Controller
+class Menu extends R_Controller
 {
   public Addons $addons;
   public function __construct()
@@ -21,6 +21,6 @@ class Publik extends CI_Controller
         <link rel='stylesheet' type='text/css' href='../assets/css/vendors/swiper/swiper.min.css'>\n"
       ]
     ]);
-    $this->load->page("publik")->layout("auth_layout");
+    $this->load->page("menu")->layout("auth_layout");
   }
 }

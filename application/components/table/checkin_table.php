@@ -5,32 +5,36 @@
 <table class="table table-bordered">
   <thead>
     <tr>
-      <th>Penggugat</th>
-      <th>Tergugat</th>
-      <th>Kuasa Hukum</th>
+      <th>Pihak P</th>
+      <td><?php
+          foreach ($data->perkara->pihak_satu as $k => $ps) {
+            echo form_ambil_antrian_sidang($data, "P" . ++$k, $ps->nama);
+          } ?>
+      </td>
+    </tr>
+    <tr>
+      <th>Pihak T</th>
+      <td><?php
+          foreach ($data->perkara->pihak_dua as $k => $pd) {
+            echo form_ambil_antrian_sidang($data, "T" . ++$k, $pd->nama);
+          } ?>
+      </td>
+    </tr>
+    <tr>
+      <th>Kuasa P</th>
+      <td><?php
+          foreach ($data->perkara->pengacara_satu as $k => $ks) {
+            echo form_ambil_antrian_sidang($data, "KP" . ++$k, $ks->nama);
+          } ?>
+      </td>
+    </tr>
+    <tr>
+      <th>Kuasa T</th>
+      <td><?php
+          foreach ($data->perkara->pengacara_dua as $k => $kd) {
+            echo form_ambil_antrian_sidang($data, "KD" . ++$k, $kd->nama);
+          } ?>
+      </td>
     </tr>
   </thead>
-  <tbody>
-    <tr>
-      <td>
-        <?php foreach ($data->pihak_satu as $p1) { ?>
-          <form action="<?= base_url('/ambil') ?>" style="width: 500px;" class="my-3" method="POST">
-            <input type="hidden" name="perkara_id" value="<?= $data->perkara_id ?>">
-            <input type="hidden" name="perkara" value="<?= $data->perkara_id ?>">
-            <button class="btn btn-success m-2"><?= $p1->nama ?></button>
-          </form>
-        <?php } ?>
-      </td>
-      <td>
-        <?php foreach ($data->pihak_dua as $p2) { ?>
-          <button class="btn btn-success m-2"><?= $p2->nama ?></button>
-        <?php } ?>
-      </td>
-      <td>
-        <?php foreach ($data->pengacara as $pc) { ?>
-          <button class="btn btn-success m-2"><?= $pc->nama ?></button>
-        <?php } ?>
-      </td>
-    </tr>
-  </tbody>
 </table>

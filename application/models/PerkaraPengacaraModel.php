@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class PerkaraPengacaraModel extends Model
+class PerkaraPengacara extends Model
 {
   protected $connection = "sipp";
   protected $table = "perkara_pengacara";
