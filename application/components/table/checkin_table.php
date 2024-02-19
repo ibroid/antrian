@@ -8,31 +8,35 @@
       <th>Pihak P</th>
       <td><?php
           foreach ($data->perkara->pihak_satu as $k => $ps) {
-            echo form_ambil_antrian_sidang($data, "P" . ++$k, $ps->nama);
+            ++$k;
+            echo form_ambil_antrian_sidang($data, "P$k" . ++$k, $ps->nama);
           } ?>
       </td>
     </tr>
     <tr>
       <th>Pihak T</th>
       <td><?php
-          foreach ($data->perkara->pihak_dua as $k => $pd) {
-            echo form_ambil_antrian_sidang($data, "T" . ++$k, $pd->nama);
+          foreach ($data->perkara->pihak_dua as $y => $pd) {
+            ++$y;
+            echo form_ambil_antrian_sidang($data, "T$y" . ++$k, $pd->nama);
           } ?>
       </td>
     </tr>
     <tr>
       <th>Kuasa P</th>
       <td><?php
-          foreach ($data->perkara->pengacara_satu as $k => $ks) {
-            echo form_ambil_antrian_sidang($data, "KP" . ++$k, $ks->nama);
+          foreach ($data->perkara->pengacara_satu as $n => $ks) {
+            ++$n;
+            echo form_ambil_antrian_sidang($data, "KP$n" . ++$k, $ks->nama);
           } ?>
       </td>
     </tr>
     <tr>
       <th>Kuasa T</th>
       <td><?php
-          foreach ($data->perkara->pengacara_dua as $k => $kd) {
-            echo form_ambil_antrian_sidang($data, "KD" . ++$k, $kd->nama);
+          foreach ($data->perkara->pengacara_dua as $c => $kd) {
+            ++$c;
+            echo form_ambil_antrian_sidang($data, "KT$c" . ++$k, $kd->nama);
           } ?>
       </td>
     </tr>

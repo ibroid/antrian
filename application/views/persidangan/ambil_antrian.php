@@ -1,7 +1,7 @@
-<div class="row">
+<div class="row ">
   <div class="col-xl-12 p-0">
-    <div class="login-card login-dark">
-      <div class="login-main" style="width: max-content;">
+    <div class="login-card login-dark ">
+      <div class="login-main" style="width: 1200px;">
         <?= $this->session->flashdata('flash_error') ?>
         <?= $this->session->flashdata('flash_alert') ?>
         <h4>Halaman Pengambilan Antrian Sidang. Silahkan Pilih Nama Anda</h4>
@@ -117,5 +117,10 @@
         $("#checkInModal-body").html(err.responseText && err.message)
       }
     })
+  }
+
+  const disableAfterSubmit = (e) => {
+    e.disabled = true
+    e.innerHTML = "Sedang Memproses ..."
   }
 </script>

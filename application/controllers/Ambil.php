@@ -52,8 +52,6 @@ class Ambil extends R_Controller
             'nomor_ruang' => R_Input::pos("nomor_ruang"),
             'nama_ruang' => R_Input::pos("nama_ruang"),
             'nomor_perkara' => R_Input::pos("nomor_perkara"),
-            'pihak_satu' => R_Input::pos("pihak_satu"),
-            'pihak_dua' => R_Input::pos("pihak_dua"),
             'tanggal_sidang' => R_Input::pos("tanggal_sidang"),
             'majelis_hakim' => R_Input::pos("majelis_hakim"),
             'jadwal_sidang_id' => R_Input::pos("jadwal_sidang_id"),
@@ -61,10 +59,6 @@ class Ambil extends R_Controller
         );
       }
 
-      KehadiranPihak::updateOrCreate([
-        "pihak" => R_Input::pos("nama_yang_ambil"),
-        "sebagai" => R_Input::pos("yang_ambil")
-      ], ["antrian_persidangan_id" => $data->id]);
 
       $this->session->set_flashdata("flash_alert", $this->load->component(Constanta::ALERT_SUCCESS, ["message" => "Nomor Antrian Anda : $data->nomor_urutan. Di ruangan : $data->nama_ruang. Silahkan Ambil Tiket Antrian nya"]));
 
@@ -84,11 +78,14 @@ class Ambil extends R_Controller
     return $qrcMaxAntrian;
   }
 
-  public function print($data)
+  public function print($data, $ip = "192.168.0.188")
   {
     try {
-      //code...
-      $connector = new NetworkPrintConnector("192.168.0.188", 9100, 3000);
+      if ($_ENV["DEBUG"] == true) {
+        $ip = "192.168.0.187";
+      }
+
+      $connector = new NetworkPrintConnector($ip, 9100, 3000);
       $printer = new Printer($connector);
       $printer->initialize();
 
@@ -96,6 +93,9 @@ class Ambil extends R_Controller
       $printer->setJustification(Printer::JUSTIFY_CENTER);
       $printer->setFont(Printer::FONT_A);
 
+      if ($_ENV["DEBUG"] == true) {
+        $printer->text("TEST UJI COBA\n");
+      }
       $printer->text("ANTRIAN SIDANG \n");
       $printer->text("Pengadilan Agama\n Jakarta Utara \n");
       $printer->text("------------------------\n");
@@ -107,7 +107,7 @@ class Ambil extends R_Controller
       $printer->setTextSize(1, 1);
       $printer->text($data->nomor_perkara);
       $printer->text("\n");
-      $printer->text($data->pihak_satu);
+      $printer->text("Yang Mengambil Antrian : " . R_Input::pos("nama_yang_ambil")) . "(" . R_Input::pos("yang_ambil") . ")\n";
       $printer->text("\n");
 
       $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
@@ -116,9 +116,10 @@ class Ambil extends R_Controller
       $printer->text("------------------------\n");
       $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
       $printer->setJustification(Printer::JUSTIFY_CENTER);
-      $printer->setFont(Printer::FONT_A);
+      $printer->setTextSize(1, 1);
       $printer->text("Di ambil:" . date('Y-m-d H:i:S') . " \n");
-      $printer->text("Silahkan Menunggu Di Tempat Yg Telah Disediakan\n");
+      $printer->setFont(Printer::FONT_A);
+      $printer->text("KERTAS INI SEBAGAI KARTU PARKIR KENDARAAN ANDA. MOHON UNTUK DITUKARKAN SEBELUM MENINGGALKAN PARKIRAN\n");
 
       $printer->cut();
       /* Pulse */
@@ -128,46 +129,5 @@ class Ambil extends R_Controller
     } catch (\Throwable $th) {
       throw new Exception("Gagal cetak antrian. Masin antrian mati/tidak terhubung. " . $th->getMessage(), $th->getCode());
     }
-  }
-
-  public function print_belakang($data)
-  {
-    $connector = new NetworkPrintConnector("192.168.0.187", 9100, 3000);
-    $printer = new Printer($connector);
-    $printer->initialize();
-
-    $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-    $printer->setJustification(Printer::JUSTIFY_CENTER);
-    $printer->setFont(Printer::FONT_A);
-
-    $printer->text("ANTRIAN SIDANG \n");
-    $printer->text("Pengadilan Agama\n Jakarta Utara \n");
-    $printer->text("------------------------\n");
-    $printer->text($data->nama_ruang);
-    $printer->text("\n");
-    $printer->setTextSize(5, 4);
-    $printer->text($data->nomor_urutan);
-    $printer->text("\n");
-    $printer->setTextSize(1, 1);
-    $printer->text($data->nomor_perkara);
-    $printer->text("\n");
-    $printer->text($data->pihak_satu);
-    $printer->text("\n");
-
-    $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-    $printer->setJustification(Printer::JUSTIFY_CENTER);
-    $printer->setFont(Printer::FONT_A);
-    $printer->text("------------------------\n");
-    $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-    $printer->setJustification(Printer::JUSTIFY_CENTER);
-    $printer->setFont(Printer::FONT_A);
-    $printer->text("Di ambil:" . date('Y-m-d H:i:S') . " \n");
-    $printer->text("Silahkan Menunggu Di Tempat Yg Telah Disediakan\n");
-
-    $printer->cut();
-    /* Pulse */
-    $printer->pulse();
-
-    $printer->close();
   }
 }

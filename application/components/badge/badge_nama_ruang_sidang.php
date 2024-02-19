@@ -1,0 +1,1 @@
+<span class="badge bg-<?= isset($type) ? $type : "primary" ?>"><?= isset($name) ? $name : "Umar" ?></span>

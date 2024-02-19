@@ -9,13 +9,11 @@ if (!function_exists("form_ambil_antrian_sidang")) {
     <input type="hidden" name="nomor_ruang" value="' . $ds->ruangan_id . '">
     <input type="hidden" name="nama_ruang" value="' . $ds->ruangan . '">
     <input type="hidden" name="nomor_perkara" value="' . $ds->perkara->nomor_perkara . '">
-    <input type="hidden" name="pihak_satu" value="' . $ds->perkara->pihak1_text . '">
-    <input type="hidden" name="pihak_dua" value="' . $ds->perkara->pihak2_text . '">
     <input type="hidden" name="tanggal_sidang" value="' . $ds->tanggal_sidang . '">
     <input type="hidden" name="jadwal_sidang_id" value="' . $ds->id . '">
     <input type="hidden" name="nama_yang_ambil" value="' . $nama_pihak . '">
     <input type="hidden" name="majelis_hakim" value="' . $ds->perkara->penetapan->majelis_hakim_nama . '">
-    <button type="submit" name="yang_ambil" value="' . $yang_ambil . '" class="btn btn-success">' . $nama_pihak . '</button></form>';
+    <button onclick="disableAfterSubmit(this)" type="button" name="yang_ambil" value="' . $yang_ambil . '" class="btn btn-success">' . $nama_pihak . '</button></form>';
   }
 }
 
@@ -31,5 +29,18 @@ if (!function_exists("badge_status_antrian_sidang")) {
     ];
     $ci = &get_instance();
     return  $ci->load->component("badge/badge_status_antrian_sidang", $typeAndMessage[$status]);
+  }
+}
+
+if (!function_exists("badge_nama_ruang_sidang")) {
+  function badge_nama_ruang_sidang($ruang_id)
+  {
+    $typeAndName = [
+      ["type" => "primary", "name" => "Ruang Umar"],
+      ["type" => "warning", "name" => "Ruang Abu Musa"],
+      ["type" => "secondary", "name" => "Ruang Syuarih"],
+    ];
+    $ci = &get_instance();
+    return  $ci->load->component("badge/badge_nama_ruang_sidang", $typeAndName[$ruang_id - 1]);
   }
 }

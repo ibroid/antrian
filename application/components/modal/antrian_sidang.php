@@ -126,7 +126,7 @@
 </table>
 
 <script>
-  const checkIn = async (id) => {
+  async function checkIn(id) {
     const {
       isConfirmed
     } = await Swal.fire({

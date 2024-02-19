@@ -70,11 +70,10 @@
         <table class="table table-hover" id="table-antrian">
           <thead>
             <tr>
+              <th>Ruangan</th>
               <th>Antrian</th>
               <th>Perkara</th>
-              <th>Pihak P</th>
-              <th>Pihak T</th>
-              <th>Ruangan</th>
+              <th>Para Pihak</th>
               <th>Majelis</th>
               <th>Status</th>
             </tr>
@@ -82,15 +81,12 @@
           <tbody>
             <?php foreach ($antrian as $a) { ?>
               <tr onclick='handleRowClick(<?= $a->id ?>)'>
+                <td> <?= badge_nama_ruang_sidang($a->nomor_ruang) ?></td>
                 <td>No. <?= $a->nomor_urutan ?></td>
-                <td><?= $a->nomor_perkara ?></td>
+                <td><?= $a->nomor_perkara ?><br><?= $a->perkara->jenis_perkara_nama ?></td>
                 <td>
-                  <?= $a->pihak_satu ?>
+                  <?= $a->perkara->para_pihak  ?>
                 </td>
-                <td>
-                  <?= $a->pihak_dua  ?>
-                </td>
-                <td><?= $a->nama_ruang ?></td>
                 <td><?= $a->majelis_hakim  ?></td>
                 <td><?= badge_status_antrian_sidang($a->status) ?></td>
               </tr>
