@@ -15,12 +15,13 @@ class UsersSeeder extends AbstractSeed
      */
     public function run(): void
     {
+        $pass = $_ENV["DEBUG"] ? "admin123" : "kuyabatok";
         $data = [
             [
                 "sipp_user_id" => 1,
                 "identifier" => "admin",
                 "salt" => "g17i09n15R17",
-                "password" => password_hash("admin123g17i09n15R17", PASSWORD_BCRYPT),
+                "password" => password_hash($pass . "g17i09n15R17", PASSWORD_BCRYPT),
                 "name" => "Admin Imal",
                 "role_id" => 1
             ]
