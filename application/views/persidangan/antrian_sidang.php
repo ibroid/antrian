@@ -2,6 +2,10 @@
   .widget-with-chart {
     background-image: none;
   }
+
+  .widget-1 {
+    background-image: none;
+  }
 </style>
 
 <div class="container-fluid py-3">
@@ -9,7 +13,7 @@
     <div class="col-sm-12 col-md-4 col-lg-4">
       <div class="card small-widget mb-sm-0">
         <div class="card-body primary">
-          <span class="f-light">Ruang Sidang Satu : Umar Bin Khatab (1)</span>
+          <span class="f-light">Umar Bin Khatab (1)</span>
           <div class="d-flex align-items-end gap-1">
             <span class="font-secondary f-12 f-w-500">
               <span>(22)</span>
@@ -28,14 +32,14 @@
           </div>
           <div class="flex mt-4">
             <!-- <button class="btn btn-outline-primary btn-sm">Lihat Antrian</button> -->
-            <button class="btn btn-outline-primary btn-sm">Lihat CCTV</button>
+            <button class="btn btn-outline-primary btn-sm">Lihat Antrian</button>
           </div>
         </div>
       </div>
     </div>
     <div class="col-sm-12 col-md-4 col-lg-4">
       <div class="card small-widget mb-sm-0">
-        <div class="card-body warning"><span class="f-light">Ruang Sidang Dua : Abu Musa (2)</span>
+        <div class="card-body warning"><span class="f-light">Abu Musa (2)</span>
           <div class="d-flex align-items-end gap-1">
             <h4>2,908</h4><span class="font-warning f-12 f-w-500"><i class="icon-arrow-up"></i><span>+20%</span></span>
           </div>
@@ -49,7 +53,7 @@
     </div>
     <div class="col-sm-12 col-md-4 col-lg-4">
       <div class="card small-widget mb-sm-0">
-        <div class="card-body secondary"><span class="f-light">Ruang Sidang Tiga : Asyuraih (3)</span>
+        <div class="card-body secondary"><span class="f-light">Asyuraih (3)</span>
           <div class="d-flex align-items-end gap-1">
             <h4>$389k</h4><span class="font-secondary f-12 f-w-500"><i class="icon-arrow-down"></i><span>-10%</span></span>
           </div>
@@ -62,9 +66,193 @@
       </div>
     </div>
   </div>
+  <div class="row mt-3">
+    <!-- Widget Total Antrian -->
+    <div class="col-xl-3">
+      <div class="card widget-1" onclick="document.location.href='<?= base_url('persidangan') ?>'">
+        <div class="card-body">
+          <div class="widget-content">
+            <div class="widget-round success">
+              <div class="bg-round">
+                <svg class="svg-fill">
+                  <use href="../assets/svg/icon-sprite.svg#rate"> </use>
+                </svg>
+                <svg class="half-circle svg-fill">
+                  <use href="../assets/svg/icon-sprite.svg#halfcircle"></use>
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h4><?= $antrian->count() ?></h4><span class="f-light">Total Antrian</span>
+            </div>
+          </div>
+          <div class="font-success f-w-500"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Widget Menunggu Di ruang tunggu sidang utama -->
+    <div class="col-xl-3">
+      <div class="card widget-1">
+        <div class="card-body">
+          <div class="widget-content">
+            <div class="widget-round success">
+              <div class="bg-round">
+                <svg class="svg-fill">
+                  <use href="../assets/svg/icon-sprite.svg#rate"> </use>
+                </svg>
+                <svg class="half-circle svg-fill">
+                  <use href="../assets/svg/icon-sprite.svg#halfcircle"></use>
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h4><?= $antrian->where("status", 1)->count() ?></h4><span class="f-light">Di ruang tunggu sidang</span>
+            </div>
+          </div>
+          <div class="font-success f-w-500"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Widget Sudah dipanggil -->
+    <div class="col-xl-3">
+      <div class="card widget-1">
+        <div class="card-body">
+          <div class="widget-content">
+            <div class="widget-round success">
+              <div class="bg-round">
+                <svg class="svg-fill">
+                  <use href="../assets/svg/icon-sprite.svg#rate"> </use>
+                </svg>
+                <svg class="half-circle svg-fill">
+                  <use href="../assets/svg/icon-sprite.svg#halfcircle"></use>
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h4><?= $antrian->where("status", 3)->count() ?></h4><span class="f-light">Sudah Di Panggil</span>
+            </div>
+          </div>
+          <div class="font-success f-w-500"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Widget Total Skors -->
+    <div class="col-xl-3">
+      <div class="card widget-1">
+        <div class="card-body">
+          <div class="widget-content">
+            <div class="widget-round success">
+              <div class="bg-round">
+                <svg class="svg-fill">
+                  <use href="../assets/svg/icon-sprite.svg#rate"> </use>
+                </svg>
+                <svg class="half-circle svg-fill">
+                  <use href="../assets/svg/icon-sprite.svg#halfcircle"></use>
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h4><?= $antrian->where("status", 4)->count() ?></h4><span class="f-light">Di Skors/Lewati</span>
+            </div>
+          </div>
+          <div class="font-success f-w-500"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Widget Belum ambil antrian -->
+    <div class="col-xl-3">
+      <div class="card widget-1">
+        <div class="card-body">
+          <div class="widget-content">
+            <div class="widget-round success">
+              <div class="bg-round">
+                <svg class="svg-fill">
+                  <use href="../assets/svg/icon-sprite.svg#rate"> </use>
+                </svg>
+                <svg class="half-circle svg-fill">
+                  <use href="../assets/svg/icon-sprite.svg#halfcircle"></use>
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h4><?= $jadwal_sidang->whereNotIn("id", $antrian->pluck("jadwal_sidang_id"))->count() ?></h4><span class="f-light">Belum mengambil antrian</span>
+            </div>
+          </div>
+          <div class="font-success f-w-500"></div>
+        </div>
+      </div>
+    </div>
+    <!--  -->
+    <div class="col-xl-3">
+      <div class="card widget-1">
+        <div class="card-body">
+          <div class="widget-content">
+            <div class="widget-round success">
+              <div class="bg-round">
+                <svg class="svg-fill">
+                  <use href="../assets/svg/icon-sprite.svg#rate"> </use>
+                </svg>
+                <svg class="half-circle svg-fill">
+                  <use href="../assets/svg/icon-sprite.svg#halfcircle"></use>
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h4><?= $antrian->where("status", 0)->count() ?></h4><span class="f-light">Belum di panggil ke dalam</span>
+            </div>
+          </div>
+          <div class="font-success f-w-500"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3">
+      <div class="card widget-1">
+        <div class="card-body">
+          <div class="widget-content">
+            <div class="widget-round success">
+              <div class="bg-round">
+                <svg class="svg-fill">
+                  <use href="../assets/svg/icon-sprite.svg#rate"> </use>
+                </svg>
+                <svg class="half-circle svg-fill">
+                  <use href="../assets/svg/icon-sprite.svg#halfcircle"></use>
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h4><?= $jadwal_sidang->count() ?></h4><span class="f-light">Total Sidang Hari Ini</span>
+            </div>
+          </div>
+          <div class="font-success f-w-500"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3">
+      <div class="card widget-1">
+        <div class="card-body ">
+          <div class="widget-content">
+            <div class="widget-round warning">
+              <div class="bg-round">
+                <svg class="svg-fill">
+                  <use href="../assets/svg/icon-sprite.svg#rate"> </use>
+                </svg>
+                <svg class="half-circle svg-fill">
+                  <use href="../assets/svg/icon-sprite.svg#halfcircle"></use>
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h4>000</h4><span class="f-light">Lahan Kosong</span>
+            </div>
+          </div>
+          <div class="font-warning f-w-500"></div>
+        </div>
+      </div>
+    </div>
+  </div>
   <?= $this->session->flashdata("flash_alert") ?>
   <?= $this->session->flashdata("flash_error") ?>
-  <div class="row mt-3">
+  <div class="row mx-1">
     <div class="card">
       <div class="card-body">
         <table class="table table-hover" id="table-antrian">
@@ -82,8 +270,20 @@
             <?php foreach ($antrian as $a) { ?>
               <tr onclick='handleRowClick(<?= $a->id ?>)'>
                 <td> <?= badge_nama_ruang_sidang($a->nomor_ruang) ?></td>
-                <td>No. <?= $a->nomor_urutan ?></td>
-                <td><?= $a->nomor_perkara ?><br><?= $a->perkara->jenis_perkara_nama ?></td>
+                <td>
+
+                  <h6> <strong>No. <?= $a->nomor_urutan ?> </strong></h6>
+
+                </td>
+                <td>
+                  <?= $a->nomor_perkara ?>
+                  <br>
+                  <div class="badge badge-secondary">
+                    <?= $a->perkara->jenis_perkara_nama ?>
+                  </div>
+                  <br>
+                  <?= $a->jadwal_sidang->agenda ?>
+                </td>
                 <td>
                   <?= $a->perkara->para_pihak  ?>
                 </td>
@@ -122,15 +322,25 @@
 </div>
 
 
-
 <script>
   let modalAntrian
+
   window.addEventListener('load', function() {
+    const pusher = new Pusher('a360f9f6cfefca4c383b', {
+      cluster: 'ap1'
+    });
+
+    const channel = pusher.subscribe('antrian-channel');
+    channel.bind('new-antrian', function(data) {
+      notifToas("Ada antrian baru. Silahkan refresh halaman ini")
+    });
+
     modalAntrian = new bootstrap.Modal(document.getElementById('modalAntrian'))
 
     $('#table-antrian').DataTable()
+
   });
-  var modalAntrianElement = document.getElementById('modalAntrian');
+  const modalAntrianElement = document.getElementById('modalAntrian');
 
   modalAntrianElement.addEventListener('hide.bs.modal', function(event) {
     $("#modalAntrian-body").html(" <div class=\"container-fluid\"><div class=\"text-center\"><h4>Mohon Tunggu ...</h4></div></div>")
@@ -151,5 +361,79 @@
         $("#modalAntrian-body").html(`<div class=\"container-fluid\"><div class=\"text-center\"><h4>${err.responseText ?? err.message}</h4></div></div>`)
       }
     })
+  }
+
+  const changeKehadiran = (e, id) => {
+    Swal.fire({
+      title: "Loading...",
+      showConfirmButton: false,
+      backdrop: true,
+      allowOutsideClick: false,
+      willOpen: () => Swal.showLoading()
+    })
+
+    $.ajax({
+      url: "<?= base_url("persidangan/update_kehadiran_pihak") ?>/" + id,
+      method: "POST",
+      data: {
+        status: e.checked ? 1 : 0
+      },
+      success: function(data) {
+        Swal.close()
+      },
+      error: function(err) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: err.responseText ?? err.message,
+        })
+        e.checked = false
+      }
+    })
+  }
+
+  async function checkIn(id) {
+    const {
+      isConfirmed
+    } = await Swal.fire({
+      title: 'Check-In Ke Ruang Tunggu',
+      text: "Apakah salah satu pihak yang di panggil sudah hadir ?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, Check-In!'
+    })
+
+    if (isConfirmed) {
+      $.ajax({
+        url: "<?= base_url("persidangan/update_antrian") ?>/" + id,
+        method: "POST",
+        data: {
+          status: 1,
+        },
+        success: function(data) {
+          Swal.fire("Sukses", "Berhasil Check-In", "success").then(() => {
+            location.reload()
+          })
+        },
+        error: function(err) {
+          Swal.fire("Terjadi Kesalahan", err.responseText && err.message, "error")
+        }
+      })
+    }
+  }
+
+  function notifToas(message = "") {
+    Toastify({
+      text: message,
+      duration: 5000,
+      destination: "<?= base_url("persidangan") ?>",
+      close: true,
+      gravity: "top", // `top` or `bottom`
+      position: "center", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      onClick: function() {} // Callback after click
+    }).showToast();
   }
 </script>

@@ -23,12 +23,12 @@ class R_Loader extends CI_Loader
         return $this;
     }
 
-    public function layout($layout)
+    public function layout($layout, $vars = array())
     {
         $this->_ci_view_paths = array(APPPATH . "layouts/" => TRUE);
         $this->_ci_load(array('_ci_view' => $layout, '_ci_vars' => $this->_ci_prepare_view_vars([
-            'page' => $this->page
-        ]), '_ci_return' => false));
+            'page' => $this->page,
+        ] + $vars), '_ci_return' => false));
     }
 
     /**

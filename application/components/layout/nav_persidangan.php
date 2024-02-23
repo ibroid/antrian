@@ -23,7 +23,7 @@
       </li>
       <li class="sidebar-list">
         <i class="fa fa-thumb-tack"></i>
-        <a class="sidebar-link sidebar-title" href="<?= base_url('/persidangan') ?>">
+        <a class="sidebar-link sidebar-title" href="<?= base_url('/ruangsidang/umar') ?>">
           <svg class="stroke-icon">
             <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-home"></use>
           </svg>
@@ -32,7 +32,7 @@
       </li>
       <li class="sidebar-list">
         <i class="fa fa-thumb-tack"></i>
-        <a class="sidebar-link sidebar-title" href="<?= base_url('/persidangan') ?>">
+        <a class="sidebar-link sidebar-title" href="<?= base_url('/ruangsidang/abumusa') ?>">
           <svg class="stroke-icon">
             <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-home"></use>
           </svg>
@@ -41,11 +41,20 @@
       </li>
       <li class="sidebar-list">
         <i class="fa fa-thumb-tack"></i>
-        <a class="sidebar-link sidebar-title" href="<?= base_url('/persidangan') ?>">
+        <a class="sidebar-link sidebar-title" href="<?= base_url('/ruangsidang/syuraih') ?>">
           <svg class="stroke-icon">
             <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-home"></use>
           </svg>
           <span>Rudang Sidang Syuraih</span>
+        </a>
+      </li>
+      <li class="sidebar-list">
+        <i class="fa fa-thumb-tack"></i>
+        <a class="sidebar-link sidebar-title" href="<?= base_url('/ruangsidang/syuraih') ?>">
+          <svg class="stroke-icon">
+            <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-to-do"></use>
+          </svg>
+          <span>Kasir</span>
         </a>
       </li>
     </ul>

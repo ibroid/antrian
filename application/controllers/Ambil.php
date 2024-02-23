@@ -57,6 +57,8 @@ class Ambil extends R_Controller
             'jadwal_sidang_id' => R_Input::pos("jadwal_sidang_id"),
           ]
         );
+      } else {
+        $data->setKehadiranSetelahAmbilAntrian();
       }
 
 
@@ -80,10 +82,15 @@ class Ambil extends R_Controller
 
   public function print($data, $ip = "192.168.0.188")
   {
+    if ($_ENV["DEBUG_PRINT"] == "false") {
+      return false;
+    }
+
     try {
-      if ($_ENV["DEBUG"] == true) {
+      if ($_ENV["DEBUG"] == "true") {
         $ip = "192.168.0.187";
       }
+
 
       $connector = new NetworkPrintConnector($ip, 9100, 3000);
       $printer = new Printer($connector);
@@ -93,7 +100,7 @@ class Ambil extends R_Controller
       $printer->setJustification(Printer::JUSTIFY_CENTER);
       $printer->setFont(Printer::FONT_A);
 
-      if ($_ENV["DEBUG"] == true) {
+      if ($_ENV["DEBUG"] == "true") {
         $printer->text("TEST UJI COBA\n");
       }
       $printer->text("ANTRIAN SIDANG \n");
@@ -119,7 +126,7 @@ class Ambil extends R_Controller
       $printer->setTextSize(1, 1);
       $printer->text("Di ambil:" . date('Y-m-d H:i:S') . " \n");
       $printer->setFont(Printer::FONT_A);
-      $printer->text("KERTAS INI SEBAGAI KARTU PARKIR KENDARAAN ANDA. MOHON UNTUK DITUKARKAN SEBELUM MENINGGALKAN PARKIRAN\n");
+      $printer->text("KERTAS INI SEBAGAI KARTU PARKIR KENDARAAN ANDA. MOHON UNTUK DITUKARKAN KEMBALI SEBELUM MENINGGALKAN PARKIRAN\n");
 
       $printer->cut();
       /* Pulse */

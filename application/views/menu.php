@@ -30,7 +30,7 @@
             </div>
           </div>
           <div class="col-xl-4">
-            <div class="card widget-1" style="background-image: none;">
+            <div onclick="window.location.href='<?= base_url('/layar/sidang') ?>'" class="card widget-1" style="background-image: none;">
               <div class="card-body">
                 <div class="widget-content">
                   <div class="widget-round primary">
@@ -65,7 +65,7 @@
                     </div>
                   </div>
                   <div>
-                    <h4>Audio Antrian PTSP</h4>
+                    <h4>Layar Antrian PTSP</h4>
                   </div>
                 </div>
               </div>

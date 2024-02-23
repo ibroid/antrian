@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Eloquent\Model;
+
+class DalamPersidangan extends Model
+{
+  protected $table = "dalam_persidangan";
+  protected $guarded = [];
+
+  public static function booted(): void
+  {
+    static::created(
+      function (DalamPersidangan $dalamPersidangan) {
+        $dalamPersidangan->antrian_persidangan->update(["status" => 2]);
+      }
+    );
+
+    static::updated(
+      function (DalamPersidangan $dalamPersidangan) {
+        $dalamPersidangan->antrian_persidangan->update(["status" => 2]);
+      }
+    );
+
+    static::updating(
+      function (DalamPersidangan $dalamPersidangan) {
+        $dalamPersidangan->antrian_persidangan->update(["status" => 3]);
+      }
+    );
+  }
+
+  public function antrian_persidangan()
+  {
+    return $this->belongsTo(AntrianPersidangan::class, "nomor_antrian_id", "id");
+  }
+}

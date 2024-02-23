@@ -10,7 +10,7 @@
 	<link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('assets/favicon/') ?>/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('assets/favicon/') ?>/favicon-16x16.png">
 	<link rel="manifest" href="<?= base_url('assets/favicon/') ?>/site.webmanifest">
-	<title>Dashboard | APDP - PAJU</title>
+	<title><?= isset($title) ? $title : "Dashboard" ?> | APDP - PAJU</title>
 	<!-- Google font-->
 	<link href="https://fonts.googleapis.com/css?family=Rubik:400,400i,500,500i,700,700i&amp;display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900&amp;display=swap" rel="stylesheet">
@@ -114,11 +114,7 @@
 						<div class="toggle-sidebar"><i class="status_toggle middle sidebar-toggle" data-feather="grid"> </i></div>
 					</div>
 					<div class="logo-icon-wrapper"><a href="index.html"><img class="img-fluid" src="<?= base_url() ?>assets/images/logo/logo-icon.png" alt=""></a></div>
-					<?php if ($this->uri->segment(1) == "persidangan") {
-						echo $this->load->component(Constanta::COMPONENT_NAV_PERSIDANGAN);
-					} else {
-						echo $this->load->component(Constanta::COMPONENT_NAV);
-					} ?>
+					<?= isset($nav) ? $nav :  $this->load->component(Constanta::COMPONENT_NAV) ?>
 				</div>
 			</div>
 			<!-- Page Sidebar Ends-->
@@ -151,6 +147,7 @@
 	<!-- Plugins JS Ends-->
 	<!-- Theme js-->
 	<script src="<?= base_url() ?>assets/js/script.js"></script>
+	<!-- <script src="../assets/js/theme-customizer/customizer.js"></script> -->
 </body>
 
 </html>

@@ -4,6 +4,9 @@
       <div class="login-main" style="width: 1200px;">
         <?= $this->session->flashdata('flash_error') ?>
         <?= $this->session->flashdata('flash_alert') ?>
+        <div class="text-end">
+          <a href="<?= base_url('/menu') ?>" class="btn btn-secondary">Kembali</a>
+        </div>
         <h4>Halaman Pengambilan Antrian Sidang. Silahkan Pilih Nama Anda</h4>
         <p>Pastikan anda sidang hari ini. Periksa kembali surat panggilan. Apabila tidak ada nama anda, Silahkan hubungi petugas.</p>
 
@@ -120,7 +123,13 @@
   }
 
   const disableAfterSubmit = (e) => {
-    e.disabled = true
-    e.innerHTML = "Sedang Memproses ..."
+    Swal.fire({
+      title: "Loading...",
+      text: "Please wait",
+      showConfirmButton: false,
+      allowOutsideClick: false,
+      backdrop: true,
+      willOpen: () => Swal.showLoading()
+    })
   }
 </script>

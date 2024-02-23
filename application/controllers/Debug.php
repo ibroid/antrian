@@ -15,4 +15,9 @@ class Debug extends R_Controller
       die;
     }
   }
+
+  public function index()
+  {
+    echo "string" == true ? "Debug mode is off" : "Debug mode is on";
+  }
 }

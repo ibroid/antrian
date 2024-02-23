@@ -24,7 +24,7 @@ class Perkara extends Illuminate\Database\Eloquent\Model
 
   public function jadwal_sidang()
   {
-    return $this->hasOne(PerkaraJadwalSidang::class, "perkara_id");
+    return $this->hasMany(PerkaraJadwalSidang::class, "perkara_id");
   }
 
   public function pihak_satu()

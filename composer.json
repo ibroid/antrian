@@ -16,7 +16,8 @@
 		"illuminate/database": "8.8",
 		"illuminate/events": "8.8",
 		"mike42/escpos-php": "^4.0",
-		"robmorgan/phinx": "^0.13.4"
+		"robmorgan/phinx": "^0.13.4",
+		"pusher/pusher-php-server": "^7.2"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

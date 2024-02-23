@@ -9,7 +9,7 @@
       <td><?php
           foreach ($data->perkara->pihak_satu as $k => $ps) {
             ++$k;
-            echo form_ambil_antrian_sidang($data, "P$k" . ++$k, $ps->nama);
+            echo form_ambil_antrian_sidang($data, "P$k", $ps->nama);
           } ?>
       </td>
     </tr>
@@ -18,7 +18,7 @@
       <td><?php
           foreach ($data->perkara->pihak_dua as $y => $pd) {
             ++$y;
-            echo form_ambil_antrian_sidang($data, "T$y" . ++$k, $pd->nama);
+            echo form_ambil_antrian_sidang($data, "T$y", $pd->nama);
           } ?>
       </td>
     </tr>
@@ -27,7 +27,7 @@
       <td><?php
           foreach ($data->perkara->pengacara_satu as $n => $ks) {
             ++$n;
-            echo form_ambil_antrian_sidang($data, "KP$n" . ++$k, $ks->nama);
+            echo form_ambil_antrian_sidang($data, "KP$n", $ks->nama);
           } ?>
       </td>
     </tr>
@@ -36,7 +36,7 @@
       <td><?php
           foreach ($data->perkara->pengacara_dua as $c => $kd) {
             ++$c;
-            echo form_ambil_antrian_sidang($data, "KT$c" . ++$k, $kd->nama);
+            echo form_ambil_antrian_sidang($data, "KT$c", $kd->nama);
           } ?>
       </td>
     </tr>

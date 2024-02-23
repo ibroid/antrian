@@ -11,4 +11,9 @@ class PerkaraJadwalSidang extends Model
   {
     return $this->belongsTo(Perkara::class, "perkara_id", "perkara_id");
   }
+
+  public function antrian_sidang()
+  {
+    return $this->hasMany(AntrianPersidangan::class, "jadwal_sidang_id", "id");
+  }
 }
