@@ -23,7 +23,7 @@ class DalamPersidangan extends Model
 
     static::updating(
       function (DalamPersidangan $dalamPersidangan) {
-        $dalamPersidangan->antrian_persidangan->update(["status" => 3]);
+        AntrianPersidangan::where("id", $dalamPersidangan->getOriginal("nomor_antrian_id"))->update(["status" => 3]);;
       }
     );
   }

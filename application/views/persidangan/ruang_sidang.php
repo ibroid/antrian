@@ -35,7 +35,7 @@
   let tableAntrianSidang
 
   window.addEventListener("load", () => {
-    setTimeout(fetchTableAntrian, 3000)
+    setTimeout(fetchTableAntrian, 1000)
   })
 
   function fetchTableAntrian() {

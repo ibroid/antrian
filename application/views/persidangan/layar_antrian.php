@@ -26,7 +26,7 @@
                 <div class=" text-center">
                   <div>
                     <h1>RUANG SIDANG 1 : UMAR BK</h1>
-                    <span class="nomor-antrian" style=" font-size: 15rem;">0</span>
+                    <span class="nomor-antrian" data-nomor="1" style=" font-size: 15rem;">0</span>
                   </div>
                 </div>
               </div>
@@ -38,7 +38,7 @@
                 <div class=" text-center">
                   <div>
                     <h1>RUANG SIDANG 2 : ABUMUSA</h1>
-                    <span class="nomor-antrian" style=" font-size: 15rem;">0</span>
+                    <span class="nomor-antrian" data-nomor="2" style=" font-size: 15rem;">0</span>
                   </div>
                 </div>
               </div>
@@ -50,7 +50,7 @@
                 <div class=" text-center">
                   <div>
                     <h1>RUANG SIDANG 3 : SYURAIH</h1>
-                    <span class="nomor-antrian" style=" font-size: 15rem;">0</span>
+                    <span class="nomor-antrian" data-nomor="3" style=" font-size: 15rem;">0</span>
                   </div>
                 </div>
               </div>
@@ -90,6 +90,14 @@
       initAudo(data)
     })
 
+    channel.bind('update-persidangan', async function(data) {
+      fetchNomorAntrian()
+    })
+
+    fetchNomorAntrian()
+  })
+
+  function fetchNomorAntrian() {
     $.ajax({
       url: "<?= base_url("/api/dalam_persidangan") ?>",
       method: "POST",
@@ -99,14 +107,19 @@
       success(data) {
         const dataAntrian = JSON.parse(data)
         $(".nomor-antrian").each(function(index, el) {
-          $(el).text(dataAntrian[index]?.antrian_persidangan?.nomor_urutan)
+          // $(el).text(dataAntrian[index]?.antrian_persidangan?.nomor_urutan)
+          dataAntrian.forEach(ant => {
+            if (ant.nomor_ruang == $(el).data("nomor")) {
+              $(el).text(ant.antrian_persidangan.nomor_urutan)
+            }
+          })
         })
       },
       error(err) {
         notifToas("Gagal fetch antrian")
       }
     })
-  })
+  }
 
   async function initAudo(data) {
     const audio = await requestVoice(data)

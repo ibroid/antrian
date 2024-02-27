@@ -16,14 +16,18 @@
         </div>
         <hr>
         <div class="d-flex p-2 gap-2">
-          <button class="btn btn-outline-secondary">
-            <i class="fa fa-undo btn-lg"></i>
-            Skors Sidang
-          </button>
-          <button class="btn btn-outline-secondary">
-            <i class="fa fa-arrow-left btn-lg"></i>
-            keluarkan Dari Ruang Sidang
-          </button>
+          <form action="<?= base_url("ruangsidang/keluarkan_dari_ruang_sidang?skors=1") ?>" method="POST">
+            <button class="btn btn-outline-secondary" name="nomor_antrian_id" value="<?= $data->antrian_persidangan->id ?>">
+              <i class="fa fa-undo btn-lg"></i>
+              Skors Sidang
+            </button>
+          </form>
+          <form action="<?= base_url("ruangsidang/keluarkan_dari_ruang_sidang") ?>" method="POST">
+            <button name="nomor_antrian_id" value="<?= $data->antrian_persidangan->id ?>" class="btn btn-outline-secondary">
+              <i class="fa fa-arrow-left btn-lg"></i>
+              keluarkan Dari Ruang Sidang
+            </button>
+          </form>
         </div>
         <hr>
       <?php } else { ?>

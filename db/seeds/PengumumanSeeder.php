@@ -22,16 +22,45 @@ class PengumumanSeeder extends AbstractSeed
             ],
             [
                 "judul" => "panggil-petugas",
-                "template" => "Petugas sidang dipanggil ke {ruang_sidang}."
+                "template" => "Petugas sidang dipanggil ke ruang sidang {ruang_sidang}."
             ],
             [
                 "judul" => "istirahat-sidang",
-                "template" => "Persidangan di {ruang_sidang} sedang istirahat. Para pihak diperkenankan meninggalkan ruang tunggu sidang."
+                "template" => "Persidangan di {ruang_sidang} sedang istirahat. Para pihak diperkenankan meninggalkan ruang tunggu persidangan."
             ],
             [
                 "judul" => "istirahat-pelayanan",
                 "template" => "Pelayanan kami sedang istirahat, dan akan dilanjutkan setelah pukul satu."
             ],
+            [
+                "judul" => "semua-pihak-ke-ruang-tunggu",
+                "template" => "Para pihak dari {pihak_satu} {condition_pihak_dua}, dipanggil masuk ke ruang tunggu persidangan."
+            ],
+            [
+                "judul" => "semua-pihak-ke-ruang-sidang",
+                "template" => "Para pihak dari {pihak_satu} {condition_pihak_dua}, dipanggil masuk ke dalam ruang sidang {ruang_sidang}."
+            ],
+            [
+                "judul" => "pihak-ke-ruang-tunggu",
+                "template" => "Pihak atas nama {nama_pihak}, dipanggil masuk ke ruang tunggu persidangan."
+            ],
+            [
+                "judul" => "pihak-ke-ruang-sidang",
+                "template" => "Pihak atas nama {nama_pihak}, dipanggil masuk ke ruang sidang {ruang_sidang}."
+            ],
+            [
+                "judul" => "perkara-diskors",
+                "template" => "Perkara atas nama {pihak_satu} {condition_pihak_dua} telah diskors. Silahkan tunggu untuk dipanggil kembali"
+            ],
+            [
+                "judul" => "saksi-saksi-ke-ruang-tunggu",
+                "template" => "Saksi saksi dari pihak {pihak_satu} {condition_pihak_dua}, dipanggil masuk ke ruang tunggu persidangan."
+            ],
+            [
+                "judul" => "saksi-saksi-ke-ruang-sidang",
+                "template" => "Saksi saksi dari pihak {pihak_satu} {condition_pihak_dua}, dipanggil masuk ke ruang sidang {ruang_sidang}."
+            ],
+
         ];
 
         $roles = $this->table('pengumuman');

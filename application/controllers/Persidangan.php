@@ -24,7 +24,8 @@ class Persidangan extends R_Controller
     $this->load->page("persidangan/antrian_sidang", [
       "pagename" => "Monitor Petugas Sidang",
       "antrian" => AntrianPersidangan::whereDate("created_at", date("Y-m-d"))->latest()->get(),
-      "jadwal_sidang" => PerkaraJadwalSidang::where("tanggal_sidang", date("Y-m-d"))->get()
+      "jadwal_sidang" => PerkaraJadwalSidang::where("tanggal_sidang", date("Y-m-d"))->get(),
+      "dalam_sidang" => DalamPersidangan::whereDate("tanggal_panggil", date("Y-m-d"))->get()
     ])->layout("dashboard_layout", [
       "nav" => $this->load->component("layout/nav_persidangan"),
       "title" => "Monitor Petugas Sidang",
@@ -82,6 +83,34 @@ class Persidangan extends R_Controller
       echo json_encode(["status" => true, "message" => "Pengumumanm berhasil dikirim. Silahkan tunggu sampai pengumuman selesai dibacakan"]);
     } catch (\Throwable $th) {
       set_status_header(400);
+      echo $th->getMessage();
+    }
+  }
+
+  public function panggil()
+  {
+    R_Input::mustPost();
+    try {
+      $pengumuman = Pengumuman::where("judul", R_Input::pos("judul"))->first();
+      if (!$pengumuman) {
+        set_status_header(404);
+        throw new \Exception("Pengumuman tidak ditemukan");
+      }
+
+      $textPengumuman = str_replace("{pihak_satu}", R_Input::pos("pihak_satu"), $pengumuman->template);
+
+      if (R_Input::pos("pihak_dua")) {
+        $textPengumuman = str_replace("{condition_pihak_dua}", "dan " . R_Input::pos("pihak_dua"), $textPengumuman);
+      } else {
+        $textPengumuman = str_replace("{condition_pihak_dua}", "", $textPengumuman);
+      }
+
+      $textPengumuman = str_replace("{ruang_sidang}", R_Input::pos("nama_ruang"), $textPengumuman);
+      $textPengumuman = str_replace("{nama_pihak}", R_Input::pos("nama_pihak"), $textPengumuman);
+      $this->pusher->trigger("antrian-channel", "panggil-pihak", $textPengumuman);
+
+      echo json_encode(["status" => true, "message" => "Panggilan berhasil dikirim. Silahkan tunggu sampai panggilan selesai dibacakan"]);
+    } catch (\Throwable $th) {
       echo $th->getMessage();
     }
   }

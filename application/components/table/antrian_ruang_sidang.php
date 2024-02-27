@@ -8,7 +8,6 @@
       <th>Kehadiran <br> Pihak</th>
       <th>Kehadiran <br> Saksi</th>
       <th>Aksi</th>
-
     </tr>
   </thead>
   <tbody>
@@ -28,11 +27,16 @@
         <td><?= ($a->kehadiran_pihak->count("id") == $a->kehadiran_pihak->sum("status")) ? "<div class=\"alert-light-success txt-success text-center p-1 rounded\">Hadir Semua</div" : "<div class=\"event-date alert-light-danger txt-danger text-center p-1 rounded\">Ada yang belum hadir</div>" ?></td>
         <td><?= $a->kehadiran_pihak->where("sebagai", "S")->first()->status == 0 ? "<div class=\"event-date alert-light-secondary txt-secondary text-center p-1 rounded\">Belum hadir</div>" : "<div class=\"alert-light-primary txt-primary text-center p-1 rounded\">Sudah hadir</div>"  ?></td>
         <td>
-          <form action="<?= base_url("ruangsidang/masukan_ke_ruang_sidang") ?>" method="post">
-            <input type="hidden" name="nomor_ruang" value="<?= $nomor_ruang ?>">
-            <input type="hidden" name="antrian_sidang_id" value="<?= $a->id ?>">
-            <button onclick="disableAfterClick(this)" type="submit" class="btn btn-success"><i class="fa fa-arrow-right"></i>Masukan ke ruang sidang</button>
-          </form>
+          <?php
+          if ($a->status == 2) { ?>
+            <button disabled type="submit" class="btn btn-info">Dalam Persidangan</button>
+          <?php } else { ?>
+            <form action="<?= base_url("ruangsidang/masukan_ke_ruang_sidang") ?>" method="post">
+              <input type="hidden" name="nomor_ruang" value="<?= $nomor_ruang ?>">
+              <input type="hidden" name="antrian_sidang_id" value="<?= $a->id ?>">
+              <button onclick="disableAfterClick(this)" type="submit" class="btn btn-success"><i class="fa fa-arrow-right"></i>Masukan ke ruang sidang</button>
+            </form>
+          <?php } ?>
         </td>
       </tr>
     <?php } ?>

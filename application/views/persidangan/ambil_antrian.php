@@ -94,7 +94,12 @@
   let checkInModal;
   window.addEventListener("load", function() {
     $(".date-picker").flatpickr();
-    $("#table-sidang").DataTable();
+    $("#table-sidang").DataTable({
+      "language": {
+        "search": "Cari Disini :",
+      },
+      "pageLength": 50
+    });
 
     checkInModal = new bootstrap.Modal(
       document.getElementById("checkInModal"),

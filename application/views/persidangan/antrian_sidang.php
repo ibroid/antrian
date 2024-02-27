@@ -9,63 +9,7 @@
 </style>
 
 <div class="container-fluid py-3">
-  <div class="row g-sm-3 height-equal-2 widget-charts">
-    <div class="col-sm-12 col-md-4 col-lg-4">
-      <div class="card small-widget mb-sm-0">
-        <div class="card-body primary">
-          <span class="f-light">Umar Bin Khatab (1)</span>
-          <div class="d-flex align-items-end gap-1">
-            <span class="font-secondary f-12 f-w-500">
-              <span>(22)</span>
-              <i class="icon-arrow-left"></i>
-            </span>
-            <h5>(23) 123/Pdt.G/2022</h5>
-            <span class="font-primary f-12 f-w-500">
-              <i class="icon-arrow-right"></i>
-              <span>(24)</span>
-            </span>
-          </div>
-          <div class="bg-gradient">
-            <svg class="stroke-icon svg-fill">
-              <use href="../assets/svg/icon-sprite.svg#new-order"></use>
-            </svg>
-          </div>
-          <div class="flex mt-4">
-            <!-- <button class="btn btn-outline-primary btn-sm">Lihat Antrian</button> -->
-            <button class="btn btn-outline-primary btn-sm">Lihat Antrian</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-12 col-md-4 col-lg-4">
-      <div class="card small-widget mb-sm-0">
-        <div class="card-body warning"><span class="f-light">Abu Musa (2)</span>
-          <div class="d-flex align-items-end gap-1">
-            <h4>2,908</h4><span class="font-warning f-12 f-w-500"><i class="icon-arrow-up"></i><span>+20%</span></span>
-          </div>
-          <div class="bg-gradient">
-            <svg class="stroke-icon svg-fill">
-              <use href="../assets/svg/icon-sprite.svg#customers"></use>
-            </svg>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-12 col-md-4 col-lg-4">
-      <div class="card small-widget mb-sm-0">
-        <div class="card-body secondary"><span class="f-light">Asyuraih (3)</span>
-          <div class="d-flex align-items-end gap-1">
-            <h4>$389k</h4><span class="font-secondary f-12 f-w-500"><i class="icon-arrow-down"></i><span>-10%</span></span>
-          </div>
-          <div class="bg-gradient">
-            <svg class="stroke-icon svg-fill">
-              <use href="../assets/svg/icon-sprite.svg#sale"></use>
-            </svg>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <?= $this->load->component("card/widget_current_persidangan") ?>
   <div class="row mt-3">
     <!-- Widget Total Antrian -->
     <div class="col-xl-3">
@@ -161,7 +105,7 @@
     </div>
     <!-- Widget Belum ambil antrian -->
     <div class="col-xl-3">
-      <div class="card widget-1">
+      <div class="card widget-1" data-bs-toggle="modal" data-bs-target="#modalSidangHariIni">
         <div class="card-body">
           <div class="widget-content">
             <div class="widget-round success">
@@ -182,7 +126,7 @@
         </div>
       </div>
     </div>
-    <!--  -->
+    <!-- Widget Belum di panggil kedalam  -->
     <div class="col-xl-3">
       <div class="card widget-1">
         <div class="card-body">
@@ -205,28 +149,9 @@
         </div>
       </div>
     </div>
-    <div class="col-xl-3">
-      <div class="card widget-1">
-        <div class="card-body">
-          <div class="widget-content">
-            <div class="widget-round success">
-              <div class="bg-round">
-                <svg class="svg-fill">
-                  <use href="../assets/svg/icon-sprite.svg#rate"> </use>
-                </svg>
-                <svg class="half-circle svg-fill">
-                  <use href="../assets/svg/icon-sprite.svg#halfcircle"></use>
-                </svg>
-              </div>
-            </div>
-            <div>
-              <h4><?= $jadwal_sidang->count() ?></h4><span class="f-light">Total Sidang Hari Ini</span>
-            </div>
-          </div>
-          <div class="font-success f-w-500"></div>
-        </div>
-      </div>
-    </div>
+    <!-- Total Sidang Hari Ini -->
+    <?= $this->load->component("card/widget_total_sidang") ?>
+    <!-- Lahan Kosong -->
     <div class="col-xl-3">
       <div class="card widget-1">
         <div class="card-body ">
@@ -301,7 +226,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalAntrian" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+<div class="modal fade" id="modalAntrian" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -321,9 +246,135 @@
   </div>
 </div>
 
+<div class="modal fade" id="modalSidangHariIni" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitleId">
+          Daftar Sidang Hari Ini
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-responsive table-hover table-bordered" id="table-sidang">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Pekara</th>
+              <th>Pihak P </th>
+              <th>Kuasa P</th>
+              <th>Pihak T </th>
+              <th>Kuasa T</th>
+              <th>Ruangan</th>
+              <th>Majelis</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($jadwal_sidang as $n => $ds) { ?>
+              <tr onclick="handleRowClickSidang(<?= $ds->id ?>)">
+                <td><?= ++$n ?></td>
+                <td><?= $ds->perkara->nomor_perkara ?><br><?= $ds->perkara->jenis_perkara_nama ?></td>
+                <td>
+                  <?= $ds->perkara->pihak_satu[0]->nama ?>
+                </td>
+                <td>
+                  <?php if (count($ds->perkara->pengacara_satu) > 0) {
+                    echo  $ds->perkara->pengacara_satu[0]->nama;
+                  } ?>
+                </td>
+                <td>
+                  <?php if (count($ds->perkara->pihak_dua) !== 0) {
+                    echo  $ds->perkara->pihak_dua[0]->nama;
+                  }  ?>
+                </td>
+                <td>
+                  <?php if (count($ds->perkara->pengacara_dua) > 0) {
+                    echo  $ds->perkara->pengacara_dua[0]->nama;
+                  } ?>
+                </td>
+                <td><?= $ds->ruangan ?><br><?= str_replace("Panitera Pengganti:", "", $ds->perkara->penetapan->panitera_pengganti_text)  ?></td>
+                <td><?= $ds->perkara->penetapan->majelis_hakim_nama ?></td>
+              </tr>
+            <?php } ?>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="modalBelumAmbilAntrian" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitleId">
+          Daftar Sidang Hari Ini
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-responsive table-hover table-bordered" id="table-sidang">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Pekara</th>
+              <th>Pihak P </th>
+              <th>Kuasa P</th>
+              <th>Pihak T </th>
+              <th>Kuasa T</th>
+              <th>Ruangan</th>
+              <th>Majelis</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($jadwal_sidang->whereNotIn("id", $antrian->pluck("jadwal_sidang_id"))->all() as $n => $ds) { ?>
+              <tr onclick="handleRowClickSidang(<?= $ds->id ?>)">
+                <td><?= ++$n ?></td>
+                <td><?= $ds->perkara->nomor_perkara ?><br><?= $ds->perkara->jenis_perkara_nama ?></td>
+                <td>
+                  <?= $ds->perkara->pihak_satu[0]->nama ?>
+                </td>
+                <td>
+                  <?php if (count($ds->perkara->pengacara_satu) > 0) {
+                    echo  $ds->perkara->pengacara_satu[0]->nama;
+                  } ?>
+                </td>
+                <td>
+                  <?php if (count($ds->perkara->pihak_dua) !== 0) {
+                    echo  $ds->perkara->pihak_dua[0]->nama;
+                  }  ?>
+                </td>
+                <td>
+                  <?php if (count($ds->perkara->pengacara_dua) > 0) {
+                    echo  $ds->perkara->pengacara_dua[0]->nama;
+                  } ?>
+                </td>
+                <td><?= $ds->ruangan ?><br><?= str_replace("Panitera Pengganti:", "", $ds->perkara->penetapan->panitera_pengganti_text)  ?></td>
+                <td><?= $ds->perkara->penetapan->majelis_hakim_nama ?></td>
+              </tr>
+            <?php } ?>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
   let modalAntrian
+  let modalSidang
+  let modalBelumAmbilAntrian
 
   window.addEventListener('load', function() {
     const pusher = new Pusher('a360f9f6cfefca4c383b', {
@@ -331,15 +382,20 @@
     });
 
     const channel = pusher.subscribe('antrian-channel');
+
     channel.bind('new-antrian', function(data) {
       notifToas("Ada antrian baru. Silahkan refresh halaman ini")
     });
 
     modalAntrian = new bootstrap.Modal(document.getElementById('modalAntrian'))
+    modalSidang = new bootstrap.Modal(document.getElementById('modalSidangHariIni'))
+    modalBelumAmbilAntrian = new bootstrap.Modal(document.getElementById('modalBelumAmbilAntrian'))
 
     $('#table-antrian').DataTable()
+    $('#table-sidang').DataTable()
 
   });
+
   const modalAntrianElement = document.getElementById('modalAntrian');
 
   modalAntrianElement.addEventListener('hide.bs.modal', function(event) {
@@ -359,6 +415,24 @@
       },
       error: function(err) {
         $("#modalAntrian-body").html(`<div class=\"container-fluid\"><div class=\"text-center\"><h4>${err.responseText ?? err.message}</h4></div></div>`)
+      }
+    })
+  }
+
+  const handleRowClickSidang = (sidang_id) => {
+    modalAntrian.show()
+    modalSidang.hide()
+    $.ajax({
+      url: "<?= base_url("ambil/fetch_table_checkin?secondary_print=true") ?>",
+      method: "POST",
+      data: {
+        sidang_id: sidang_id
+      },
+      success(html) {
+        $("#modalAntrian-body").html(html)
+      },
+      error(err) {
+        $("#modalAntrian-body").html(err.responseText && err.message)
       }
     })
   }

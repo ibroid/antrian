@@ -6,10 +6,10 @@
   <button onclick="checkIn(<?= $data->id ?>)" class="btn btn-info btn-sm">
     <i class="fa fa-check"></i> Check-In Ruang Tunggu
   </button>
-  <button class="btn btn-warning btn-sm btn-panggil" data-tujuan="ruang_tunggu">
+  <button class="btn btn-warning btn-sm btn-panggil" data-tujuan="semua-pihak-ke-ruang-tunggu">
     <i class="fa fa-volume-up"></i> Panggil Semua Pihak Ke Ruang Tunggu
   </button>
-  <button class="btn btn-danger btn-sm btn-panggil" data-tujuan="ruang_sidang">
+  <button class="btn btn-danger btn-sm btn-panggil" data-tujuan="semua-pihak-ke-ruang-sidang">
     <i class="fa fa-volume-up"></i> Panggil Semua Pihak Ke Ruang Sidang
   </button>
 </div>
@@ -29,7 +29,8 @@
       <tr>
         <td><?= $kp->pihak; ?></td>
         <td>
-          <button class="btn btn-primary btn-sm">
+
+          <button class="btn btn-primary btn-sm btn-panggil" data-tujuan="<?= $kp->sebagai == "S" ? "saksi-saksi-ke-ruang-tunggu" : "pihak-ke-ruang-tunggu" ?>" data-nama="<?= $kp->pihak ?>">
             <i class="fa fa-volume-up"></i>
             Panggil ke Ruang Tunggu
           </button>
@@ -41,7 +42,7 @@
           </div>
         </td>
         <td>
-          <button disabled class="btn btn-secondary btn-sm">
+          <button data-tujuan="<?= $kp->sebagai == "S" ? "saksi-saksi-ke-ruang-sidang" : "pihak-ke-ruang-sidang" ?>" data-nama="<?= $kp->pihak ?>" class="btn btn-secondary btn-sm btn-panggil">
             <i class="fa fa-volume-up"></i>
             Panggil ke Ruang Sidang
           </button>
@@ -51,19 +52,39 @@
   </tbody>
 </table>
 
-<div class="d-flex d-spacing-2 p-2 gap-3">
-  <button class="btn btn-success btn-sm">
-    <i class="fa fa-volume-up"></i> Panggil Semua Saksi Ke Ruang Tunggu
-  </button>
-  <button class="btn btn-danger btn-sm">
-    <i class="fa fa-volume-up"></i> Panggil Semua Saksi Ke Ruang Sidang
-  </button>
-</div>
 
 <script>
   $(".btn-panggil").each((i, e) => {
     $(e).click(() => {
-      console.log("clicked");
+      Swal.fire({
+        title: "Mohon tunggu ...",
+        showConfirmButton: false,
+        willOpen: () => Swal.showLoading(),
+        backdrop: true,
+        allowOutsideClick: false
+      })
+
+      $.ajax({
+        url: "<?= base_url("/persidangan/panggil") ?>",
+        method: "POST",
+        data: {
+          judul: $(e).data("tujuan"),
+          nama_ruang: "<?= $data->nama_ruang ?>",
+          pihak_satu: "<?= $data->kehadiran_pihak->where("sebagai", "P1")->first()->pihak ?>",
+          pihak_dua: "<?= $data->kehadiran_pihak->where("sebagai", "T1")->first()->pihak ?? null ?>",
+          nama_pihak: $(e).data("nama") ?? null
+        },
+        success: (res) => {
+          Swal.close()
+        },
+        error: (err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: err.responseText && err.message
+          })
+        }
+      })
     })
   })
 </script>

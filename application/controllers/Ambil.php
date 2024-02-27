@@ -31,8 +31,17 @@ class Ambil extends R_Controller
 
   public function fetch_table_checkin()
   {
-    $data = PerkaraJadwalSidang::find(R_Input::pos("sidang_id"));
-    echo $this->load->component("table/checkin_table", compact("data"));
+    R_Input::mustPost();
+    try {
+      $data = PerkaraJadwalSidang::find(R_Input::pos("sidang_id"));
+      if (isset($_GET["secondary_print"])) {
+        echo $this->load->component("table/checkin_table_secondary", ["data" => $data]);
+      } else {
+        echo $this->load->component("table/checkin_table", ["data" => $data]);
+      }
+    } catch (\Throwable $th) {
+      echo $th->getMessage();
+    }
   }
 
   public function ambil_antrian_sidang()
@@ -70,7 +79,7 @@ class Ambil extends R_Controller
       $this->session->set_flashdata("flash_error", $this->load->component(Constanta::ALERT_ERROR, ["message" => $th->getMessage()]));
     }
 
-    redirect("/ambil");
+    redirect($_SERVER["HTTP_REFERER"]);
   }
 
   public function nomor_urut_terakhir($ruang)
@@ -87,10 +96,9 @@ class Ambil extends R_Controller
     }
 
     try {
-      if ($_ENV["DEBUG"] == "true") {
+      if ($_ENV["DEBUG"] == "true" || isset($_GET["secondary"])) {
         $ip = "192.168.0.187";
       }
-
 
       $connector = new NetworkPrintConnector($ip, 9100, 3000);
       $printer = new Printer($connector);
