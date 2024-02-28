@@ -35,6 +35,16 @@
   let tableAntrianSidang
 
   window.addEventListener("load", () => {
+    const pusher = new Pusher('a360f9f6cfefca4c383b', {
+      cluster: 'ap1'
+    });
+
+    const channel = pusher.subscribe('antrian-channel');
+
+    channel.bind('new-antrian', function(data) {
+      fetchTableAntrian()
+    });
+
     setTimeout(fetchTableAntrian, 1000)
   })
 
