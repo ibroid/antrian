@@ -59,7 +59,7 @@ class RuangSidang extends R_Controller
 
   public function fetch_table_antrian()
   {
-    $data["antrian"] = AntrianPersidangan::where("nomor_ruang", R_Input::pos("nomor_ruang"))->whereDate("created_at", date("Y-m-d"))->orderByRaw("CAST(nomor_urutan as UNSIGNED)")->get();
+    $data["antrian"] = AntrianPersidangan::where("nomor_ruang", R_Input::pos("nomor_ruang"))->whereDate("created_at", date("Y-m-d"))->get();
     $data["nomor_ruang"] = R_Input::pos("nomor_ruang");
     echo $this->load->component("table/antrian_ruang_sidang", $data);
   }

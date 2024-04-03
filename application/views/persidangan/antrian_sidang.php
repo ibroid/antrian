@@ -105,7 +105,7 @@
     </div>
     <!-- Widget Belum ambil antrian -->
     <div class="col-xl-3">
-      <div class="card widget-1" data-bs-toggle="modal" data-bs-target="#modalSidangHariIni">
+      <div class="card widget-1" data-bs-toggle="modal" data-bs-target="#modalBelumAmbilAntrian">
         <div class="card-body">
           <div class="widget-content">
             <div class="widget-round success">
@@ -207,7 +207,7 @@
                     <?= $a->perkara->jenis_perkara_nama ?>
                   </div>
                   <br>
-                  <?= $a->jadwal_sidang->agenda ?>
+                  <?= $a->jadwal_sidang->agenda ?? "" ?>
                 </td>
                 <td>
                   <?= $a->perkara->para_pihak  ?>

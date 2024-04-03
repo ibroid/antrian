@@ -57,7 +57,13 @@
       },
       success: function(data) {
         $("#card-body-antrian").html(data)
-        tableAntrianSidang = $("#table-antrian").DataTable()
+        tableAntrianSidang = $("#table-antrian").DataTable({
+          "aaSorting": [],
+          "columnDefs": [{
+            "targets": 0,
+            "orderable": false
+          }]
+        })
       },
       error: function(err) {
         $("#card-body-antrian").html(`<div class=\"text-center\">${err.message ?? err.responseText}<h4></h4></div>`)

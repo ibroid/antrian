@@ -75,7 +75,7 @@
         <div class="row">
 
           <div class="col-xl-6">
-            <div class="card widget-1" style="background-image: none;">
+            <div onclick="window.location.href='<?= base_url('/kasir') ?>'" class="card widget-1" style="background-image: none;">
               <div class="card-body">
                 <div class="widget-content">
                   <div class="widget-round secondary">

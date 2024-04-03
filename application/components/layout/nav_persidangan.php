@@ -50,7 +50,7 @@
       </li>
       <li class="sidebar-list">
         <i class="fa fa-thumb-tack"></i>
-        <a class="sidebar-link sidebar-title" href="<?= base_url('/ruangsidang/syuraih') ?>">
+        <a class="sidebar-link sidebar-title" href="<?= base_url('/kasir') ?>">
           <svg class="stroke-icon">
             <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-to-do"></use>
           </svg>
