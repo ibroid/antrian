@@ -36,4 +36,9 @@ class Perkara extends Illuminate\Database\Eloquent\Model
   {
     return $this->hasMany(PerkaraPihakDua::class, "perkara_id", "perkara_id");
   }
+
+  public function biaya()
+  {
+    return $this->hasMany(PerkaraBiaya::class, "perkara_id", "perkara_id");
+  }
 }

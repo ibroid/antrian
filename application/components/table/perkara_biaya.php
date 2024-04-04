@@ -31,8 +31,8 @@
           echo $keluar  ?></th>
     </tr>
     <tr>
-      <th colspan="4" class="text-end">Sisa</th>
-      <th><?= floatval($masuk)  - floatval($keluar) ?></th>
+      <th colspan="4" class="text-end text-danger">Sisa Panjar</th>
+      <th class="bg-dark text-light"><?= floatval($masuk)  - floatval($keluar) ?></th>
     </tr>
   </thead>
 </table>

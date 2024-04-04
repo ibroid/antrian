@@ -26,7 +26,7 @@ class Ambil extends R_Controller
     ]);
 
     $data["daftar_sidang"] = PerkaraJadwalSidang::where("tanggal_sidang", isset($_POST["tanggal_sidang"]) ? $_POST["tanggal_sidang"] : date("Y-m-d"))->get();
-    $this->load->page("persidangan/ambil_antrian", $data)->layout("auth_layout");
+    $this->load->page("ambil_antrian", $data)->layout("auth_layout");
   }
 
   public function fetch_table_checkin()
