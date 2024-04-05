@@ -73,7 +73,7 @@ class Ambil extends R_Controller
 
       $this->session->set_flashdata("flash_alert", $this->load->component(Constanta::ALERT_SUCCESS, ["message" => "Nomor Antrian Anda : $data->nomor_urutan. Di ruangan : $data->nama_ruang. Silahkan Ambil Tiket Antrian nya"]));
 
-      $this->print($data);
+      $this->print_antrian_sidang($data);
     } catch (\Throwable $th) {
 
       $this->session->set_flashdata("flash_error", $this->load->component(Constanta::ALERT_ERROR, ["message" => $th->getMessage()]));
@@ -89,7 +89,7 @@ class Ambil extends R_Controller
     return $qrcMaxAntrian;
   }
 
-  public function print($data, $ip = "192.168.0.188")
+  public function print_antrian_sidang($data, $ip = "192.168.0.188")
   {
     if ($_ENV["DEBUG_PRINT"] == "false") {
       return false;
@@ -143,6 +143,16 @@ class Ambil extends R_Controller
       $printer->close();
     } catch (\Throwable $th) {
       throw new Exception("Gagal cetak antrian. Masin antrian mati/tidak terhubung. " . $th->getMessage(), $th->getCode());
+    }
+  }
+
+  public function ambil_antrian_ptsp()
+  {
+    R_Input::mustPost();
+    try {
+      $lastAntrianPtsp = AntrianPtsp::where("tujuan", R_Input::pos("tujuan"))->whereDate("created_at", date("Y-m-d"))->first();
+    } catch (\Throwable $th) {
+      //throw $th;
     }
   }
 }
