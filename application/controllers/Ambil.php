@@ -4,6 +4,8 @@
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 
+use function PHPSTORM_META\map;
+
 class Ambil extends R_Controller
 {
   public Addons $addons;
@@ -57,7 +59,7 @@ class Ambil extends R_Controller
         $data = AntrianPersidangan::create(
           [
             'status' => 0,
-            'nomor_urutan' =>  floatval($this->nomor_urut_terakhir(R_Input::pos("nomor_ruang")))  + 1,
+            'nomor_urutan' =>  floatval($this->nomor_urut_sidang_terakhir(R_Input::pos("nomor_ruang")))  + 1,
             'nomor_ruang' => R_Input::pos("nomor_ruang"),
             'nama_ruang' => R_Input::pos("nama_ruang"),
             'nomor_perkara' => R_Input::pos("nomor_perkara"),
@@ -82,7 +84,7 @@ class Ambil extends R_Controller
     redirect($_SERVER["HTTP_REFERER"]);
   }
 
-  public function nomor_urut_terakhir($ruang)
+  public function nomor_urut_sidang_terakhir($ruang)
   {
     $qrcMaxAntrian = AntrianPersidangan::whereDate("created_at", date("Y-m-d"))->where("nomor_ruang", $ruang)->max('nomor_urutan');
 
@@ -106,15 +108,16 @@ class Ambil extends R_Controller
 
       $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
       $printer->setJustification(Printer::JUSTIFY_CENTER);
-      $printer->setFont(Printer::FONT_A);
 
       if ($_ENV["DEBUG"] == "true") {
         $printer->text("TEST UJI COBA\n");
       }
-      $printer->text("ANTRIAN SIDANG \n");
       $printer->text("Pengadilan Agama\n Jakarta Utara \n");
       $printer->text("------------------------\n");
-      $printer->text($data->nama_ruang);
+      $printer->setTextSize(1, 1);
+      $printer->text("Persidangan di " . $data->nama_ruang);
+      $printer->text("\n");
+      $printer->text("Nomor Antrian");
       $printer->text("\n");
       $printer->setTextSize(5, 4);
       $printer->text($data->nomor_urutan);
@@ -127,14 +130,84 @@ class Ambil extends R_Controller
 
       $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
       $printer->setJustification(Printer::JUSTIFY_CENTER);
+      $printer->setTextSize(1, 1);
+      $printer->text("Di ambil:" . date('Y-m-d H:i:S') . " \n");
+
+      $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+      $printer->setJustification(Printer::JUSTIFY_CENTER);
       $printer->setFont(Printer::FONT_A);
       $printer->text("------------------------\n");
+
+      $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+      $printer->setJustification(Printer::JUSTIFY_CENTER);
+      $printer->qrCode(base_url("/mobile"), Printer::QR_ECLEVEL_L, 7, Printer::QR_MODEL_2);
+      $printer->text("\n");
+      $printer->setTextSize(1, 1);
+      $printer->text("Scan QR Code di atas untuk mengetahui antrian berjalan secara online\n");
+
+      $printer->cut();
+      /* Pulse */
+      $printer->pulse();
+
+      $printer->close();
+    } catch (\Throwable $th) {
+      throw new Exception("Gagal cetak antrian. Masin antrian mati/tidak terhubung. " . $th->getMessage(), $th->getCode());
+    }
+  }
+
+  public function print_antrian_ptsp($data, $ip = "192.168.0.188")
+  {
+    if ($_ENV["DEBUG_PRINT"] == "false") {
+      return false;
+    }
+
+    try {
+      if ($_ENV["DEBUG"] == "true" || isset($_GET["secondary"])) {
+        $ip = "192.168.0.187";
+      }
+
+      $connector = new NetworkPrintConnector($ip, 9100, 3000);
+      $printer = new Printer($connector);
+      $printer->initialize();
+
+      $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+      $printer->setJustification(Printer::JUSTIFY_CENTER);
+      $printer->setFont(Printer::FONT_A);
+
+      if ($_ENV["DEBUG"] == "true") {
+        $printer->text("TEST UJI COBA\n");
+      }
+
+      $printer->text("Pengadilan Agama\n Jakarta Utara \n");
+      $printer->text("------------------------\n");
+      $printer->text($data->tujuan);
+      $printer->text("\n");
+      $printer->setTextSize(5, 4);
+      $printer->text($data->kode . "-" . $data->nomor_urutan);
+      $printer->text("\n");
+      $printer->setTextSize(1, 1);
+
+      if ($data->pesanan_produk) {
+        $printer->text("Yang Mengambil Antrian : " . $data->pesanan_produk->nama_pengambil ?? "");
+      }
       $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
       $printer->setJustification(Printer::JUSTIFY_CENTER);
       $printer->setTextSize(1, 1);
       $printer->text("Di ambil:" . date('Y-m-d H:i:S') . " \n");
+
+      $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+      $printer->setJustification(Printer::JUSTIFY_CENTER);
       $printer->setFont(Printer::FONT_A);
-      $printer->text("KERTAS INI SEBAGAI KARTU PARKIR KENDARAAN ANDA. MOHON UNTUK DITUKARKAN KEMBALI SEBELUM MENINGGALKAN PARKIRAN\n");
+      $printer->text("------------------------\n");
+
+      $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+      $printer->setJustification(Printer::JUSTIFY_CENTER);
+      $printer->qrCode(base_url("/mobile"), Printer::QR_ECLEVEL_L, 7, Printer::QR_MODEL_2);
+      $printer->text("\n");
+      $printer->setTextSize(1, 1);
+      $printer->text("Scan QR Code di atas untuk mengetahui antrian berjalan secara online\n");
+
+
 
       $printer->cut();
       /* Pulse */
@@ -150,9 +223,57 @@ class Ambil extends R_Controller
   {
     R_Input::mustPost();
     try {
-      $lastAntrianPtsp = AntrianPtsp::where("tujuan", R_Input::pos("tujuan"))->whereDate("created_at", date("Y-m-d"))->first();
+      $lastNomorAntrianPtsp = AntrianPtsp::where([
+        "tujuan" => R_Input::pos("tujuan")
+      ])->whereDate("created_at", date("Y-m-d"))->max("nomor_urutan");
+
+      $newAntrianPtsp = AntrianPtsp::create([
+        "tujuan" => R_Input::pos("tujuan"),
+        "kode" => $this->tujuanToKode(R_Input::pos("tujuan")),
+        "nomor_urutan" => $lastNomorAntrianPtsp ? $lastNomorAntrianPtsp + 1 : 1,
+        "status" => 0,
+      ]);
+
+      if (isset($_POST["nomor_perkara"])) {
+        $produk = ProdukPengadilan::create([
+          "nomor_perkara" => R_Input::pos("nomor_perkara"),
+          "pihak_id" => R_Input::pos("pihak_id"),
+          "antrian_pelayanan_id" => $newAntrianPtsp->id
+        ]);
+      }
+
+      $this->print_antrian_ptsp($newAntrianPtsp);
+
+      if ($this->input->request_headers()["Accept"] == "application/json") {
+        echo json_encode(["message" => "Berhasil", "antrian" => $newAntrianPtsp]);
+      } else {
+        Redirect::wfa([
+          "mesg" => "Berhasil",
+          "text" => "Nomor antrian Anda " . $newAntrianPtsp->nomor_urutan . " di loket " . $newAntrianPtsp->tujuan,
+          "type" => "success"
+        ])->go($_SERVER["HTTP_REFERER"]);
+      }
     } catch (\Throwable $th) {
-      //throw $th;
+      if ($this->input->request_headers()["Accept"] == "application/json") {
+        set_status_header(400);
+        echo json_encode(["message" => $th->getMessage()]);
+      } else {
+        Redirect::wfe($th->getMessage())->go($_SERVER["HTTP_REFERER"]);
+      }
     }
+  }
+
+  private function tujuanToKode($tujuan)
+  {
+    $daftarTujuan = [
+      "PENDAFTARAN" => "A",
+      "E-COURT" => "A",
+      "INFORMASI" => "A",
+      "KASIR" => "B",
+      "POSBAKUM" => "C",
+      "PRODUK" => "D",
+    ];
+
+    return $daftarTujuan[$tujuan] ?? null;
   }
 }

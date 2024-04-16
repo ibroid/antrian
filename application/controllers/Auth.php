@@ -31,8 +31,13 @@ class Auth extends CI_Controller
       $this->matchPassword($u->password, $u->salt);
 
       $this->storeSession($u->toArray());
+      if ($this->session->userdata("redirect_dest")) {
 
-      redirect(base_url("/menu"));
+        redirect(base_url($this->session->userdata("redirect_dest")));
+      } else {
+
+        redirect(base_url("/menu"));
+      }
     } catch (\Throwable $th) {
 
       $this->session->set_flashdata('flash_error', $this->load->component(Constanta::ALERT_ERROR, [

@@ -24,6 +24,8 @@ class R_Controller extends CI_Controller
                 ])
             );
 
+            $this->session->set_userdata("redirect_dest", $_SERVER["REQUEST_URI"]);
+
             redirect(base_url('auth'));
         }
 

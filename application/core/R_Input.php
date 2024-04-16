@@ -12,6 +12,11 @@ class R_Input extends CI_Input
         self::$par = new parent($sc);
     }
 
+    public static function ci()
+    {
+        return new static;
+    }
+
     public static function pos($par = null)
     {
         return !$par ? self::$par->post() : self::$par->post($par, TRUE);

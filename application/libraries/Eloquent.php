@@ -19,6 +19,9 @@ class Eloquent extends Illuminate\Database\Capsule\Manager
       'charset' => 'utf8',
       'collation' => 'utf8_unicode_ci',
       'prefix' => '',
+      'options'   => [
+        PDO::ATTR_TIMEOUT => 5,
+      ],
     ]);
 
     $this->addConnection([
@@ -27,9 +30,13 @@ class Eloquent extends Illuminate\Database\Capsule\Manager
       'database' => $_ENV["DB_SIPP_NAME"],
       'username' => $_ENV["DB_SIPP_USER"],
       'password' => $_ENV["DB_SIPP_PASS"],
+      'port' => $_ENV["DB_SIPP_PORT"],
       'charset' => 'utf8',
       'collation' => 'utf8_unicode_ci',
       'prefix' => '',
+      'options'   => [
+        PDO::ATTR_TIMEOUT => 5,
+      ],
     ], "sipp");
 
     $this->setEventDispatcher(new Dispatcher(new Container));

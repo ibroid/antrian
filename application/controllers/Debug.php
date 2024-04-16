@@ -18,6 +18,6 @@ class Debug extends R_Controller
 
   public function index()
   {
-    echo "string" == true ? "Debug mode is off" : "Debug mode is on";
+    echo date("Y-m-d H:i:s");
   }
 }

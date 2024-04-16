@@ -23,6 +23,6 @@ final class CreatePetugasTable extends AbstractMigration
         $table->addColumn('nama_petugas', 'string', ['limit' => 191])
             ->addColumn('jenis_petugas', 'enum', ['values' => ['Petugas PTSP', 'Petugas Sidang', 'Petugas Produk']])
             ->addColumn('created_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP'])
-            ->addColumn('updated_at', 'timestamp', ['default' => null, 'null' => true]);
+            ->addColumn('updated_at', 'timestamp', ['default' => null, 'null' => true])->create();
     }
 }

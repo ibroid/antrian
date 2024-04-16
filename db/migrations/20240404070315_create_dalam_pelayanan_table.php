@@ -24,6 +24,6 @@ final class CreateDalamPelayananTable extends AbstractMigration
             ->addColumn('petugas_id', 'integer', ['null' => true])
             ->addColumn('tanggal_panggil', 'date', ['null' => true])
             ->addColumn('created_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP'])
-            ->addColumn('updated_at', 'timestamp', ['default' => null, 'null' => true]);
+            ->addColumn('updated_at', 'timestamp', ['null' => true])->create();
     }
 }
