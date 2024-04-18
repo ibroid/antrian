@@ -4,8 +4,18 @@
       <div class="login-main" style="width: fit-content;">
         <?= $this->session->flashdata('flash_error') ?>
         <?= $this->session->flashdata('flash_notif') ?>
-        <h4>Halaman Utama. Silahkan Pilih Menu</h4>
-        <p>Aplikasi Antrian Persidangan dan Pelayanan Pengadilan Agama Jakarta Utara</p>
+        <div class="d-flex">
+          <div class="flex-grow-1">
+            <h4>Halaman Utama. Silahkan Pilih Menu</h4>
+            <p>Aplikasi Antrian Persidangan dan Pelayanan Pengadilan Agama Jakarta Utara</p>
+          </div>
+          <div class="text-end">
+            <a href="<?= base_url('/admin') ?>" class="btn bg-primary">
+              Dashboard Admin
+              <i class="fa fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
         <div class="row">
           <div class="col-xl-4">
             <div class="card widget-1" style="background-image: none;" onclick="window.location.href='<?= base_url('/ambil') ?>'">

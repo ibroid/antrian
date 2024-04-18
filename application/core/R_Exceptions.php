@@ -17,7 +17,7 @@ class R_Exceptions extends CI_Exceptions
           break;
 
         default:
-          prindie($exception);
+          echo "Terjadi error pada database sipp :" . $exception->getMessage();
           break;
       }
     } else {

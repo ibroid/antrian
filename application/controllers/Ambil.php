@@ -4,8 +4,6 @@
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 
-use function PHPSTORM_META\map;
-
 class Ambil extends R_Controller
 {
   public Addons $addons;

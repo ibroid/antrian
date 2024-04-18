@@ -35,3 +35,7 @@ assets
 .env
 
 package
+
+*.pem
+*.cert
+*.crt

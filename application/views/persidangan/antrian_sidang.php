@@ -9,6 +9,8 @@
 </style>
 
 <div class="container-fluid py-3">
+  <?= $this->session->flashdata("flash_alert") ?>
+  <?= $this->session->flashdata("flash_error") ?>
   <?= $this->load->component("card/widget_current_persidangan") ?>
   <div class="row mt-3">
     <!-- Widget Total Antrian -->

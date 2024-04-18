@@ -607,6 +607,7 @@
       },
       success(html) {
         $("#checkInModal-body").html(html)
+        changeGlobalAudio("<?= base_url("/audio/intruction-antrian-sidang-1.mp3") ?>")
       },
       error(err) {
         $("#checkInModal-body").html(err.responseText && err.message)

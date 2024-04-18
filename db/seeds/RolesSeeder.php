@@ -23,13 +23,13 @@ class RolesSeeder extends AbstractSeed
                 "role_name" => "Petugas Sidang",
             ],
             [
-                "role_name" => "Petugas PTSP",
+                "role_name" => "Petugas Pelayanan",
             ],
             [
-                "role_name" => "Petugas Pegawai",
+                "role_name" => "Pegawai",
             ],
             [
-                "role_name" => "Petugas HAKIM",
+                "role_name" => "Hakim",
             ],
         ];
 
