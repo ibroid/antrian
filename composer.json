@@ -18,7 +18,8 @@
 		"mike42/escpos-php": "^4.0",
 		"robmorgan/phinx": "^0.13.4",
 		"pusher/pusher-php-server": "^7.2",
-		"phpoffice/phpword": "^1.2"
+		"phpoffice/phpword": "^1.2",
+		"claudye/php-crypter": "^1.0"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

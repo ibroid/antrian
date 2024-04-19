@@ -20,7 +20,9 @@ final class CreatePetugasTable extends AbstractMigration
     public function change(): void
     {
         $table = $this->table('petugas', ['engine' => 'InnoDB']);
-        $table->addColumn('nama_petugas', 'string', ['limit' => 191])
+        $table
+            ->addColumn('user_id', 'integer', ['limit' => 12, 'null' => false])
+            ->addColumn('nama_petugas', 'string', ['limit' => 191])
             ->addColumn('jenis_petugas', 'enum', ['values' =>
             [
                 'Petugas PTSP',

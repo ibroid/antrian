@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
-class Debug extends R_Controller
+class Debug extends CI_Controller
 {
   public Eloquent $eloquent;
 
@@ -14,10 +14,5 @@ class Debug extends R_Controller
       set_status_header(404);
       die;
     }
-  }
-
-  public function index()
-  {
-    echo date("Y-m-d H:i:s");
   }
 }
