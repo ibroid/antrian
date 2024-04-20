@@ -3,12 +3,19 @@
 class Pengguna extends R_Controller
 {
   /**
-   * Inisialisasi library Addons untuk menambahkan plugin css dan js
+   * Inisialisasi fungsi construct.
+   * Inisialisasi library Addons untuk menambahkan plugin css dan js.
+   * 
    * @return void
    */
   public function __construct()
   {
     parent::__construct();
+
+    if (!$this->is_admin) {
+      Redirect::wfe("Halaman khusus admin")->go($_SERVER["HTTP_REFERER"]);
+    }
+
     $this->load->library("Addons");
     $this->addons->init([
       "js" => [

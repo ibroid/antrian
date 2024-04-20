@@ -9,12 +9,14 @@
             <h4>Halaman Utama. Silahkan Pilih Menu</h4>
             <p>Aplikasi Antrian Persidangan dan Pelayanan Pengadilan Agama Jakarta Utara</p>
           </div>
-          <div class="text-end">
-            <a href="<?= base_url('/admin') ?>" class="btn bg-primary">
-              Dashboard Admin
-              <i class="fa fa-arrow-right"></i>
-            </a>
-          </div>
+          <?php if ($is_admin) : ?>
+            <div class="text-end">
+              <a href="<?= base_url('/admin') ?>" class="btn bg-primary">
+                Dashboard Admin
+                <i class="fa fa-arrow-right"></i>
+              </a>
+            </div>
+          <?php endif; ?>
         </div>
         <div class="row">
           <div class="col-xl-4">
@@ -61,7 +63,7 @@
             </div>
           </div>
           <div class="col-xl-4">
-            <div class="card widget-1" style="background-image: none;">
+            <div class="card widget-1" onclick="window.location.href='<?= base_url('/layar/ptsp') ?>'" style="background-image: none;">
               <div class="card-body">
                 <div class="widget-content">
                   <div class="widget-round primary">

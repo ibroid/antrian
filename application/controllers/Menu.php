@@ -21,6 +21,8 @@ class Menu extends R_Controller
         <link rel='stylesheet' type='text/css' href='../assets/css/vendors/swiper/swiper.min.css'>\n"
       ]
     ]);
-    $this->load->page("menu")->layout("auth_layout");
+    $this->load->page("menu", [
+      "is_admin" => $this->is_admin
+    ])->layout("auth_layout");
   }
 }

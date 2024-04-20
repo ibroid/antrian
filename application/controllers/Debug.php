@@ -15,4 +15,8 @@ class Debug extends CI_Controller
       die;
     }
   }
+
+  public function index()
+  {
+  }
 }

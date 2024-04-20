@@ -4,14 +4,43 @@ use Pusher\Pusher;
 
 class R_Controller extends CI_Controller
 {
-    public $user = [];
+    /**
+     * Mendefinisikan variabel user yang berisi array kosong yang akan diisi oleh record user yang telah login.
+     * @var array
+     */
+    public array $user = [];
 
+    /**
+     * Mendefinisikan variable id_admin yang akan di set ulang apabila user yang login adalah admin.
+     * @var bool
+     */
+    public bool $is_admin = FALSE;
+
+    /**
+     * Inisialisasi library eloquent
+     * @var Eloquent
+     */
     public Eloquent $ed;
 
+    /**
+     * Inisialisasi library addons
+     * @var Addons
+     */
     public Addons $addons;
 
+    /**
+     * Inisialisasi library Pusher
+     * @var Pusher
+     */
     public Pusher $pusher;
 
+    /**
+     * Inisialisasi fungsi construct. 
+     * Mengecek apakah user sudah login atau belum.
+     * Mengisikan variabel user dengan record user yang login.
+     * Inisialisasi Pusher.
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
@@ -30,6 +59,11 @@ class R_Controller extends CI_Controller
         }
 
         $this->user = $this->session->userdata('user_login');
+
+        if ($this->user["role_id"] == 1) {
+            $this->is_admin = TRUE;
+        }
+
         $this->load->library("Addons");
 
         $this->pusher = new \Pusher\Pusher(
