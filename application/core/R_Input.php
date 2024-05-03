@@ -9,7 +9,6 @@ class R_Input extends CI_Input
     {
         $sc = new CI_Security(true);
         parent::__construct($sc);
-        self::$par = new parent($sc);
     }
 
     public static function ci()
@@ -17,19 +16,25 @@ class R_Input extends CI_Input
         return new static;
     }
 
+    /**
+     * Retrieves the POST data from the request, optionally filtering by a specific parameter.
+     *
+     * @param string|null $par The parameter to filter the POST data by (optional).
+     * @return string|\Illuminate\Support\Collection The filtered POST data if a parameter is provided, otherwise the entire POST data.
+     */
     public static function pos($par = null)
     {
-        return !$par ? self::$par->post() : self::$par->post($par, TRUE);
+        return !$par ? collect(self::ci()->post(null, true))  : self::ci()->post($par, TRUE);
     }
 
     public static function gett($par = null)
     {
-        return !$par ? self::$par->get() : self::$par->get($par, TRUE);
+        return !$par ? self::ci()->get() : self::ci()->get($par, TRUE);
     }
 
     public static function mustPost()
     {
-        if (self::$par->method() !== "post") {
+        if (self::ci()->method() !== "post") {
             http_response_code(404);
             exit;
         }
@@ -37,7 +42,7 @@ class R_Input extends CI_Input
 
     public static function isPost()
     {
-        return self::$par->method() == "post";
+        return self::ci()->method() == "post";
     }
 
     /**

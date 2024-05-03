@@ -111,7 +111,7 @@
             <h5 class="text-center">Anda yakin ingin menghapus user ini?</h5>
             <p class="text-center">Masukan password untuk menghapus user</p>
           </div>
-          <form action="<?= base_url('pengguna/hapus/' . Cypher::urlsafe_encrypt($pengguna->id)) ?>" method="post" novalidate autocomplete="off">
+          <form action="<?= base_url('pengguna/delete/' . Cypher::urlsafe_encrypt($pengguna->id)) ?>" method="post" novalidate autocomplete="off">
             <div class="form-group">
               <label for="password_hapus">Password</label>
               <input type="password" name="password_hapus" id="password_hapus" class="form-control" style="margin-bottom:10px;" required>

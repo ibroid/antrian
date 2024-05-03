@@ -76,7 +76,7 @@
   let audioQueue = [];
 
   window.addEventListener("load", () => {
-    const pusher = new Pusher('a360f9f6cfefca4c383b', {
+    const pusher = new Pusher(PUSHER_APP_KEY, {
       cluster: 'ap1'
     });
 

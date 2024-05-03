@@ -21,6 +21,8 @@
                   <th>Bagian</th>
                   <th>Status</th>
                   <th>Aksi</th>
+                  <th></th>
+                  <th>Username</th>
                 </tr>
               </thead>
               <tbody>
@@ -46,6 +48,7 @@
                     <td>
                       <img width="50" src="https://api.dicebear.com/8.x/adventurer/svg?seed=<?= $p->avatar ?>" alt="avatar" />
                     </td>
+                    <td><?= $p->identifier ?></td>
                   </tr>
                 <?php endforeach; ?>
               </tbody>

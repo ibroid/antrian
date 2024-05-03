@@ -72,6 +72,7 @@
       <div class="text-center">
         <h3 class="text-warning" id="realtime-clock">00:00:00</h3>
       </div>
+      <a href="<?= base_url('/menu') ?>">Kembali</a>
       <script>
         const clockElement = document.getElementById('realtime-clock');
 
@@ -99,9 +100,7 @@
           </div>
           <div class="carousel slide" style="min-height: 360px;" id="carouselExampleInterval" data-bs-ride="carousel">
             <div class="carousel-inner">
-              <div class="carousel-item active" data-bs-interval="10000"><img class="d-block w-100" src="/assets/images/banner/1.jpg" alt="drawing-room"></div>
-              <div class="carousel-item" data-bs-interval="2000"><img class="d-block w-100" src="/assets/images/banner/2.jpg" alt="drawing-room"></div>
-              <div class="carousel-item"><img class="d-block w-100" src="/assets/images/banner/3.jpg" alt="drawing-room"></div>
+              <div class="carousel-item active" data-bs-interval="10000"><img class="d-block w-100" src="/uploads/images/loading.gif" alt="drawing-room"></div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span></button>
             <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span></button>
@@ -138,11 +137,7 @@
             <iframe id="tvplayer" width="720" height="450" src="https://www.youtube.com/embed/yNKvkPJl-tg?si=7fQq7qJbRJ32JUu7&amp;controls=1&mute=1&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
             </iframe>
           </div>
-          <ul class="pagination pagination-primary pagin-border-primary justify-content-center mb-2">
-            <li class="page-item"><a class="page-link" href="javascript:void(0)">Tv One</a></li>
-            <li class="page-item"><a class="page-link" href="javascript:void(0)">Kompas Tv</a></li>
-            <li class="page-item"><a class="page-link" href="javascript:void(0)">Metro Tv</a></li>
-            <li class="page-item"><a class="page-link" href="javascript:void(0)">Spongebob</a></li>
+          <ul id="channelTvList" class="pagination pagination-primary pagin-border-primary justify-content-center mb-2">
           </ul>
         </div>
       </div>
@@ -153,114 +148,374 @@
 </div>
 
 <div class="footer2 bg-white bg-opacity-50 ">
-  <table style="--bs-table-bg: transparent;" class="table table-bordered background-transparent text-center">
-    <thead>
-      <tr>
-        <th class="p-0 text-dark" scope="col" style="font-size: 1.2rem">Loket Kasir</th>
-        <th class="p-0 text-dark" scope="col" style="font-size: 1.2rem">Loket Produk</th>
-        <th class="p-0 text-dark" scope="col" style="font-size: 1.2rem">Loket Pelayanan 1</th>
-        <th class="p-0 text-dark" scope="col" style="font-size: 1.2rem">Loket Pelayanan 2</th>
-        <th class="p-0 text-dark" scope="col" style="font-size: 1.2rem">Loket Pelayanan 3</th>
-        <th class="p-0 text-dark" scope="col" style="font-size: 1.2rem">Loket Pelayanan 4</th>
-        <th class="p-0 text-dark" scope="col" style="font-size: 1.2rem">Loket Posbakum</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="p-2"><span style="font-size: 5rem" class="badge bg-success">B-0</span></td>
-        <td class="p-2"><span style="font-size: 5rem" class="badge bg-warning">D-0</span></td>
-        <td class="p-2"><span style="font-size: 5rem" class="badge bg-secondary">A-0</span></td>
-        <td class="p-2"><span style="font-size: 5rem" class="badge bg-secondary">A-0</span></td>
-        <td class="p-2"><span style="font-size: 5rem" class="badge bg-secondary">A-0</span></td>
-        <td class="p-2"><span style="font-size: 5rem" class="badge bg-secondary">A-0</span></td>
-        <td class="p-2"><span style="font-size: 5rem" class="badge bg-primary">C-0</span></td>
-      </tr>
-    </tbody>
-  </table>
+  <div id="container-table-loket-pelayanan"></div>
   <div class="marquee bg-dark">
-    <span>Running Text. </span>
+    <span>Loading content running text. </span>
   </div>
 </div>
 
-
 <script>
   window.addEventListener("load", function() {
-    const announcementTextList = [
-      "This is a marquee text inside the Bootstrap 5 footer.",
-      "This is a new paragraph of marquee.",
-    ];
+
+    fetchAllPageContent()
 
     const elementWithColorChanged = [
       document.querySelector("#pelayanan-info"),
     ];
+    registerElementforColorToggle(elementWithColorChanged)
 
-    const tvChannelList = [{
-        "channel_name": "TV One",
-        "channel_link": "https://www.youtube.com/embed/yNKvkPJl-tg?si=AJHk-H1tdbPSQwS7",
-      },
-      {
-        "channel_name": "Kompas TV",
-        "channel_link": "https://www.youtube.com/embed/DOOrIxw5xOw?si=vYchAp7vVe6KSU_w",
-      },
-      {
-        "channel_name": "Metro TV",
-        "channel_link": "https://www.youtube.com/embed/XKueVSGTk2o?si=iHU8FRYVdNDuVsyN",
-      },
-      {
-        "channel_name": "Spongebob",
-        "channel_link": "https://www.youtube.com/embed/-AzqVQY32-Y?si=lkCY1Oip_o_nPzLq",
+    var pusher = new Pusher("<?= $_ENV['PUSHER_APP_KEY'] ?>", {
+      cluster: 'ap1'
+    });
+
+    const loketChannel = pusher.subscribe('loket-channel');
+
+    loketChannel.bind('reorder-loket', function(data) {
+      // alert('Received my-event with message: ' + data.message);
+      fetchTableLoketPelayanan()
+    });
+
+    loketChannel.bind('update-loket', function(data) {
+      fetchTableLoketPelayanan()
+    })
+
+    const antrianChannel = pusher.subscribe('antrian-channel');
+
+    antrianChannel.bind('panggil-antrian-ptsp', function(data) {
+      audioMemanggil(data)
+    });
+  })
+
+  /**
+   * Fungi untuk mengambil data dan menerapkan nya pada konten web.
+   * @returns {Promise<void>}
+   */
+  function fetchAllPageContent() {
+    fetchDataChannelTvList().then(function(result) {
+      /**
+       * @type {
+       *   status: bool,
+       *   data: {
+       *     nama_channel: string,
+       *     url: string,
+       *     status: number,
+       *   }[]
+       * }
+       */
+      const {
+        status,
+        data
+      } = JSON.parse(result)
+
+      if (status) {
+        renderChannelTvList(data)
       }
-    ]
+    })
 
-    autoToggleColorEvery5Ms(elementWithColorChanged)
+    fetchAnnouncementList().then(function(result) {
+      /**
+       * @type {
+       *   status: bool,
+       *   data: {
+       *     content: string
+       *     status: 1
+       *   }[]
+       * }
+       */
+      const {
+        status,
+        data
+      } = JSON.parse(result)
 
-    $(".page-link").each((index, element) => {
-      $(element).on("click", function() {
-        changeIFrameVideoSource(tvChannelList[index].channel_link)
+      let startPosition = 0
+
+      changeAnnoucementEveryMarqueeEnd(startPosition, data)
+      $(".marquee").on("animationiteration", function() {
+        startPosition += 1
+        if (startPosition == data.length) {
+          startPosition = 0
+        }
+        changeAnnoucementEveryMarqueeEnd(startPosition, data)
       })
     })
 
+    fetchDataBanner().then(function(result) {
+      const {
+        status,
+        data
+      } = result
 
-    let startPosition = 0
-    changeAnnoucementEveryMarqueeEnd(startPosition, announcementTextList)
-    $(".marquee").on("animationiteration", function() {
-      startPosition += 1
-      changeAnnoucementEveryMarqueeEnd(startPosition, announcementTextList)
+      data.forEach(renderBannerContent)
     })
-  })
+
+    fetchTableLoketPelayanan()
+  }
+
+  /**
+   * Fungsi untuk mengambil data running text.
+   * @returns {Promise<string>}
+   */
+  function fetchAnnouncementList() {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: "<?= base_url('layar/fetch_data_running_text') ?>",
+        headers: {
+          "Accept": "application/json",
+        },
+        success: function(data) {
+          resolve(data)
+        },
+        error: function(xhr, status, error) {
+          reject(xhr.responseText ?? error)
+        }
+      })
+    })
+  }
 
   /**
    * Fungsi untuk mengganti isi pengumuman di running text setelah running text berakhir.
    * @param {number} startPosition
-   * @param {string[]} listOfAnaouncement
+   * @param {{content: string, status: 1}[]} listOfAnaouncement
    * @returns {void}
    */
   function changeAnnoucementEveryMarqueeEnd(startPosition = 0, listOfAnaouncement) {
-    if (startPosition == listOfAnaouncement.length) {
-      changeAnnoucementEveryMarqueeEnd(0, listOfAnaouncement)
-    }
-
-    $(".marquee span").text(listOfAnaouncement[startPosition]);
+    $(".marquee span").text(listOfAnaouncement[startPosition].content);
   }
 
   /**
-   * Fungsi untuk mengganti warna background secara otomatis setiap 5ms.
-   * @param {Element[]} element
+   * Meregistrasi setiap element yang dikirimkan untuk di toggle warna nya.
+   * @param {Element[]} elements
    */
-  function autoToggleColorEvery5Ms(element) {
-    element.forEach(e => {
-      setInterval(() => {
-        if (e.style.color === "red") {
-          e.style.color = "yellow"
-        } else {
-          e.style.color = "red"
-        }
-      }, 500)
+  function registerElementforColorToggle(elements) {
+    elements.forEach(e => {
+      toggleColorElementEvery5ms(e)
     })
   }
 
+  /** 
+   * Fungsi untuk mengganti warna text secara otomatis setiap 5ms.
+   * @param {Element} e
+   * @returns {number}
+   */
+  function toggleColorElementEvery5ms(e) {
+    return setInterval(() => {
+      if (e.style.color === "red") {
+        e.style.color = "yellow"
+      } else {
+        e.style.color = "red"
+      }
+    }, 500)
+  }
+
+  /**
+   * Fungsi untuk mengganti link video tv player.
+   * @param {string} source
+   */
   function changeIFrameVideoSource(source) {
     const iframe = document.querySelector("#tvplayer")
     iframe.setAttribute("src", source + "&amp;controls=1&autoplay=1")
+  }
+
+  /**
+   * Fungsi untuk mengambil data channel tv list.
+   * @returns {Promise<string[]>}
+   */
+  function fetchDataChannelTvList() {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: "<?= base_url("layar/fetch_data_channel_tv_list") ?>",
+        headers: {
+          "Accept": "application/json"
+        },
+        success: function(data) {
+          resolve(data)
+        },
+        error: function(err) {
+          reject(err)
+        }
+      })
+    })
+  }
+
+  /**
+   * Fungsi untuk merender button data channel tv list.
+   * @param {{
+   *   nama_channel: string,
+   *   url: string,
+   *   status: number,
+   * }[]} data
+   */
+  function renderChannelTvList(data) {
+    data.forEach(d => {
+      const elementList = $("<li>").addClass("page-item")
+      const elementLink = $("<a>").attr("href", "javascript:void(0)").addClass("page-link").text(d.nama_channel)
+      elementList.append(elementLink)
+      elementList.click(() => {
+        changeIFrameVideoSource(d.url)
+      })
+      $("#channelTvList").append(elementList)
+    })
+  }
+
+  /**
+   * Fungsi untuk mengambil data banner.
+   * @returns {Promise<{
+   *   status: bool,
+   *   data: {
+   *     filename: string,
+   *     status: number
+   *   }[]
+   * }>}
+   */
+  function fetchDataBanner() {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: "<?= base_url("layar/fetch_data_banner") ?>",
+        headers: {
+          "Accept": "application/json"
+        },
+        success: function(data) {
+          resolve(JSON.parse(data))
+        },
+        error: function(err) {
+          reject(err)
+        }
+      })
+    })
+  }
+
+  /**
+   * Fungsi untuk merender banner.
+   * @param {{
+   *   filename: string,
+   *   status: number
+   * }} data
+   * @returns {void}
+   */
+  function renderBannerContent(data) {
+    $(".carousel-inner").append(`<div class="carousel-item" data-bs-interval="10000"><img class="d-block w-100" src="/uploads/banner/${data.filename}" alt="drawing-room"></div>`)
+  }
+
+  /**
+   * Fungsi untuk memuat tabel loket pelayanan
+   */
+  function fetchTableLoketPelayanan() {
+    $.ajax({
+      url: "<?= base_url("loket/fetch_table_loket_pelayanan") ?>",
+      method: "POST",
+      success: function(html) {
+        $("#container-table-loket-pelayanan").html(html)
+      },
+      error: function(err) {
+        console.log(err)
+        $("#container-table-loket-pelayanan").html(`<div class="text-center"><h3>Terjadi kesalahaan saat memproses informasi tabel loket pelayanan. ${err.statusText ?? err.responseJSON }</h3></div>`)
+      }
+    })
+  }
+
+  var audioQueue = []
+  var isPlaying = false
+
+
+  function audioMemanggil(loket) {
+
+    const susunanAudio = [];
+
+    const loketNametoAudioName = {
+      "Customer Service 1": "ke_kastemer_servis_satu.mp3",
+      "Customer Service 2": "ke_kastemer_servis_dua.mp3",
+      "Customer Service 3": "ke_kastemer_servis_tiga.mp3",
+      "Customer Service 4": "ke_kastemer_servis_empat.mp3",
+      "Customer Service 5": "ke_kastemer_servis_lima.mp3",
+      "Loket Produk": "ke_loket_produk.mp3",
+      "Loket Posbakum": "ke_loket_posbakum.mp3",
+      "Loket Pos Indonesia": "ke_loket_pos_indonesia.mp3",
+      "Loket Bank": "ke_loket_bank.mp3",
+    };
+
+    susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/nomor_antrian_${String(loket.antrian.kode).toLowerCase()}.mp3`));
+
+    if (loket.antrian.nomor_urutan > 11) {
+      const digitAntrian = String(loket.antrian.nomor_urutan).split("");
+
+      if (digitAntrian.length == 3) {
+        if (digitAntrian[0] == 1) {
+          susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/SERATUS.mp3`));
+        } else {
+          susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/${digitAntrian[0]}.mp3`));
+          susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/RATUS.mp3`));
+        }
+
+        if (digitAntrian[1] == 0) {
+          susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/${digitAntrian[2]}.mp3`));
+        } else if (digitAntrian[1] == 0 && digitAntrian[2] == 0) {
+
+        } else if (digitAntrian[2] == 0) {
+          susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/${digitAntrian[1]}.mp3`));
+          susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/PULUH.mp3`));
+        } else {
+          susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/${digitAntrian[1]}.mp3`));
+          susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/PULUH.mp3`));
+          susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/${digitAntrian[2]}.mp3`));
+        }
+      } else if (digitAntrian[0] == 1) {
+
+        susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/${digitAntrian[1]}.mp3`));
+        susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/BELAS.mp3`));
+
+      } else {
+        susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/${digitAntrian[0]}.mp3`));
+      }
+
+
+
+
+      if (digitAntrian.length == 4) {
+        throw new Error("Tidak ada audio melebih seribu");
+      }
+
+    } else {
+      susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/${loket.antrian.nomor_urutan}.mp3`));
+    }
+    susunanAudio.push(new Audio("<?= base_url() ?>/audio/nomor_antrian/" + loketNametoAudioName[loket.nama_loket]));
+
+    audioQueue.push(susunanAudio);
+    if (!isPlaying) {
+      playAudioQueue()
+    }
+  }
+
+  /**
+   * @params {Audio[]} audios
+   */
+  function playSusunanAudio(audios, callback) {
+    if (!audios) {
+      return;
+    }
+    let current = 0;
+    const playNext = () => {
+      if (current < audios.length) {
+        const audio = audios[current];
+        current++;
+        audio.addEventListener("ended", playNext);
+        audio.play();
+      } else {
+        callback();
+      }
+    }
+    playNext();
+  }
+
+  function playAudioQueue() {
+    isPlaying = true
+
+    if (audioQueue.length == 0) {
+      isPlaying = false
+      return true;
+
+    }
+    playSusunanAudio(audioQueue.shift(), () => {
+      playAudioQueue();
+    });
   }
 </script>

@@ -192,6 +192,11 @@ class Pengguna extends R_Controller
     R_Input::mustPost();
     try {
       $user = Users::findOrFail(Cypher::urlsafe_decrypt($user_id));
+
+      if (!password_verify(R_Input::pos("password_hapus") . $user->salt, $user->password)) {
+        throw new Exception("Password Tidak Sama", 1);
+      }
+
       $user->delete();
 
       if (R_Input::ci()->request_headers()["Accept"] == "application/json") {

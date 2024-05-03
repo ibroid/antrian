@@ -20,7 +20,7 @@ class R_Controller extends CI_Controller
      * Inisialisasi library eloquent
      * @var Eloquent
      */
-    public Eloquent $ed;
+    public Eloquent $eloquent;
 
     /**
      * Inisialisasi library addons

@@ -30,7 +30,8 @@ final class CreatePetugasTable extends AbstractMigration
                 'Petugas Produk',
                 'Kasir',
                 'Petugas Antrian',
-                'Petugas Akta'
+                'Petugas Akta',
+                'Petugas Posbakum'
             ]])
             ->addColumn('created_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('updated_at', 'timestamp', ['default' => null, 'null' => true])->create();

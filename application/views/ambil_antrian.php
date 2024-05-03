@@ -212,14 +212,14 @@
 
   <ul id="camera-control" hidden class="tg-list common-flex">
     <li class="tg-list-item">
-      <input class="tgl tgl-skewed" id="cb3" type="checkbox">
+      <input class="tgl tgl-skewed" id="cb3" type="checkbox" checked>
       <label class="tgl-btn" data-tg-off="OFF" data-tg-on="ON" for="cb3"></label>
     </li>
     <li>
       <h6> Camera</h6>
     </li>
     <li class="tg-list-item">
-      <input class="tgl tgl-skewed" id="cb5" type="checkbox">
+      <input class="tgl tgl-skewed" id="cb5" type="checkbox" checked>
       <label class="tgl-btn" data-tg-off="OFF" data-tg-on="ON" for="cb5"></label>
     </li>
     <li>
@@ -376,11 +376,25 @@
       .then(() => {
         $("#camera-control").removeAttr("hidden");
         $("#camera-container > .text-center").attr("hidden");
-
       })
       .catch(err => {
         console.error(err);
         $("#camera-container").html('Error accessing camera: ' + err.message);
+      })
+      .finally(() => {
+        webcam.start()
+          .then(result => {
+            webcamElement.style.transform = "";
+            console.log("webcam started");
+          })
+          .catch(err => {
+            console.error(err)
+          }).finally(() => {
+            setTimeout(() => {
+              createCanvas();
+              startDetection();
+            }, 1000)
+          });
       })
 
     $("#cb3").change(function() {
@@ -540,24 +554,30 @@
         tujuan: tujuan
       },
       success(data) {
-        (async function() {
-          changeGlobalAudio("/audio/intruction-antrian-1.mp3")
-        })()
         const {
-          antrian
-        } = JSON.parse(data)
+          antrian,
+          message
+        } = JSON.parse(data);
+
+        (async function() {
+          if (message == "Antrian berhasil dicetak") {
+            changeGlobalAudio("/audio/intruction-antrian-1.mp3")
+          } else {
+            changeGlobalAudio("/audio/intruction-antrian-2.mp3")
+          }
+        })()
 
         const nomor_antrian = antrian.kode + "-" + antrian.nomor_urutan;
 
         Swal.fire({
-          title: "Silahkan ambil antrian",
+          title: "Nomor Antrian Anda : " + nomor_antrian,
           icon: "success",
-          html: "Antrian Anda : " + nomor_antrian + "<br/><b></b>",
-          timer: 5000,
+          html: message + "<br/><b></b>",
+          timer: 6000,
           timerProgressBar: true,
           didOpen: () => {
             const timer = Swal.getPopup().querySelector("b");
-            let sec = 4;
+            let sec = 5;
             timerInterval = setInterval(() => {
               timer.textContent = sec--;
             }, 1000);
@@ -865,18 +885,22 @@
     const nomor_antrian = kode + "-" + nomor_urutan;
 
     (async function() {
-      changeGlobalAudio("<?= base_url("/audio/intruction-antrian-1.mp3") ?>")
+      if (decissionPihakPengambil.value.message == "Antrian berhasil dicetak") {
+        changeGlobalAudio("/audio/intruction-antrian-1.mp3")
+      } else {
+        changeGlobalAudio("/audio/intruction-antrian-2.mp3")
+      }
     })()
 
     Swal.fire({
-      title: "Silahkan ambil antrian",
+      html: decissionPihakPengambil.value.message,
       icon: "success",
-      html: "Antrian Anda : " + nomor_antrian + "<br/><b></b>",
-      timer: 5000,
+      title: "Antrian Anda : " + nomor_antrian + "<br/><b></b>",
+      timer: 6000,
       timerProgressBar: true,
       didOpen: () => {
         const timer = Swal.getPopup().querySelector("b");
-        let sec = 4;
+        let sec = 5;
         timerInterval = setInterval(() => {
           timer.textContent = sec--;
         }, 1000);
@@ -894,5 +918,56 @@
   function stopGlobalAudio() {
     globalAudio.pause();
     globalAudio.currentTime = 0;
+  }
+
+  /**
+   * Fungsi untuk memutar audio berulang yang sumber nya di dalam array.
+   * @param {string[]} audioList
+   * @returns {void}
+   */
+  function playAudioStreak(audioList) {
+    if (audioList.length == 0) {
+      return true;
+    }
+
+    let audio = new Audio();
+    audio.src = audioList[0];
+    audio.play();
+    audio.addEventListener("ended", () => {
+      if (indexAudio < audioList.length) {
+        audioList.shift()
+        playAudioStreak(audioList)
+      }
+    });
+  }
+
+  /**
+   * @param {string} antrianNumber
+   * return {string[]}
+   */
+  function getAudioFromAntrianNmber(antrianNumber) {
+    const arrayOfNumber = antrianNumber.split("")
+    const arrayAudioSource = [];
+
+    if (antrianNumber.length == 1) {
+      return [
+        `<?= base_url('/audio/nomor_antrian/') ?>${arrayOfNumber[0]}.mp3`,
+      ]
+    }
+
+    if (antrianNumber.length == 2 && parseInt(arrayOfNumber[0]) == 1) {
+      arrayAudioSource.push('<?= base_url('/audio/nomor_antrian/') ?>SE.mp3');
+
+      if (parseInt(arrayOfNumber[1]) == 0) {
+        return [...arrayAudioSource, `<?= base_url('/audio/nomor_antrian/') ?>PULUH.mp3`];
+      }
+
+      if (arrayOfNumber[1] == "00") {
+        return [...arrayAudioSource, `<?= base_url('/audio/nomor_antrian/') ?>RATUS.mp3`];
+      }
+
+    }
+    const audioPath = `<?= base_url('/audio/nomor_antrian/') ?>${arrayOfNumber[1]}.mp3`
+    return audioPath
   }
 </script>

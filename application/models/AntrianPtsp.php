@@ -30,4 +30,14 @@ class AntrianPtsp extends Model
   {
     return $this->hasOne(ProdukPengadilan::class, "antrian_pelayanan_id", "id");
   }
+
+
+  /**
+   * Get the nomor_antrian attribute. Combine from nomor_urutan and kode
+   * @return string
+   */
+  public function getNomorAntrianAttribute()
+  {
+    return $this->kode . "-" . $this->nomor_urutan;
+  }
 }

@@ -46,7 +46,7 @@ $user = $this->session->userdata('user_login');
         </li>
         <li class="profile-nav onhover-dropdown pe-0 py-0">
             <div class="media profile-media">
-                <img class="b-r-10" src="https://api.dicebear.com/7.x/adventurer/svg?size=45&backgroundColor=b6e3f4&seed=<?= $user['avatar'] ?>" alt="avatar" />
+                <img class="b-r-10" src="https://api.dicebear.com/7.x/adventurer/svg?size=65&backgroundColor=b6e3f4&seed=<?= $user['avatar'] ?>" alt="avatar" />
                 <div class="media-body"><span><?= $user['name'] ?></span>
                     <p class="mb-0"><?= $user['role']['role_name']  ?> <i class="middle fa fa-angle-down"></i></p>
                 </div>

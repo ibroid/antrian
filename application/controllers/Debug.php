@@ -18,5 +18,6 @@ class Debug extends CI_Controller
 
   public function index()
   {
+    echo password_hash("ptsp400622" . "96af1a5a", PASSWORD_BCRYPT);
   }
 }

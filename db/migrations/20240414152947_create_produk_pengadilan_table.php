@@ -25,7 +25,7 @@ final class CreateProdukPengadilanTable extends AbstractMigration
             ->addColumn('nomor_perkara', 'string', ['limit' => 32])
             ->addColumn('nomor_akta_cerai', 'string', ['limit' => 32, 'null' => true])
             ->addColumn('pihak_id', 'integer', ['limit' => 12, 'null' => true])
-            ->addColumn('jenis_perkara', 'string', ['limit' => 12, 'null' => true])
+            ->addColumn('jenis_perkara', 'string', ['limit' => 64, 'null' => true])
             ->addColumn('tahun_perkara', 'integer', ['limit' => 4, 'null' => true])
             ->addColumn('nama_pengambil', 'string', ['limit' => 512, 'null' => true])
             ->addColumn('foto_pengambil', 'string', ['limit' => 64, 'null' => true])

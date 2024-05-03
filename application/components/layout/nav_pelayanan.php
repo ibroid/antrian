@@ -23,7 +23,7 @@
       </li>
       <li class="sidebar-list">
         <i class="fa fa-thumb-tack"></i>
-        <a class="sidebar-link sidebar-title" href="<?= base_url('/kasir') ?>">
+        <a class="sidebar-link sidebar-title" href="<?= base_url('/pesanan_produk') ?>">
           <svg class="stroke-icon">
             <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-project"></use>
           </svg>
@@ -32,7 +32,16 @@
       </li>
       <li class="sidebar-list">
         <i class="fa fa-thumb-tack"></i>
-        <a class="sidebar-link sidebar-title" href="<?= base_url('/produk') ?>">
+        <a class="sidebar-link sidebar-title" href="<?= base_url('/bank_gugatan') ?>">
+          <svg class="stroke-icon">
+            <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-project"></use>
+          </svg>
+          <span>Bank Gugatan</span>
+        </a>
+      </li>
+      <li class="sidebar-list">
+        <i class="fa fa-thumb-tack"></i>
+        <a class="sidebar-link sidebar-title" href="<?= base_url('/kasir') ?>">
           <svg class="stroke-icon">
             <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-to-do"></use>
           </svg>

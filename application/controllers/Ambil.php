@@ -73,7 +73,7 @@ class Ambil extends R_Controller
 
       $this->session->set_flashdata("flash_alert", $this->load->component(Constanta::ALERT_SUCCESS, ["message" => "Nomor Antrian Anda : $data->nomor_urutan. Di ruangan : $data->nama_ruang. Silahkan Ambil Tiket Antrian nya"]));
 
-      $this->print_antrian_sidang($data);
+      $cetak = $this->print_antrian_sidang($data);
     } catch (\Throwable $th) {
 
       $this->session->set_flashdata("flash_error", $this->load->component(Constanta::ALERT_ERROR, ["message" => $th->getMessage()]));
@@ -92,7 +92,7 @@ class Ambil extends R_Controller
   public function print_antrian_sidang($data, $ip = "192.168.0.188")
   {
     if ($_ENV["DEBUG_PRINT"] == "false") {
-      return false;
+      return [true, "Antrian tidak akan dicetak jika dalam mode debug print."];
     }
 
     try {
@@ -100,7 +100,7 @@ class Ambil extends R_Controller
         $ip = "192.168.0.187";
       }
 
-      $connector = new NetworkPrintConnector($ip, 9100, 3000);
+      $connector = new NetworkPrintConnector($ip, 9100, 5);
       $printer = new Printer($connector);
       $printer->initialize();
 
@@ -148,15 +148,17 @@ class Ambil extends R_Controller
       $printer->pulse();
 
       $printer->close();
+
+      return [true, "Antrian Berhasil dicetak"];
     } catch (\Throwable $th) {
-      throw new Exception("Gagal cetak antrian. Masin antrian mati/tidak terhubung. " . $th->getMessage(), $th->getCode());
+      return [false, "Gagal cetak antrian. Masin antrian mati/tidak terhubung. " . $th->getMessage()];
     }
   }
 
   public function print_antrian_ptsp($data, $ip = "192.168.0.188")
   {
     if ($_ENV["DEBUG_PRINT"] == "false") {
-      return false;
+      return [true, "Antrian tidak akan dicetak jika dalam mode debug print."];
     }
 
     try {
@@ -164,7 +166,7 @@ class Ambil extends R_Controller
         $ip = "192.168.0.187";
       }
 
-      $connector = new NetworkPrintConnector($ip, 9100, 3000);
+      $connector = new NetworkPrintConnector($ip, 9100, 5);
       $printer = new Printer($connector);
       $printer->initialize();
 
@@ -212,8 +214,10 @@ class Ambil extends R_Controller
       $printer->pulse();
 
       $printer->close();
+
+      return [true, "Antrian berhasil dicetak"];
     } catch (\Throwable $th) {
-      throw new Exception("Gagal cetak antrian. Masin antrian mati/tidak terhubung. " . $th->getMessage(), $th->getCode());
+      return [false, "Gagal cetak antrian. Masin antrian mati/tidak terhubung. " . $th->getMessage()];
     }
   }
 
@@ -222,7 +226,7 @@ class Ambil extends R_Controller
     R_Input::mustPost();
     try {
       $lastNomorAntrianPtsp = AntrianPtsp::where([
-        "tujuan" => R_Input::pos("tujuan")
+        "kode" => $this->tujuanToKode(R_Input::pos("tujuan")),
       ])->whereDate("created_at", date("Y-m-d"))->max("nomor_urutan");
 
       $newAntrianPtsp = AntrianPtsp::create([
@@ -240,13 +244,13 @@ class Ambil extends R_Controller
         ]);
       }
 
-      $this->print_antrian_ptsp($newAntrianPtsp);
+      $cetak = $this->print_antrian_ptsp($newAntrianPtsp);
 
       if ($this->input->request_headers()["Accept"] == "application/json") {
-        echo json_encode(["message" => "Berhasil", "antrian" => $newAntrianPtsp]);
+        echo json_encode(["message" => $cetak[1], "antrian" => $newAntrianPtsp]);
       } else {
         Redirect::wfa([
-          "mesg" => "Berhasil",
+          "mesg" => $cetak[1],
           "text" => "Nomor antrian Anda " . $newAntrianPtsp->nomor_urutan . " di loket " . $newAntrianPtsp->tujuan,
           "type" => "success"
         ])->go($_SERVER["HTTP_REFERER"]);
@@ -254,7 +258,7 @@ class Ambil extends R_Controller
     } catch (\Throwable $th) {
       if ($this->input->request_headers()["Accept"] == "application/json") {
         set_status_header(400);
-        echo json_encode(["message" => $th->getMessage()]);
+        echo json_encode(["message" => $th->getMessage(), "stack" => $th->getTrace()]);
       } else {
         Redirect::wfe($th->getMessage())->go($_SERVER["HTTP_REFERER"]);
       }

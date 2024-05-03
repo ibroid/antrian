@@ -33,4 +33,9 @@ class Redirect
   {
     redirect($url);
   }
+
+  public static function to($url)
+  {
+    redirect($url);
+  }
 }
