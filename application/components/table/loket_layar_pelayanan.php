@@ -9,7 +9,7 @@
   <tbody>
     <tr>
       <?php foreach ($data as $d) : ?>
-        <td style="padding: auto;"><span style="font-size: 5rem" class="badge px-3 py-4 bg-<?= $d->warna_loket ?> <?= $d->status == 0 ? "opacity-50" : null ?>"><?= $d->status == 0 ? "OFF" : $d->antrian->nomor_antrian ?? 0 ?></span></td>
+        <td style="padding: auto;"><span style="font-size: 5rem" class="badge px-3 py-4 bg-<?= $d->warna_loket ?> <?= $d->status == 0 ? "opacity-50" : null ?>"><?= $d->status == 0 ? "OFF" : $d->antrian->nomor_antrian ?? $d->kode_loket . " - 0" ?></span></td>
       <?php endforeach; ?>
     </tr>
   </tbody>

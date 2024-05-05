@@ -57,6 +57,17 @@
       <a class="navbar-brand" href="#">
         <?= Carbon\Carbon::parse(time())->locale('id_ID')->format("l d F Y") ?>
       </a>
+      <div class="d-flex justify-content-center">
+        <ul class="tg-list common-flex">
+          <li class="tg-list-item">
+            <input class="tgl tgl-skewed" id="cb3" type="checkbox">
+            <label class="tgl-btn" data-tg-off="OFF" data-tg-on="ON" for="cb3"></label>
+          </li>
+          <li>
+            <h6> Audio</h6>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="flex-grow-1">
       <div class="text-center">
@@ -155,6 +166,19 @@
 </div>
 
 <script>
+  const loketNametoAudioName = {
+    "Customer Service 1": "ke_kastemer_servis_satu.mp3",
+    "Customer Service 2": "ke_kastemer_servis_dua.mp3",
+    "Customer Service 3": "ke_kastemer_servis_tiga.mp3",
+    "Customer Service 4": "ke_kastemer_servis_empat.mp3",
+    "Customer Service 5": "ke_kastemer_servis_lima.mp3",
+    "Loket Produk": "ke_loket_produk.mp3",
+    "Loket Posbakum": "ke_loket_posbakum.mp3",
+    "Loket Pos Indonesia": "ke_loket_pos_indonesia.mp3",
+    "Loket Bank": "ke_loket_bank.mp3",
+  };
+
+
   window.addEventListener("load", function() {
 
     fetchAllPageContent()
@@ -183,6 +207,17 @@
 
     antrianChannel.bind('panggil-antrian-ptsp', function(data) {
       audioMemanggil(data)
+    });
+
+    antrianChannel.bind('stop-antrian-ptsp', function(data) {
+      const audio = new Audio("<?= base_url() ?>/audio/nomor_antrian/" + loketNametoAudioName[data.nama_loket])
+      const audio2 = new Audio("<?= base_url() ?>/audio/nomor_antrian/sedang_istirahat.mp3");
+      audio.currentTime = 0.3;
+      audio.play()
+      audio.addEventListener("ended", function() {
+        audio2.play()
+      })
+
     });
   })
 
@@ -407,7 +442,6 @@
         $("#container-table-loket-pelayanan").html(html)
       },
       error: function(err) {
-        console.log(err)
         $("#container-table-loket-pelayanan").html(`<div class="text-center"><h3>Terjadi kesalahaan saat memproses informasi tabel loket pelayanan. ${err.statusText ?? err.responseJSON }</h3></div>`)
       }
     })
@@ -421,62 +455,32 @@
 
     const susunanAudio = [];
 
-    const loketNametoAudioName = {
-      "Customer Service 1": "ke_kastemer_servis_satu.mp3",
-      "Customer Service 2": "ke_kastemer_servis_dua.mp3",
-      "Customer Service 3": "ke_kastemer_servis_tiga.mp3",
-      "Customer Service 4": "ke_kastemer_servis_empat.mp3",
-      "Customer Service 5": "ke_kastemer_servis_lima.mp3",
-      "Loket Produk": "ke_loket_produk.mp3",
-      "Loket Posbakum": "ke_loket_posbakum.mp3",
-      "Loket Pos Indonesia": "ke_loket_pos_indonesia.mp3",
-      "Loket Bank": "ke_loket_bank.mp3",
+    const huruf = {
+      'Satu': new Audio('<?= base_url('/audio/nomor_antrian/1.mp3') ?>'),
+      'Dua': new Audio('<?= base_url('/audio/nomor_antrian/2.mp3') ?>'),
+      'Tiga': new Audio('<?= base_url('/audio/nomor_antrian/3.mp3') ?>'),
+      'Empat': new Audio('<?= base_url('/audio/nomor_antrian/4.mp3') ?>'),
+      'Lima': new Audio('<?= base_url('/audio/nomor_antrian/5.mp3') ?>'),
+      'Enam': new Audio('<?= base_url('/audio/nomor_antrian/6.mp3') ?>'),
+      'Tujuh': new Audio('<?= base_url('/audio/nomor_antrian/7.mp3') ?>'),
+      'Delapan': new Audio('<?= base_url('/audio/nomor_antrian/8.mp3') ?>'),
+      'Sembilan': new Audio('<?= base_url('/audio/nomor_antrian/9.mp3') ?>'),
+      'Sepuluh': new Audio('<?= base_url('/audio/nomor_antrian/10.mp3') ?>'),
+      'Sebelas': new Audio('<?= base_url('/audio/nomor_antrian/11.mp3') ?>'),
+      'Belas': new Audio('<?= base_url('/audio/nomor_antrian/BELAS.mp3') ?>'),
+      'Puluh': new Audio('<?= base_url('/audio/nomor_antrian/PULUH.mp3') ?>'),
+      'Ratus': new Audio('<?= base_url('/audio/nomor_antrian/RATUS.mp3') ?>'),
+      'Seratus': new Audio('<?= base_url('/audio/nomor_antrian/SERATUS.mp3') ?>'),
     };
 
     susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/nomor_antrian_${String(loket.antrian.kode).toLowerCase()}.mp3`));
 
-    if (loket.antrian.nomor_urutan > 11) {
-      const digitAntrian = String(loket.antrian.nomor_urutan).split("");
+    terbilang(loket.antrian.nomor_urutan).split(" ").forEach((char) => {
+      susunanAudio.push(huruf[char])
+    })
 
-      if (digitAntrian.length == 3) {
-        if (digitAntrian[0] == 1) {
-          susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/SERATUS.mp3`));
-        } else {
-          susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/${digitAntrian[0]}.mp3`));
-          susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/RATUS.mp3`));
-        }
+    console.log(terbilang(loket.antrian.nomor_urutan))
 
-        if (digitAntrian[1] == 0) {
-          susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/${digitAntrian[2]}.mp3`));
-        } else if (digitAntrian[1] == 0 && digitAntrian[2] == 0) {
-
-        } else if (digitAntrian[2] == 0) {
-          susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/${digitAntrian[1]}.mp3`));
-          susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/PULUH.mp3`));
-        } else {
-          susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/${digitAntrian[1]}.mp3`));
-          susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/PULUH.mp3`));
-          susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/${digitAntrian[2]}.mp3`));
-        }
-      } else if (digitAntrian[0] == 1) {
-
-        susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/${digitAntrian[1]}.mp3`));
-        susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/BELAS.mp3`));
-
-      } else {
-        susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/${digitAntrian[0]}.mp3`));
-      }
-
-
-
-
-      if (digitAntrian.length == 4) {
-        throw new Error("Tidak ada audio melebih seribu");
-      }
-
-    } else {
-      susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/${loket.antrian.nomor_urutan}.mp3`));
-    }
     susunanAudio.push(new Audio("<?= base_url() ?>/audio/nomor_antrian/" + loketNametoAudioName[loket.nama_loket]));
 
     audioQueue.push(susunanAudio);
@@ -517,5 +521,62 @@
     playSusunanAudio(audioQueue.shift(), () => {
       playAudioQueue();
     });
+  }
+
+  /**
+   * @param {number} nilai
+   * @returns {string}
+   */
+  function terbilang(nilai) {
+    nilai = Math.floor(Math.abs(nilai));
+    var huruf = [
+      '',
+      'Satu',
+      'Dua',
+      'Tiga',
+      'Empat',
+      'Lima',
+      'Enam',
+      'Tujuh',
+      'Delapan',
+      'Sembilan',
+      'Sepuluh',
+      'Sebelas',
+    ];
+
+    var bagi = 0;
+    var penyimpanan = '';
+
+    if (nilai < 12) {
+      penyimpanan = '' + huruf[nilai];
+    } else if (nilai < 20) {
+      penyimpanan = terbilang(Math.floor(nilai - 10)) + ' Belas';
+    } else if (nilai < 100) {
+      bagi = Math.floor(nilai / 10);
+      penyimpanan = terbilang(bagi) + `${nilai.toString()[1] == '0' ? ' Puluh' : ' Puluh '}` + terbilang(nilai % 10);
+    } else if (nilai < 200) {
+      penyimpanan = nilai == 100 ? 'Seratus' : 'Seratus ' + terbilang(nilai - 100);
+    } else if (nilai < 1000) {
+      bagi = Math.floor(nilai / 100);
+      penyimpanan = terbilang(bagi) + ' Ratus ' + terbilang(nilai % 100);
+    } else if (nilai < 2000) {
+      penyimpanan = ' Seribu' + terbilang(nilai - 1000);
+    } else if (nilai < 1000000) {
+      bagi = Math.floor(nilai / 1000);
+      penyimpanan = terbilang(bagi) + ' Ribu ' + terbilang(nilai % 1000);
+    } else if (nilai < 1000000000) {
+      bagi = Math.floor(nilai / 1000000);
+      penyimpanan = terbilang(bagi) + ' Juta ' + terbilang(nilai % 1000000);
+    } else if (nilai < 1000000000000) {
+      bagi = Math.floor(nilai / 1000000000);
+      penyimpanan = terbilang(bagi) + ' Miliar ' + terbilang(nilai % 1000000000);
+    } else if (nilai < 1000000000000000) {
+      bagi = Math.floor(nilai / 1000000000000);
+      penyimpanan = terbilang(nilai / 1000000000000) + ' Triliun ' + terbilang(nilai % 1000000000000);
+    } else {
+      throw new Error('Terlalu Besar');
+    }
+
+    return penyimpanan;
   }
 </script>

@@ -15,12 +15,12 @@ class Layar extends R_Controller
     $this->addons->init([
       "js" => [
         "<script src=\"https://js.pusher.com/8.2.0/pusher.min.js\"></script>\n",
-        "<script type=\"text/javascript\" src=\"https://cdn.jsdelivr.net/npm/toastify-js\"></script>\n",
-        "<script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script>",
+        "<script type=\"text/javascript\" src=\"https://unpkg.com/toastify-js\"></script>\n",
+        "<script src=\"https://unpkg.com/sweetalert2@11\"></script>",
         "<script src=\"https://js.pusher.com/8.2.0/pusher.min.js\"></script>"
       ],
       "css" => [
-        "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css\">\n"
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/toastify-js/src/toastify.min.css\">\n"
       ]
     ]);
   }

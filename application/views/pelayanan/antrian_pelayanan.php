@@ -1,12 +1,3 @@
-<?php
-if (!$is_admin) {
-  # code...
-  $currentLoket = $lokets->filter(function ($value, $key) {
-    return $value->petugas_id == $this->user['petugas']['id'];
-  })->first();
-}
-?>
-
 <style>
   .widget-with-chart {
     background-image: none;
@@ -22,7 +13,7 @@ if (!$is_admin) {
     <?= $this->session->flashdata('flash_error') ?>
     <div class="col-3">
       <?php if (!$is_admin) :
-        if ($currentLoket->status == 0 || $currentLoket->antrian->nomor_urutan == 0) { ?>
+        if ($currentLoket->status == 0 || !$currentLoket->antrian) { ?>
           <div class="p-4 mb-3 bg-primary">
             <div class="card-body">
               <h4 class="card-title">Nomor Saat Ini</h4>
@@ -51,12 +42,21 @@ if (!$is_admin) {
                 <button name="panggil" value="baru" class="btn btn-primary btn-lg btn-block" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-title="<b>Memanggil antrian  baru dari antrian yang berjalan</b>">
                   Panggil Antrian Baru <i class="fa fa-volume-up"></i>
                 </button>
-                <button name="panggil" value="kembali" class="btn btn-secondary btn-lg" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" data-bs-title="<strong>Memanggil antrian kembali yang sebelum nya tidak menjawab.</strong>">
+                <button name="panggil" value="kembali" class="btn btn-secondary btn-lg" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Memanggil antrian kembali yang sebelum nya tidak menjawab.">
                   Panggil Antrian Kembali <i class="fa fa-volume-up"></i>
                 </button>
               </div>
             </form>
           <?php } ?>
+          <hr>
+          <form action="<?= base_url('/pelayanan/stop') ?>" method="POST">
+            <input type="hidden" name="kode" value="<?= $kode ?>">
+            <div class="d-grid gap-2">
+              <button name="panggil" value="baru" class="btn btn-outline-warning btn-lg btn-block" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Mengumumkan bahwa loket pelayanan ini akan berhenti/istirahat">
+                Isitrahat <i class="fa fa-volume-up"></i>
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -75,7 +75,7 @@ if (!$is_admin) {
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tabs">
               <?= $this->load->component("table/antrian_pelayanan_selesai", ['data' => $antrian_berjalan->filter(
                 function ($value, $key) {
-                  return $value->status == 1;
+                  return $value->petugas_id == $this->user["petugas"]["id"];
                 }
               )->all()]) ?>
             </div>

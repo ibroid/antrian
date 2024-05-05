@@ -1,0 +1,1 @@
+<a target="_blank" href="<?= base_url('/uploads/gugatan/' . $filename) ?>" class="btn btn-primary"><i class="fa fa-download"></i> Download</a>

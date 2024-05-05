@@ -11,10 +11,11 @@ class Pelayanan extends R_Controller
         "<script src=\"https://js.pusher.com/8.2.0/pusher.min.js\"></script>\n",
         "<script type=\"text/javascript\" src=\"https://unpkg.com/toastify-js\"></script>\n",
         "<script src=\"https://unpkg.com/sweetalert2@11\"></script>",
-        "<script src=\"https://js.pusher.com/8.2.0/pusher.min.js\"></script>"
+        "<script src=\"https://js.pusher.com/8.2.0/pusher.min.js\"></script>\n",
+        "<script src='" . base_url() . "assets/js/form-validation-custom.js'></script>",
       ],
       "css" => [
-        "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/toastify-js/src/toastify.min.css\">\n"
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/browse/toastify-js@1.12.0/src/toastify.css\">\n"
       ]
     ]);
   }
@@ -26,13 +27,26 @@ class Pelayanan extends R_Controller
    */
   public function index()
   {
+    $currentLoket = LoketPelayanan::where('petugas_id', $this->user['petugas']['id'] ?? null)->first();
+    if (!$currentLoket) {
+      return Redirect::wfe("Akun anda tidak diregister sebagai petugas pelayanan")->go($_SERVER['HTTP_REFERER']);
+    }
+
+
+    if ($currentLoket->antrian && \Carbon\Carbon::today()->gt($currentLoket->antrian->created_at)) {
+      $currentLoket->update([
+        'status' => 0,
+        'antrian_pelayanan_id' => null
+      ]);
+    }
+
     $this->load->page("pelayanan/antrian_pelayanan", [
       "antrian_berjalan" => AntrianPtsp::whereDate('created_at', date('Y-m-d'))->get(),
       "is_admin" => $this->is_admin,
       "kode" => $this->getAntrianByJenisPetugas(
         $this->user['petugas']['jenis_petugas'] ?? 'admin'
       ),
-      "lokets" => LoketPelayanan::where('status', '!=', 2)->get(),
+      "currentLoket" => $currentLoket,
     ])->layout("dashboard_layout", [
       "title" => "Antrian Pelayanan",
       "nav" => $this->load->component("layout/nav_pelayanan")
@@ -120,10 +134,10 @@ class Pelayanan extends R_Controller
           throw new Error("Antrian Sudah Habis");
         }
 
-        $lastNomorAntrianPtsp->update(['status' => 1]);
+        $lastNomorAntrianPtsp->update(['status' => 1, 'petugas_id' => $this->user['petugas']['id']]);
 
         $loket = LoketPelayanan::where("petugas_id", $this->user['petugas']['id'])->first();
-        $loket->update(['antrian_pelayanan_id' => $lastNomorAntrianPtsp->id]);
+        $loket->update(['antrian_pelayanan_id' => $lastNomorAntrianPtsp->id, 'status' => 1]);
 
         $loket->antrian;
         $loket->petugas;
@@ -131,6 +145,9 @@ class Pelayanan extends R_Controller
 
       if (R_Input::pos('panggil') == "kembali") {
         $loket = LoketPelayanan::where("petugas_id", $this->user['petugas']['id'])->first();
+        if (!$loket->antrian) {
+          throw new Exception("Anda Belum Memanggil Antrian");
+        }
         $loket->antrian;
         $loket->petugas;
       }
@@ -156,5 +173,95 @@ class Pelayanan extends R_Controller
 
       return Redirect::wfe($th->getMessage())->go($_SERVER["HTTP_REFERER"]);
     }
+  }
+
+  public function stop()
+  {
+    R_Input::mustPost();
+    try {
+      $loket = LoketPelayanan::where("petugas_id", $this->user['petugas']['id'])->first();
+
+      if (!$loket) {
+        throw new Exception("Anda bukan petugas PTSP", 1);
+      }
+
+      $loket->update(['status' => 0]);
+
+      Broadcast::pusher()->trigger("antrian-channel", "stop-antrian-ptsp", $loket);
+
+      if (R_Input::ci()->request_headers()["Accept"] == "application/json") {
+        echo  json_encode(["status" => true, 'messsage' => 'Berhasil memanggil']);
+        return set_status_header(200);
+      }
+
+      return Redirect::wfa([
+        "message" => "Berhasil memanggil",
+        "type" => "success",
+        "text" => "Berlangsung"
+      ])->go($_SERVER['HTTP_REFERER']);
+    } catch (\Throwable $th) {
+
+      if (R_Input::ci()->request_headers()["Accept"] == "application/json") {
+        echo  json_encode(["status" => false, 'messsage' => $th->getMessage()]);
+        return set_status_header(400);
+      }
+
+      return Redirect::wfe($th->getMessage())->go($_SERVER["HTTP_REFERER"]);
+    }
+  }
+
+  public function pindahkan()
+  {
+    R_Input::mustPost();
+    try {
+      $lastNomorAntrianPtsp = AntrianPtsp::where([
+        "kode" => $this->tujuanToKode(R_Input::pos("tujuan")),
+      ])->whereDate("created_at", date("Y-m-d"))->max("nomor_urutan");
+
+      $newAntrianPtsp = AntrianPtsp::create([
+        "tujuan" => R_Input::pos("tujuan"),
+        "kode" => $this->tujuanToKode(R_Input::pos("tujuan")),
+        "nomor_urutan" => $lastNomorAntrianPtsp ? $lastNomorAntrianPtsp + 1 : 1,
+        "status" => 0,
+      ]);
+
+      if (R_Input::ci()->request_headers()["Accept"] == "application/json") {
+        echo json_encode([
+          "message" => "Berhasil memindahkan ke antrian : " . $newAntrianPtsp->nomor_antrian,
+          "data" => $newAntrianPtsp
+        ]);
+
+        return set_status_header(200);
+      }
+
+      $this->session->set_flashdata("nomor_antrian", " -> " . $newAntrianPtsp->nomor_antrian);
+
+      return Redirect::wfa(["message" => "Berhasil memindahkan ke antrian : " . $newAntrianPtsp->nomor_antrian])->go($_SERVER['HTTP_REFERER']);
+    } catch (\Throwable $th) {
+      if (R_Input::ci()->request_headers(true)['Accept'] == 'application/json') {
+        echo json_encode([
+          'message' => $th->getMessage(),
+          'data' => null
+        ]);
+
+        return set_status_header(400);
+      }
+
+      return Redirect::wfe($th->getMessage())->go($_SERVER['HTTP_REFERER']);
+    }
+  }
+
+  private function tujuanToKode($tujuan)
+  {
+    $daftarTujuan = [
+      "PENDAFTARAN" => "A",
+      "E-COURT" => "A",
+      "INFORMASI" => "A",
+      "KASIR" => "B",
+      "POSBAKUM" => "C",
+      "PRODUK" => "D",
+    ];
+
+    return $daftarTujuan[$tujuan] ?? null;
   }
 }

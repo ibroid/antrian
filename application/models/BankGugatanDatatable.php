@@ -2,20 +2,16 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class AntrianPtspDatatable extends Model
+class BankGugatanDatatable extends Model
 {
-
-  protected $table = 'antrian_pelayanan';
-  protected $fillable = ['nomor_urutan', 'tujuan', 'kode', 'status'];
+  protected $table = 'bank_gugatan';
+  protected $fillable = ['nama_pihak', 'filename'];
   protected $primaryKey = 'id';
-  protected $columnSearch = ['nomor_urutan', 'tujuan', 'kode', 'status'];
+  protected $columnSearch = ['nama_pihak', 'filename'];
   protected $defaultOrder = ['id' => 'asc'];
-
-  public $condition = null;
 
   public function getData()
   {
-
     $query = $this->query();
 
     $query = $this->applyFilters($query, R_Input::pos('search')['value']);
@@ -32,21 +28,12 @@ class AntrianPtspDatatable extends Model
       $query->skip($start)->take($length);
     }
 
-    $query->whereDate('created_at', date('Y-m-d'));
-    if ($this->condition) {
-      $query->where($this->condition);
-    }
-
     return $query->get();
   }
 
   public function countData()
   {
     $query = $this->query();
-    $query->whereDate('created_at', date('Y-m-d'));
-    if ($this->condition) {
-      $query->where($this->condition);
-    }
 
     $query = $this->applyFilters($query, R_Input::pos('search')['value']);
     return $query->count();
@@ -54,10 +41,6 @@ class AntrianPtspDatatable extends Model
 
   private function applyFilters($query, $searchValue)
   {
-    $query->whereDate('created_at', date('Y-m-d'));
-    if ($this->condition) {
-      $query->where($this->condition);
-    }
 
     if ($searchValue) {
       $query->where(function ($query) use ($searchValue) {
