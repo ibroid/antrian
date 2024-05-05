@@ -39,15 +39,6 @@
           <span>Bank Gugatan</span>
         </a>
       </li>
-      <li class="sidebar-list">
-        <i class="fa fa-thumb-tack"></i>
-        <a class="sidebar-link sidebar-title" href="<?= base_url('/kasir') ?>">
-          <svg class="stroke-icon">
-            <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-to-do"></use>
-          </svg>
-          <span>Kasir</span>
-        </a>
-      </li>
     </ul>
   </div>
   <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>

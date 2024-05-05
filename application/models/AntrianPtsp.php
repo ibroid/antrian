@@ -40,4 +40,14 @@ class AntrianPtsp extends Model
   {
     return $this->kode . "-" . $this->nomor_urutan;
   }
+
+  /**
+   * Retrieve the associated IdentitasPihak for the AntrianPtsp.
+   *
+   * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+   */
+  public function pihak()
+  {
+    return $this->belongsTo(IdentitasPihak::class, 'identitas_pihak_id', 'id');
+  }
 }
