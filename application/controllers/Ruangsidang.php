@@ -29,7 +29,7 @@ class RuangSidang extends R_Controller
       "js" => [
         "<script src=\"$base_url/assets/js/timeline/timeline-v-1/main.js\"></script>\n",
         "<script src=\"https://js.pusher.com/8.2.0/pusher.min.js\"></script>\n",
-        "<script src=\"https://unpkg.com/browse/sweetalert2@11.10.8/dist/sweetalert2.all.min.js\"></script>\n"
+        "<script src=\"https://unpkg.com/sweetalert2@11.10.8/dist/sweetalert2.all.min.js\"></script>\n"
       ]
     ]);
 

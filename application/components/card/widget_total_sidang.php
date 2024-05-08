@@ -1,4 +1,4 @@
-<div class="col-xl-3">
+<div class="col-xl-3 col-md-6 col-sm-12">
   <div class="card widget-1" data-bs-toggle="modal" data-bs-target="#modalSidangHariIni">
     <div class="card-body">
       <div class="widget-content">

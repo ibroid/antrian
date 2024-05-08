@@ -12,7 +12,7 @@
           </svg>
         </div>
         <div class="flex mt-4">
-          <button class="btn btn-outline-primary btn-sm">Lihat Antrian</button>
+          <button data-search-column="0" data-search-content="Umar" class="btn btn-outline-primary btn-sm btn-search">Lihat Antrian</button>
         </div>
       </div>
     </div>
@@ -29,7 +29,7 @@
           </svg>
         </div>
         <div class="flex mt-4">
-          <button class="btn btn-outline-warning btn-sm">Lihat Antrian</button>
+          <button data-search-column="0" data-search-content="Abu Musa" class="btn btn-search btn-outline-warning btn-sm">Lihat Antrian</button>
         </div>
       </div>
     </div>
@@ -46,7 +46,7 @@
           </svg>
         </div>
         <div class="flex mt-4">
-          <button class="btn btn-outline-secondary btn-sm">Lihat Antrian</button>
+          <button data-search-column="0" data-search-content="Syuraih" class="btn btn-search btn-outline-secondary btn-sm">Lihat Antrian</button>
         </div>
       </div>
     </div>

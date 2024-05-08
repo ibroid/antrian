@@ -76,7 +76,7 @@
   let audioQueue = [];
 
   window.addEventListener("load", () => {
-    const pusher = new Pusher(PUSHER_APP_KEY, {
+    const pusher = new Pusher('<?= $_ENV["PUSHER_APP_KEY"] ?>', {
       cluster: 'ap1'
     });
 

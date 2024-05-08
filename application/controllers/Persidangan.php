@@ -12,7 +12,7 @@ class Persidangan extends R_Controller
   {
     $this->addons->init([
       "js" => [
-        "<script src=\"https://unpkg.com/sweetalert2@11\"></script>\n",
+        '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>',
         "<script src=\"https://js.pusher.com/8.2.0/pusher.min.js\"></script>\n",
         "<script type=\"text/javascript\" src=\"https://unpkg.com/toastify-js\"></script>\n"
       ],
@@ -23,7 +23,7 @@ class Persidangan extends R_Controller
 
     $this->load->page("persidangan/antrian_sidang", [
       "pagename" => "Monitor Petugas Sidang",
-      "antrian" => AntrianPersidangan::whereDate("created_at", date("Y-m-d"))->latest()->get(),
+      "antrian" => AntrianPersidangan::whereDate("created_at", date("Y-m-d"))->get(),
       "jadwal_sidang" => PerkaraJadwalSidang::where("tanggal_sidang", date("Y-m-d"))->get(),
       "dalam_sidang" => DalamPersidangan::whereDate("tanggal_panggil", date("Y-m-d"))->get()
     ])->layout("dashboard_layout", [
@@ -46,7 +46,7 @@ class Persidangan extends R_Controller
     R_Input::mustPost();
     try {
       $data = AntrianPersidangan::find($id);
-      $data->update(R_Input::pos());
+      $data->update(R_Input::pos()->toArray());
       echo json_encode(["status" => true, "message" => "Berhasil mengubah data"]);
     } catch (\Throwable $th) {
       set_status_header(400);

@@ -32,10 +32,17 @@ class AntrianPtspDatatable extends Model
       $query->skip($start)->take($length);
     }
 
-    $query->whereDate('created_at', date('Y-m-d'));
     if ($this->condition) {
-      $query->where($this->condition);
+      if ($this->condition['kode'] == 'A') {
+        $query->where(function ($q) {
+          $q->where('kode', 'A')->orWhere('kode', 'D');
+        })->where($this->condition->except('kode')->toArray());
+      } else {
+
+        $query->where($this->condition->toArray());
+      }
     }
+    $query->whereDate('created_at', date('Y-m-d'));
 
     return $query->get();
   }
@@ -43,10 +50,17 @@ class AntrianPtspDatatable extends Model
   public function countData()
   {
     $query = $this->query();
-    $query->whereDate('created_at', date('Y-m-d'));
     if ($this->condition) {
-      $query->where($this->condition);
+      if ($this->condition['kode'] == 'A') {
+        $query->where(function ($q) {
+          $q->where('kode', 'A')->orWhere('kode', 'D');
+        })->where($this->condition->except('kode')->toArray());
+      } else {
+
+        $query->where($this->condition->toArray());
+      }
     }
+    $query->whereDate('created_at', date('Y-m-d'));
 
     $query = $this->applyFilters($query, R_Input::pos('search')['value']);
     return $query->count();
@@ -54,10 +68,17 @@ class AntrianPtspDatatable extends Model
 
   private function applyFilters($query, $searchValue)
   {
-    $query->whereDate('created_at', date('Y-m-d'));
     if ($this->condition) {
-      $query->where($this->condition);
+      if ($this->condition['kode'] == 'A') {
+        $query->where(function ($q) {
+          $q->where('kode', 'A')->orWhere('kode', 'D');
+        })->where($this->condition->except('kode')->toArray());
+      } else {
+
+        $query->where($this->condition->toArray());
+      }
     }
+    $query->whereDate('created_at', date('Y-m-d'));
 
     if ($searchValue) {
       $query->where(function ($query) use ($searchValue) {

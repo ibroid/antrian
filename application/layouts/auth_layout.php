@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="description" content="Antrian Pelayanan dan Persidangan Pengadilan Agama Jakarta Utara.">
     <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('assets/favicon/') ?>/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('assets/favicon/') ?>/favicon-32x32.png">
@@ -33,6 +33,17 @@
     <link id="color" rel="stylesheet" href="<?= base_url() ?>assets/css/color-1.css" media="screen">
     <!-- Responsive css-->
     <link rel="stylesheet" type="text/css" href="<?= base_url() ?>assets/css/responsive.css">
+
+    <style>
+        #content {
+            height: 100vh;
+            /* Adjust the height as needed */
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            /* Optional: Just for visualization */
+
+        }
+    </style>
 </head>
 
 <body>
