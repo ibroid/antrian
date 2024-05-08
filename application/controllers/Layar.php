@@ -42,7 +42,9 @@ class Layar extends R_Controller
    */
   public function ptsp()
   {
-    $this->load->page("pelayanan/layar_antrian")->layout("auth_layout");
+    $this->load->page("pelayanan/layar_antrian", [
+      "antrian_hari_ini" => AntrianPtsp::whereDate("created_at", date("Y-m-d"))->get(),
+    ])->layout("auth_layout");
   }
 
   /**
@@ -109,6 +111,32 @@ class Layar extends R_Controller
         echo json_encode(["status" => false, "message" => $th->getMessage()]);
         return set_status_header(400);
       }
+    }
+  }
+
+  public function jumlah_antrian_ptsp()
+  {
+    try {
+      $sudah_dipanggil = $this->eloquent::table('antrian_pelayanan')
+        ->select($this->eloquent::raw('count(*) as sudah_dipanggil'))
+        ->where('status', 1)
+        ->whereDate('created_at', date('Y-m-d'))
+        ->count();
+
+      $belum_dipanggil = $this->eloquent::table('antrian_pelayanan')
+        ->select($this->eloquent::raw('count(*) as belum_dipanggil'))
+        ->whereDate('created_at', date('Y-m-d'))
+        ->where('status', 0)
+        ->count();
+
+
+      echo json_encode(["sudah_dipanggil" => $sudah_dipanggil, "belum_dipanggil" => $belum_dipanggil]);
+    } catch (\Throwable $th) {
+      echo json_encode([
+        "status" => false,
+        "message" => $th->getMessage()
+      ]);
+      set_status_header(500);
     }
   }
 }

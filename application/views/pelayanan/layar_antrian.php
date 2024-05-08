@@ -73,7 +73,7 @@
       <div class="text-center">
         <h1 class="text-white">PENGADILAN AGAMA JAKARTA UTARA</h1>
         <h6>Jl. Plumpang Semper No.5, Tugu Sel., Kec. Koja, Jkt Utara, Daerah Khusus Ibukota Jakarta 14260 <br>
-          <text id="pelayanan-info"> Buka Senin s/d Sabtu Pukul 08.00 - 16.00</text>
+          <text id="pelayanan-info"> Buka Senin s/d Jumat Pukul 08.00 - 16.00</text>
         </h6>
 
       </div>
@@ -111,7 +111,7 @@
           </div>
           <div class="carousel slide" style="min-height: 360px;" id="carouselExampleInterval" data-bs-ride="carousel">
             <div class="carousel-inner">
-              <div class="carousel-item active" data-bs-interval="10000"><img class="d-block w-100" src="/uploads/images/loading.gif" alt="drawing-room"></div>
+              <div class="carousel-item active" data-bs-interval="10000"><img class="d-block w-100" src="<?= base_url('/uploads/images/Loading.gif') ?>" alt="drawing-room"></div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span></button>
             <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span></button>
@@ -120,25 +120,7 @@
       </div>
     </div>
     <div class="col-2">
-      <div class="card bg-transparent">
-        <div class="card-header p-3">
-          <h4 class="card-title bg-white text-center">SEDANG DI PANGGIL</h4>
-        </div>
-        <span style="font-size: 5rem" class="p-0 badge bg-white text-primary bg-opacity-50">000</span>
-      </div>
-      <div class="card bg-transparent">
-        <div class="card-header p-3">
-          <h4 class="card-title bg-white text-center">JUMLAH YANG SUDAH DIPANGILL</h4>
-        </div>
-        <span style="font-size: 5rem" class="p-0 badge bg-white text-success bg-opacity-50">000</span>
-      </div>
-      <div class="card bg-transparent">
-        <div class="card-header p-3">
-          <h4 class="card-title bg-white text-center">JUMLAH YANG BELUM DIPANGGIL</h4>
-        </div>
-        <span style="font-size: 5rem" class="p-0 badge bg-white text-danger bg-opacity-50">000</span>
-      </div>
-
+      <?= $this->load->component("card/card_jumlah_antrian_ptsp") ?>
     </div>
     <div class="col-5">
       <div class="shadow bg-transparent rounded rounded-5 border border-light border-3">

@@ -73,7 +73,7 @@
           <div class="row mb-3">
             <label for="input-alamat" class="col-sm-2 col-form-label">Alamat Domisili</label>
             <div class="col-sm-10">
-              <input value="<?= $data->pihak->alamat ?>" required name="alamat" type="text" class="form-control" id="input-alamat">
+              <input value="<?= $data->pihak->alamat ?? null ?>" required name="alamat" type="text" class="form-control" id="input-alamat">
             </div>
           </div>
           <div class="row mb-3">
@@ -81,8 +81,8 @@
             <div class="col-sm-10">
               <select required name="jenis_kelamin" id="select-jenis-kelamin" class="form-control form-selct form-control-select">
                 <option value="" selected disabled>-- Pilih --</option>
-                <option <?= $data->pihak->jenis_kelamin == "Perempuan" ? "selected" : "" ?>>Perempuan</option>
-                <option <?= $data->pihak->jenis_kelamin == "Laki-laki" ? "selected" : "" ?>>Laki-laki</option>
+                <option <?= isset($data->pihak->jenis_kelamin) && $data->pihak->jenis_kelamin == "Perempuan" ? "selected" : "" ?? null ?>>Perempuan</option>
+                <option <?= isset($data->pihak->jenis_kelamin) && $data->pihak->jenis_kelamin == "Laki-laki" ? "selected" : "" ?? null ?>>Laki-laki</option>
               </select>
             </div>
           </div>

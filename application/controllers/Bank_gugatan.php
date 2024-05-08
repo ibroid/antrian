@@ -17,7 +17,7 @@ class Bank_gugatan extends R_Controller
         "<script src='" . base_url() . "assets/js/form-validation-custom.js'></script>",
       ],
       "css" => [
-        "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/browse/toastify-js@1.12.0/src/toastify.css\">\n"
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/toastify-js@1.12.0/src/toastify.css\">\n"
       ]
     ]);
   }

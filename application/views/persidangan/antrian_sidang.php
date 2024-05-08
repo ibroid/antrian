@@ -14,7 +14,7 @@
   <?= $this->load->component("card/widget_current_persidangan") ?>
   <div class="row mt-3">
     <!-- Widget Total Antrian -->
-    <div class="col-xl-3">
+    <div class="col-xl-3 col-md-6 col-sm-12">
       <div class="card widget-1" onclick="document.location.href='<?= base_url('persidangan') ?>'">
         <div class="card-body">
           <div class="widget-content">
@@ -37,8 +37,8 @@
       </div>
     </div>
     <!-- Widget Menunggu Di ruang tunggu sidang utama -->
-    <div class="col-xl-3">
-      <div class="card widget-1">
+    <div class="col-xl-3 col-md-6 col-sm-12">
+      <div class="card widget-1 btn-search" data-search-column="5" data-search-content="Menunggu Di Ruang Tunggu">
         <div class="card-body">
           <div class="widget-content">
             <div class="widget-round success">
@@ -60,8 +60,8 @@
       </div>
     </div>
     <!-- Widget Sudah dipanggil -->
-    <div class="col-xl-3">
-      <div class="card widget-1">
+    <div class="col-xl-3 col-md-6 col-sm-12">
+      <div class="card widget-1 btn-search" data-search-column="5" data-search-content="Sudah Di Panggil">
         <div class="card-body">
           <div class="widget-content">
             <div class="widget-round success">
@@ -83,8 +83,8 @@
       </div>
     </div>
     <!-- Widget Total Skors -->
-    <div class="col-xl-3">
-      <div class="card widget-1">
+    <div class="col-xl-3 col-md-6 col-sm-12">
+      <div class="card widget-1 btn-search" data-search-column="5" data-search-content="Di Skors">
         <div class="card-body">
           <div class="widget-content">
             <div class="widget-round success">
@@ -106,7 +106,7 @@
       </div>
     </div>
     <!-- Widget Belum ambil antrian -->
-    <div class="col-xl-3">
+    <div class="col-xl-3 col-md-6 col-sm-12">
       <div class="card widget-1" data-bs-toggle="modal" data-bs-target="#modalBelumAmbilAntrian">
         <div class="card-body">
           <div class="widget-content">
@@ -129,8 +129,8 @@
       </div>
     </div>
     <!-- Widget Belum di panggil kedalam  -->
-    <div class="col-xl-3">
-      <div class="card widget-1">
+    <div class="col-xl-3 col-md-6 col-sm-12">
+      <div class="card widget-1 btn-search" data-search-column="5" data-search-content="Belum Dipanggil">
         <div class="card-body">
           <div class="widget-content">
             <div class="widget-round success">
@@ -154,7 +154,7 @@
     <!-- Total Sidang Hari Ini -->
     <?= $this->load->component("card/widget_total_sidang") ?>
     <!-- Lahan Kosong -->
-    <div class="col-xl-3">
+    <div class="col-xl-3 col-md-6 col-sm-12">
       <div class="card widget-1">
         <div class="card-body ">
           <div class="widget-content">
@@ -182,44 +182,52 @@
   <div class="row mx-1">
     <div class="card">
       <div class="card-body">
-        <table class="table table-hover" id="table-antrian">
-          <thead>
-            <tr>
-              <th>Ruangan</th>
-              <th>Antrian</th>
-              <th>Perkara</th>
-              <th>Para Pihak</th>
-              <th>Majelis</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($antrian as $a) { ?>
-              <tr onclick='handleRowClick(<?= $a->id ?>)'>
-                <td> <?= badge_nama_ruang_sidang($a->nomor_ruang) ?></td>
-                <td>
+        <div class="text-center">
+          <button class="btn btn-reset-search btn-secondary">
+            <i class="fa fa-refresh"></i>
+            Reset Pencarian</button>
+        </div>
+        <div class="table-responsive">
 
-                  <h6> <strong>No. <?= $a->nomor_urutan ?> </strong></h6>
-
-                </td>
-                <td>
-                  <?= $a->nomor_perkara ?>
-                  <br>
-                  <div class="badge badge-secondary">
-                    <?= $a->perkara->jenis_perkara_nama ?>
-                  </div>
-                  <br>
-                  <?= $a->jadwal_sidang->agenda ?? "" ?>
-                </td>
-                <td>
-                  <?= $a->perkara->para_pihak  ?>
-                </td>
-                <td><?= $a->majelis_hakim  ?></td>
-                <td><?= badge_status_antrian_sidang($a->status) ?></td>
+          <table class="table table-hover table-striped table-responsive" id="table-antrian">
+            <thead>
+              <tr>
+                <th>Ruangan</th>
+                <th>Antrian</th>
+                <th>Perkara</th>
+                <th>Para Pihak</th>
+                <th>Majelis</th>
+                <th>Status</th>
               </tr>
-            <?php } ?>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <?php foreach ($antrian as $a) { ?>
+                <tr onclick='handleRowClick(<?= $a->id ?>)'>
+                  <td> <?= badge_nama_ruang_sidang($a->nomor_ruang) ?></td>
+                  <td>
+
+                    <h6> <strong>No. <?= $a->nomor_urutan ?> </strong></h6>
+
+                  </td>
+                  <td>
+                    <?= $a->nomor_perkara ?>
+                    <br>
+                    <div class="badge badge-secondary">
+                      <?= $a->perkara->jenis_perkara_nama ?>
+                    </div>
+                    <br>
+                    <?= $a->jadwal_sidang->agenda ?? "" ?>
+                  </td>
+                  <td>
+                    <?= $a->perkara->para_pihak  ?>
+                  </td>
+                  <td><?= $a->majelis_hakim  ?></td>
+                  <td><?= badge_status_antrian_sidang($a->status) ?></td>
+                </tr>
+              <?php } ?>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -379,6 +387,7 @@
   let modalBelumAmbilAntrian
 
   window.addEventListener('load', function() {
+
     const pusher = new Pusher('a360f9f6cfefca4c383b', {
       cluster: 'ap1'
     });
@@ -393,8 +402,18 @@
     modalSidang = new bootstrap.Modal(document.getElementById('modalSidangHariIni'))
     modalBelumAmbilAntrian = new bootstrap.Modal(document.getElementById('modalBelumAmbilAntrian'))
 
-    $('#table-antrian').DataTable()
+    const tableSidang = $('#table-antrian').DataTable()
     $('#table-sidang').DataTable()
+
+    $(".btn-search").each((i, e) => {
+      $(e).click(function() {
+        tableSidang.column($(e).data('search-column')).search($(e).data('search-content')).draw();
+      })
+    })
+
+    $(".btn-reset-search").click(() => {
+      tableSidang.search('').columns().search('').draw();
+    })
 
   });
 
@@ -513,3 +532,5 @@
     }).showToast();
   }
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

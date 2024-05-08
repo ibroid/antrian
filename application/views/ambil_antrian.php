@@ -23,16 +23,17 @@
   }
 </style>
 
-<div class="row ">
+<div class="row">
   <div class="col-xl-12 p-0">
-    <?= $this->session->flashdata('flash_error') ?>
-    <?= $this->session->flashdata('flash_alert') ?>
+
 
     <div class="login-card login-dark ">
       <div class="login-main" style="width: 1200px;">
-        <div class="text-center my-3">
+        <?= $this->session->flashdata('flash_error') ?>
+        <?= $this->session->flashdata('flash_alert') ?>
+        <div class="text-center mb-3">
 
-          <h4>Menu Pengambilan Antrian PTSP.</h4>
+          <h3>Menu Pengambilan Antrian PTSP.</h3>
 
         </div>
 
@@ -131,14 +132,14 @@
         </div>
 
 
-        <form action="<?= base_url('/ambil') ?>" style="width: 500px;" class="my-3" method="POST">
+        <!-- <form action="<?= base_url('/ambil') ?>" style="width: 500px;" class="my-3" method="POST">
           <h6>Cari Berdasarkan Tanggal</h6>
           <div class="input-group mt-2">
             <input class="form-control date-picker" type="text" name="tanggal_sidang" required="Harap Isi Bidang ini">
             <button class="btn btn-outline-warning" id="button-addon2" type="submit">Cari</button>
             <a href="<?= base_url('/ambil') ?>" class="btn btn-outline-danger" id="button-addon3" type="reset">Reset</a>
           </div>
-        </form>
+        </form> -->
 
         <table class="table table-responsive table-hover " id="table-sidang">
           <thead>
@@ -212,14 +213,14 @@
 
   <ul id="camera-control" hidden class="tg-list common-flex">
     <li class="tg-list-item">
-      <input class="tgl tgl-skewed" id="cb3" type="checkbox" checked>
+      <input class="tgl tgl-skewed" id="cb3" type="checkbox">
       <label class="tgl-btn" data-tg-off="OFF" data-tg-on="ON" for="cb3"></label>
     </li>
     <li>
       <h6> Camera</h6>
     </li>
     <li class="tg-list-item">
-      <input class="tgl tgl-skewed" id="cb5" type="checkbox" checked>
+      <input class="tgl tgl-skewed" id="cb5" type="checkbox">
       <label class="tgl-btn" data-tg-off="OFF" data-tg-on="ON" for="cb5"></label>
     </li>
     <li>
@@ -319,6 +320,10 @@
 
 <script src="<?= base_url("/package/face-api.js/dist/face-api.js"); ?>"></script>
 <script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+<script>
+
+</script>
 <script>
   const webcamElement = document.getElementById('webcam');
   var faceDetection;
@@ -362,13 +367,6 @@
   }
 
   window.addEventListener("load", function() {
-    $("#webcam").bind("loadedmetadata", function() {
-      displaySize = {
-        width: this.scrollWidth,
-        height: this.scrollHeight
-      }
-    });
-
     Promise.all([
         faceapi.nets.tinyFaceDetector.load("/package/face-api.js/weights"),
         faceapi.nets.faceRecognitionNet.load("/package/face-api.js/weights"),
@@ -380,21 +378,6 @@
       .catch(err => {
         console.error(err);
         $("#camera-container").html('Error accessing camera: ' + err.message);
-      })
-      .finally(() => {
-        webcam.start()
-          .then(result => {
-            webcamElement.style.transform = "";
-            console.log("webcam started");
-          })
-          .catch(err => {
-            console.error(err)
-          }).finally(() => {
-            setTimeout(() => {
-              createCanvas();
-              startDetection();
-            }, 1000)
-          });
       })
 
     $("#cb3").change(function() {
@@ -518,9 +501,7 @@
   window.addEventListener("load", function() {
     $(".date-picker").flatpickr();
     $("#table-sidang").DataTable({
-      "language": {
-        "search": "Pencarian :",
-      },
+      // searching: false,
       "pageLength": 50
     });
 

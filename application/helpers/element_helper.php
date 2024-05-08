@@ -55,7 +55,7 @@ if (!function_exists("badge_nama_ruang_sidang")) {
     $typeAndName = [
       ["type" => "primary", "name" => "Ruang Umar"],
       ["type" => "warning", "name" => "Ruang Abu Musa"],
-      ["type" => "secondary", "name" => "Ruang Syuarih"],
+      ["type" => "secondary", "name" => "Ruang Syuraih"],
     ];
     $ci = &get_instance();
     return  $ci->load->component("badge/badge_nama_ruang_sidang", $typeAndName[$ruang_id - 1]);

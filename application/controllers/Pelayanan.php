@@ -15,7 +15,7 @@ class Pelayanan extends R_Controller
         "<script src='" . base_url() . "assets/js/form-validation-custom.js'></script>",
       ],
       "css" => [
-        "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/browse/toastify-js@1.12.0/src/toastify.css\">\n"
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/toastify-js@1.12.0/src/toastify.css\">\n"
       ]
     ]);
   }
@@ -91,10 +91,10 @@ class Pelayanan extends R_Controller
     $antrianPtspDatatable = new AntrianPtspDatatable();
 
     if (!$this->is_admin) {
-      $antrianPtspDatatable->condition = [
+      $antrianPtspDatatable->condition = collect([
         "kode" => $this->getAntrianByJenisPetugas($this->user['petugas']['jenis_petugas'] ?? "*"),
         "status" => 0
-      ];
+      ]);
     }
 
     $lists = $antrianPtspDatatable->getData();
@@ -125,10 +125,15 @@ class Pelayanan extends R_Controller
     R_Input::mustPost();
     try {
       if (R_Input::pos('panggil') == "baru") {
-        $lastNomorAntrianPtsp = AntrianPtsp::where([
-          "kode" => R_Input::pos('kode'),
-          "status" => 0
-        ])->whereDate("created_at", date("Y-m-d"))->first();
+        $lastNomorAntrianPtsp = AntrianPtsp::where("status", 0)->where(
+          function ($q) {
+            if ($this->user['petugas']['jenis_petugas'] == 'Petugas PTSP') {
+              $q->where("kode", 'A')->orWhere('kode', 'D');
+            } else {
+              $q->where("kode", R_Input::pos("kode"));
+            }
+          }
+        )->whereDate("created_at", date("Y-m-d"))->first();
 
         if (!$lastNomorAntrianPtsp) {
           throw new Error("Antrian Sudah Habis");
