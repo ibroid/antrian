@@ -26,7 +26,7 @@ class AntrianPtsp extends Model
    *
    * @return \Illuminate\Database\Eloquent\Relations\HasOne
    */
-  public function pesanan_produk()
+  public function produk()
   {
     return $this->hasOne(ProdukPengadilan::class, "antrian_pelayanan_id", "id");
   }
