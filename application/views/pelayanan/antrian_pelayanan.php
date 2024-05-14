@@ -72,7 +72,7 @@
             <div class="tab-pane fade active show py-5" id="home" role="tabpanel" aria-labelledby="home-tab">
               <?= $this->load->component("table/antrian_pelayanan_berjalan") ?>
             </div>
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tabs">
+            <div class="tab-pane fade py-5" id="profile" role="tabpanel" aria-labelledby="profile-tabs">
               <?= $this->load->component("table/antrian_pelayanan_selesai", ['data' => $antrian_berjalan->filter(
                 function ($value, $key) {
                   return $value->petugas_id == $this->user["petugas"]["id"];

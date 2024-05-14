@@ -93,6 +93,7 @@ class Auth extends CI_Controller
         break;
 
       case "Petugas Produk":
+      case "Petugas Akta":
         redirect("/produk");
         break;
 

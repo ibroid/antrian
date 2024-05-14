@@ -9,26 +9,15 @@
           <table class="table table-hovered table" id="table-produk">
             <thead>
               <tr>
-                <th>Nomor Antrian</th>
+                <th>No</th>
                 <th>Nomor Perkara</th>
                 <th>Nama Pengambil</th>
                 <th>Jenis Produk</th>
-                <th>Foto Pengambil</th>
+                <th>Jenis Perkara</th>
                 <th>Aksi</th>
               </tr>
             </thead>
-            <tbody>
-              <?php foreach ($antrian_produk as $d) : ?>
-                <tr>
-                  <td><?= $d->nomor_antrian ?></td>
-                  <td><?= $d->produk->nomor_perkara ?></td>
-                  <td><?= $d->produk->nama_pengambil ?></td>
-                  <td><?= $d->produk->jenis_produk ?></td>
-                  <td></td>
-                  <td><button class="btn btn-warning">Proses</button></td>
-                </tr>
-              <?php endforeach; ?>
-            </tbody>
+
           </table>
         </div>
       </div>
@@ -38,6 +27,18 @@
 
 <script>
   window.addEventListener("load", function() {
-    $("#table-produk").DataTable()
+    $("#table-produk").DataTable({
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Indonesian.json"
+      },
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        //panggil method ajax list dengan ajax
+        "url": '<?= base_url('pesanan_produk/datatable_pesanan_produk'); ?>',
+        "type": "POST"
+      }
+    })
   })
 </script>

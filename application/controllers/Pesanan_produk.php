@@ -22,14 +22,40 @@ class Pesanan_produk extends R_Controller
   public function index()
   {
     $this->load->page("pelayanan/pelayanan_produk", [
-      "antrian_produk" => AntrianPtsp::where(
-        'kode',
-        'D'
-      )->whereDate('created_at', date('Y-m-d'))->get(),
       "is_admin" => $this->is_admin,
     ])->layout("dashboard_layout", [
       "title" => "Antrian Pelayanan",
       "nav" => $this->load->component("layout/nav_pelayanan")
     ]);
+  }
+
+  public function datatable_pesanan_produk()
+  {
+    $produk = new PesananProdukDatatable();
+
+    $lists = $produk->getData();
+    $data = array();
+    $no = R_Input::pos('start');
+    $n = 1;
+    foreach ($lists as $list) {
+      $no++;
+      $row = array();
+      $row[] = $no;
+      $row[] = $list->nomor_perkara;
+      $row[] = $list->nama_pengambil;
+      $row[] = $list->jenis_produk;
+      $row[] = "";
+      $row[] = "";
+      // $row[] = $this->load->component("table/pilihan_antrian_pelayanan", ["data" => $list]);
+      $data[] = $row;
+    }
+    $output = array(
+      "draw" => R_Input::pos('draw'),
+      "recordsTotal" => $produk->countData(),
+      "recordsFiltered" => $produk->countData(),
+      "data" => $data,
+    );
+    // Output to json format
+    echo json_encode($output);
   }
 }

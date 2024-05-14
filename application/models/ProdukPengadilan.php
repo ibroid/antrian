@@ -25,4 +25,9 @@ class ProdukPengadilan extends Model
       return $model;
     });
   }
+
+  public function antrian()
+  {
+    return $this->belongsTo(AntrianPtsp::class, 'antrian_pelayanan_id', 'id');
+  }
 }
