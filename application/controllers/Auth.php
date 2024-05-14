@@ -94,7 +94,7 @@ class Auth extends CI_Controller
 
       case "Petugas Produk":
       case "Petugas Akta":
-        redirect("/produk");
+        redirect("/pelayanan_produk");
         break;
 
       case "Petugas Posbakum":

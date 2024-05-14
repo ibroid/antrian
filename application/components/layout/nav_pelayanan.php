@@ -23,7 +23,7 @@
       </li>
       <li class="sidebar-list">
         <i class="fa fa-thumb-tack"></i>
-        <a class="sidebar-link sidebar-title" href="<?= base_url('/pesanan_produk') ?>">
+        <a class="sidebar-link sidebar-title" href="<?= base_url('/pelayanan_produk') ?>">
           <svg class="stroke-icon">
             <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-project"></use>
           </svg>

@@ -41,3 +41,13 @@ package
 *.pem
 *.cert
 *.crt
+
+./uploads/gugatan/*.docx
+./uploads/gugatan/*.rtf
+./uploads/gugatan/*.doc
+./uploads/gugatan/*.pdf
+
+uploads/pengambil/*.png
+./uploads/pengambil/*.jpg
+./uploads/pengambil/*.jpeg
+./uploads/pengambil/*.gif

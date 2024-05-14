@@ -11,6 +11,7 @@
               <tr>
                 <th>No</th>
                 <th>Nomor Perkara</th>
+                <th>Nomor Akta</th>
                 <th>Nama Pengambil</th>
                 <th>Jenis Produk</th>
                 <th>Jenis Perkara</th>
@@ -27,7 +28,7 @@
 
 <script>
   window.addEventListener("load", function() {
-    $("#table-produk").DataTable({
+    const datatable = $("#table-produk").DataTable({
       "language": {
         "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Indonesian.json"
       },
@@ -36,9 +37,32 @@
       "order": [],
       "ajax": {
         //panggil method ajax list dengan ajax
-        "url": '<?= base_url('pesanan_produk/datatable_pesanan_produk'); ?>',
+        "url": '<?= base_url('pelayanan_produk/datatable_pesanan_produk'); ?>',
         "type": "POST"
-      }
+      },
+      drawCallback: btnlengkapiDataKelapKelip
     })
+
+    const pusher = new Pusher("<?= $_ENV['PUSHER_APP_KEY'] ?>", {
+      cluster: 'ap1'
+    });
+
+    const produkChannel = pusher.subscribe('produk-channel');
+
+    produkChannel.bind("saved-produk", (data) => {
+      datatable.ajax.reload()
+    })
+
   })
+
+  function btnlengkapiDataKelapKelip() {
+    $(".btn-kelap-kelip").each((i, e) => {
+      let cls = "btn-secondary";
+      setInterval(() => {
+        cls = cls === "btn-secondary" ? "btn-warning" : "btn-secondary";
+        e.classList.remove("btn-secondary", "btn-warning");
+        e.classList.add(cls);
+      }, 500);
+    })
+  }
 </script>
