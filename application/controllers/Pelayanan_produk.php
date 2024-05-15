@@ -43,9 +43,9 @@ class Pelayanan_produk extends R_Controller
       $row[] = $no;
       $row[] = $list->nomor_perkara;
       $row[] = $list->nomor_akta_cerai;
-      $row[] = $list->nama_pengambil;
+      $row[] = $list->nama_pengambil . "<br>(" . $list->jenis_pihak . ")";
       $row[] = $list->jenis_produk;
-      $row[] = "";
+      $row[] = $list->jenis_perkara;
       $row[] = $this->load->component("table/pilihan_pesanan_produk", ["data" => $list]);
       $data[] = $row;
     }
@@ -78,9 +78,9 @@ class Pelayanan_produk extends R_Controller
 
     try {
 
-      $filename = $this->save_foto_pengambil();
-
       $produk = ProdukPengadilan::findOrFail(Cypher::urlsafe_decrypt($id));
+
+      $filename = !$produk->foto_pengambil ? $this->save_foto_pengambil() : $produk->foto_pengambil;
 
       $produk->update(
         R_Input::pos()->except('foto_pengambil')->all() +
@@ -111,7 +111,7 @@ class Pelayanan_produk extends R_Controller
   private function save_foto_pengambil()
   {
 
-    $config['upload_path'] = './uploads/';
+    $config['upload_path'] = './uploads/pengambil/';
     $config['allowed_types'] = 'gif|jpg|png|jpeg';
     $config['encrypt_name'] = true;
 
@@ -122,5 +122,32 @@ class Pelayanan_produk extends R_Controller
     }
 
     return $this->upload->data('file_name');
+  }
+
+  public function panggil_pihak()
+  {
+    R_Input::mustPost();
+    try {
+      $pengumuman = Pengumuman::where("judul", "pihak-ke-ruang-tunggu")->first();
+      if (!$pengumuman) {
+        set_status_header(404);
+        throw new \Exception("Pengumuman tidak ditemukan");
+      }
+
+      $textPengumuman = str_replace("{nama_pihak}", R_Input::pos("pihak"), $pengumuman->template);
+
+
+      $textPengumuman = str_replace("ruang tunggu persidangan", "loket produk", $textPengumuman);
+      $textPengumuman = str_replace("masuk ", "", $textPengumuman);
+
+
+      $this->pusher->trigger("produk-channel", "panggil-pihak", $textPengumuman);
+
+      echo json_encode(["status" => true, "message" => "Panggilan berhasil dikirim. Silahkan tunggu sampai panggilan selesai dibacakan"]);
+
+      Redirect::wfa(["message" => "Sedang memanggil", "text" => "mohon tunggu", "type" => "info"])->go("/pelayanan_produk");
+    } catch (\Throwable $th) {
+      echo $th->getMessage();
+    }
   }
 }

@@ -41,8 +41,8 @@
               <div class="input-group mb-3">
                 <select name="jenis_pihak" required id="select-jenis-pihak" class="form-control form-select">
                   <option value="" selected disabled>-- Pilih Disini ---</option>
-                  <option value="P">Penggugat/Pemohon</option>
-                  <option value="T">Tergugat/Termohon</option>
+                  <option value="P" <?= $data->jenis_pihak == 'P' ? 'selected' : null ?>>Penggugat/Pemohon</option>
+                  <option value="T" <?= $data->jenis_pihak == 'T' ? 'selected' : null ?>>Tergugat/Termohon</option>
                 </select>
               </div>
             </div>
@@ -58,6 +58,10 @@
                   <option>Akta Cerai</option>
                   <option>Legalisir Salinan Putusan</option>
                   <option>Legalisir Akta Cerai</option>
+                  <?php
+                  if ($data->jenis_produk) { ?>
+                    <option selected><?= $data->jenis_produk ?></option>
+                  <?php } ?>
                 </select>
               </div>
             </div>
@@ -66,7 +70,7 @@
             <div class="form-group">
               <label for="input-foto">Foto Pengambil</label>
               <div class="input-group mb-2">
-                <input required type="file" class="form-control form-control-file" id="input-foto" name="foto_pengambil">
+                <input <?= !$data->foto_pengambil ? "required" : null ?> type="file" class="form-control form-control-file" id="input-foto" name="foto_pengambil">
               </div>
               <div class="text-center">Atau Capture Disini</div>
               <div style="display: flex; align-items: center; justify-content: center;" class="mb-4">
@@ -74,7 +78,7 @@
                 <canvas id="canvas" class="d-none"></canvas>
               </div>
               <div style="display: flex; align-items: center; justify-content: center;" class="mb-4">
-                <img src="" alt="Preview Image" id="img-capture-preview">
+                <img src="<?= base_url('/uploads/pengambil/' . $data->foto_pengambil) ?>" alt="Preview Image" id="img-capture-preview">
               </div>
               <div class="d-flex justify-content-center mb-4 gap-3">
                 <button type="button" id="btn-ganti-kamera" class="btn btn-warning btn-sm">

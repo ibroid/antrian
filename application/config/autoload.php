@@ -58,7 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array("Eloquent", "Session", "Constanta", "Redirect", "Broadcast", "Cypher");
+$autoload['libraries'] = array("Eloquent", "Session", "Constanta", "Redirect", "Broadcast", "Cypher", "TextToSpeech");
 
 /*
 | -------------------------------------------------------------------
