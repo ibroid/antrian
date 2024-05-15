@@ -199,8 +199,31 @@
       audio.addEventListener("ended", function() {
         audio2.play()
       })
-
     });
+
+    const produkChannel = pusher.subscribe('produk-channel');
+    produkChannel.bind('panggil-pihak', (data) => {
+      fetch("<?= $_ENV["TTS_URL_API"] ?>/request_voice", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            key: "<?= $_ENV["TTS_API_KEY"] ?>",
+            text: data
+          })
+        })
+        .then(res => res.json())
+        .then(res => {
+          const audio = new Audio(`data:audio/wav;base64,${res.data}`)
+          audio.playbackRate = 1.2;
+          audio.play();
+        })
+        .catch(err => {
+          console.log("Gagal meminta audio. Silahkan refresh halaman ini")
+        })
+
+    })
   })
 
   /**

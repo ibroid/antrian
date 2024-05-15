@@ -20,9 +20,18 @@ class ProdukPengadilan extends Model
       $model->nama_pengambil = $pihak->nama;
       $model->nomor_akta_cerai = $perkara->akta_cerai->nomor_akta_cerai ?? null;
       $model->jenis_perkara = $perkara->jenis_perkara_nama;
-      $model->tahun_perkara = date("Y", strtotime($perkara->tanggal_penetapan));
+      $model->tahun_perkara = date("Y", strtotime($perkara->tanggal_pendaftaran));
 
       return $model;
     });
+
+    static::saved(function ($model) {
+      Broadcast::pusher()->trigger("produk-channel", "saved-produk", $model);
+    });
+  }
+
+  public function antrian()
+  {
+    return $this->belongsTo(AntrianPtsp::class, 'antrian_pelayanan_id', 'id');
   }
 }
