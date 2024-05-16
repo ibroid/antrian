@@ -106,17 +106,17 @@
             <ul class="social-follow">
               <li>
                 <a class="text-dark" href="javacript:void(0)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" data-bs-title="<strong>Total antrian yang dipanggil hari ini</strong>">
-                  <h5 class="mb-0"> 12.0k </h5>
+                  <h5 class="mb-0"> <?= $antrian_berjalan->where('petugas_id', $this->user["petugas"]["id"])->count() ?> </h5>
                 </a><span class="f-light">Hari Ini</span>
               </li>
               <li>
                 <a class="text-dark" href="javacript:void(0)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" data-bs-title="<strong>Total antrian yang dipanggil bulan ini</strong>">
-                  <h5 class="mb-0"> 12.0k </h5>
-                </a><span class="f-light">Bulan Ini</span>
+                  <h5 class="mb-0"><i class="fa fa-users"></i> <?= $total_bulan_ini ?> </h5>
+                </a><span class="f-light"> Bulan Ini</span>
               </li>
               <li>
                 <a class="text-warning" href="javacript:void(0)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" data-bs-title="<strong>Penilaian dari para pihak</strong>">
-                  <h5 class="mb-0"> <i class="fa fa-star"></i> 4.7 </h5>
+                  <h5 class="mb-0"> <i class="fa fa-star"></i> 0 </h5>
                 </a><span class="f-light">Rating</span>
               </li>
             </ul>

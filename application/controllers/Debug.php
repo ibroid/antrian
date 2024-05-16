@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
-class Debug extends CI_Controller
+class Debug extends R_Controller
 {
   public Eloquent $eloquent;
 
@@ -18,6 +18,6 @@ class Debug extends CI_Controller
 
   public function index()
   {
-    echo date("Y-m-d H:i:s");
+    $bulan_ini = $this->eloquent->table("antrian_pelayanan")->where('petugas_id', $this->user['petugas']['id'])->whereMonth('created_at', date('m'))->count();
   }
 }
