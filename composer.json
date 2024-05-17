@@ -20,7 +20,7 @@
 		"pusher/pusher-php-server": "^7.2",
 		"phpoffice/phpword": "^1.2",
 		"claudye/php-crypter": "^1.0",
-		"peppeocchi/php-cron-scheduler": "^4.0"
+		"hashids/hashids": "^4.1"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

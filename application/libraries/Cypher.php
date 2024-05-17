@@ -1,8 +1,9 @@
 <?php
 
 use PHPCrypter\Encryption\Encryption;
+use Hashids\Hashids;
 
-class Cypher extends Encryption
+class Cypher
 {
   /**
    * Encodes the given string using encryption and makes it URL safe if specified.
@@ -12,10 +13,9 @@ class Cypher extends Encryption
    */
   public static function urlsafe_encrypt($string)
   {
-    $ret = parent::encrypt($string, "AES-128-CBC", $_ENV["ENCRYPTION_KEY"]);
-    $ret = strtr($ret, array('+' => '.', '=' => '-', '/' => '~'));
+    $hashids = new Hashids();
 
-    return $ret;
+    return $hashids->encode($string);
   }
 
   /**
@@ -26,8 +26,8 @@ class Cypher extends Encryption
    */
   public static function urlsafe_decrypt($string)
   {
-    $string = strtr($string, array('.' => '+', '-' => '=', '~' => '/'));
+    $hashids = new Hashids();
 
-    return parent::decrypt($string, $_ENV["ENCRYPTION_KEY"]);
+    return $hashids->decode($string)[0];
   }
 }

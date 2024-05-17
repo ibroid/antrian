@@ -18,6 +18,12 @@ class Debug extends R_Controller
 
   public function index()
   {
-    $bulan_ini = $this->eloquent->table("antrian_pelayanan")->where('petugas_id', $this->user['petugas']['id'])->whereMonth('created_at', date('m'))->count();
+    $original = "Gembel";
+    $encrypted = Cypher::encrypt($original);
+
+    prindie(
+      $encrypted,
+      Cypher::urlsafe_decrypt(Cypher::safe($encrypted))
+    );
   }
 }

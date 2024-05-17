@@ -42,7 +42,7 @@ class Pelayanan extends R_Controller
 
     $this->load->page("pelayanan/antrian_pelayanan", [
       "antrian_berjalan" => AntrianPtsp::whereDate('created_at', date('Y-m-d'))->get(),
-      "total_bulan_ini" => $this->eloquent->table("antrian_pelayanan")->where('petugas_id', $this->user['petugas']['id'])->whereMonth('created_at', date('m'))->count(),
+      "total_bulan_ini" =>  $this->eloquent->table("antrian_pelayanan")->where('petugas_id', $this->user['petugas']['id'] ?? 'admin')->whereMonth('created_at', date('m'))->count(),
       "is_admin" => $this->is_admin,
       "kode" => $this->getAntrianByJenisPetugas(
         $this->user['petugas']['jenis_petugas'] ?? 'admin'
