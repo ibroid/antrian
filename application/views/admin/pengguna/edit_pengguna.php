@@ -28,8 +28,8 @@
             </div>
             <div class="form-group">
               <label for="jenis_petugas">Jenis Petugas</label>
-              <select name="jenis_petugas" id="jenis_petugas" class="form-control" style="margin-bottom:10px;" required>
-                <option value="<?= $pengguna->petugas->id ?>"><?= $pengguna->petugas->jenis_petugas ?></option>
+              <select name="jenis_petugas" id="jenis_petugas" class="form-control" style="margin-bottom:10px;" <?= $this->is_admin ? 'disabled' : 'required' ?>>
+                <option value="<?= $pengguna->petugas->id ?? '' ?>"><?= $pengguna->petugas->jenis_petugas ?? 'Tidak Dalam Tugas Pelayanan' ?></option>
                 <option value="-">--- Pilih hanya jika level adalah petugas ---</option>
                 <?php foreach ((function () {
                   return [
@@ -47,7 +47,7 @@
             </div>
             <div class="form-group">
               <label for="status">Status</label>
-              <select name="status" id="status" class="form-control" style="margin-bottom:10px;" required>
+              <select name="status" id="status" class="form-control" style="margin-bottom:10px;" <?= $this->is_admin ? 'disabled' : 'required' ?>>
                 <option value="<?= $pengguna->status ?>"><?= $pengguna->status == "active" ? "Aktif" : "Tidak Aktif" ?></option>
                 <option value="active">Aktif</option>
                 <option value="inactive">Tidak Aktif</option>

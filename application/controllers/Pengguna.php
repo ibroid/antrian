@@ -149,7 +149,6 @@ class Pengguna extends R_Controller
         "identifier" => R_Input::pos("identifier"),
         "name" => R_Input::pos("nama_lengkap"),
         "role_id" => R_Input::pos("level"),
-        "password" => R_Input::pos("password"),
         "avatar" => R_Input::pos("avatar")
       ]);
 
@@ -269,5 +268,18 @@ class Pengguna extends R_Controller
       }
       return Redirect::wfe($th->getMessage())->go($_SERVER["HTTP_REFERER"]);
     }
+  }
+
+  public function setting($id = null)
+  {
+    $user = Users::findOrFail(Cypher::urlsafe_decrypt($id));
+
+    $this->load->page("admin/pengguna/edit_pengguna", [
+      "roles" => Roles::where("id", ">", 1)->get(),
+      "pengguna" => $user
+    ])->layout("dashboard_layout", [
+      "title" => "Pengguna",
+      "nav" => $this->load->component("layout/nav_admin")
+    ]);
   }
 }

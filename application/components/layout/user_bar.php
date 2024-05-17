@@ -54,8 +54,8 @@ $user = $this->session->userdata('user_login');
             <ul class="profile-dropdown onhover-show-div">
                 <!-- <li><a href="<?= base_url('profile') ?>"><i data-feather="user"></i><span>Profile </span></a></li> -->
                 <!-- <li><a href="#"><i data-feather="mail"></i><span>Inbox</span></a></li> -->
-                <!-- <li><a href="#"><i data-feather="file-text"></i><span>Taskboard</span></a></li> -->
                 <li><a href="<?= base_url("/menu") ?>"><i data-feather="home"></i><span>Menu</span></a></li>
+                <li><a href="<?= base_url('pengguna/setting/' . Cypher::urlsafe_encrypt($this->user['id'])) ?>"><i data-feather="user"></i><span>Setting</span></a></li>
                 <li>
                     <form action="<?= base_url('auth/logout') ?>" id="logoutForm" method="POST">
                     </form>
