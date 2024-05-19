@@ -51,3 +51,6 @@ uploads/pengambil/*.png
 uploads/pengambil/*.jpg
 uploads/pengambil/*.jpeg
 uploads/pengambil/*.gif
+
+uploads/pihak/*
+!uploads/pihak/index.html

@@ -26,4 +26,14 @@ class Petugas extends Model
   {
     return $this->belongsTo(Users::class, 'user_id', 'id');
   }
+
+  /**
+   * Define the relationship with the LoketPelayanan model.
+   *
+   * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+   */
+  public function loket()
+  {
+    return $this->belongsTo(LoketPelayanan::class, 'loket_id', 'id');
+  }
 }

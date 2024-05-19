@@ -27,13 +27,9 @@ class Pelayanan extends R_Controller
    */
   public function index()
   {
-    $currentLoket = LoketPelayanan::where('petugas_id', $this->user['petugas']['id'] ?? null)->first();
-    if (!$currentLoket) {
-      return Redirect::wfe("Akun anda tidak diregister sebagai petugas pelayanan")->go($_SERVER['HTTP_REFERER']);
-    }
+    $currentLoket = LoketPelayanan::where('id', $this->user['petugas']['loket_id'])->first();
 
-
-    if ($currentLoket->antrian && \Carbon\Carbon::today()->gt($currentLoket->antrian->created_at)) {
+    if ($currentLoket && $currentLoket->antrian && \Carbon\Carbon::today()->gt($currentLoket->antrian->created_at)) {
       $currentLoket->update([
         'status' => 0,
         'antrian_pelayanan_id' => null
@@ -48,6 +44,7 @@ class Pelayanan extends R_Controller
         $this->user['petugas']['jenis_petugas'] ?? 'admin'
       ),
       "currentLoket" => $currentLoket,
+      "loket" => LoketPelayanan::where("status", "!=", 2)->get()
     ])->layout("dashboard_layout", [
       "title" => "Antrian Pelayanan",
       "nav" => $this->load->component("layout/nav_pelayanan")
@@ -123,6 +120,7 @@ class Pelayanan extends R_Controller
 
   public function panggil()
   {
+    // prindie($_POST);
     R_Input::mustPost();
     try {
       if (R_Input::pos('panggil') == "baru") {
@@ -142,7 +140,7 @@ class Pelayanan extends R_Controller
 
         $lastNomorAntrianPtsp->update(['status' => 1, 'petugas_id' => $this->user['petugas']['id']]);
 
-        $loket = LoketPelayanan::where("petugas_id", $this->user['petugas']['id'])->first();
+        $loket = LoketPelayanan::where("id", $this->user['petugas']['loket_id'])->first();
         $loket->update(['antrian_pelayanan_id' => $lastNomorAntrianPtsp->id, 'status' => 1]);
 
         $loket->antrian;
@@ -150,7 +148,7 @@ class Pelayanan extends R_Controller
       }
 
       if (R_Input::pos('panggil') == "kembali") {
-        $loket = LoketPelayanan::where("petugas_id", $this->user['petugas']['id'])->first();
+        $loket = LoketPelayanan::where("id", $this->user['petugas']['loket_id'])->first();
         if (!$loket->antrian) {
           throw new Exception("Anda Belum Memanggil Antrian");
         }
@@ -185,7 +183,7 @@ class Pelayanan extends R_Controller
   {
     R_Input::mustPost();
     try {
-      $loket = LoketPelayanan::where("petugas_id", $this->user['petugas']['id'])->first();
+      $loket = LoketPelayanan::where("id", $this->user['petugas']['loket_id'])->first();
 
       if (!$loket) {
         throw new Exception("Anda bukan petugas PTSP", 1);
@@ -269,5 +267,47 @@ class Pelayanan extends R_Controller
     ];
 
     return $daftarTujuan[$tujuan] ?? null;
+  }
+
+  public function ganti_loket($id)
+  {
+    R_Input::mustPost();
+    try {
+      $petugas = Petugas::findOrFail(Cypher::urlsafe_decrypt($id));
+
+      $petugas->update([
+        'loket_id' => R_Input::pos('loket_id')
+      ]);
+
+      $this->user['petugas']['loket_id'] =  R_Input::pos('loket_id');
+      $this->session->set_userdata("user_login", $this->user);
+
+      if (R_Input::ci()->request_headers()["Accept"] == "application/json") {
+        echo json_encode([
+          "status" => true,
+          "message" => "Berhasil menyimpan data",
+          "data" => $petugas
+        ]);
+        return set_status_header(400);
+      }
+
+
+
+      return Redirect::wfa([
+        "message" => "Berhasil menyimpan data",
+        "text" => "Petugas Ditambahkan",
+        "type" => "success"
+      ])->go('pelayanan');
+    } catch (\Throwable $th) {
+      if (R_Input::ci()->request_headers()["Accept"] == "application/json") {
+        echo json_encode([
+          "status" => false,
+          "message" => $th->errorInfo[1] == 1062 ? "Data sudah ada" : $th->getMessage()
+        ]);
+        return set_status_header(400);
+      }
+
+      return Redirect::wfe($th->errorInfo[1] == 1062 ? "Data sudah ada" : $th->getMessage())->go($_SERVER["HTTP_REFERER"]);
+    }
   }
 }

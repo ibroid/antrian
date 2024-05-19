@@ -25,7 +25,7 @@ class Pelayanan_produk extends R_Controller
       "is_admin" => $this->is_admin,
     ])->layout("dashboard_layout", [
       "title" => "Pelayanan Produk",
-      "nav" => $this->load->component("layout/nav_pelayanan")
+      "nav" => $this->load->component($this->is_admin ? "layout/nav_admin" : "layout/nav_pelayanan")
     ]);
   }
 
@@ -68,7 +68,7 @@ class Pelayanan_produk extends R_Controller
     ])->layout("dashboard_layout", [
 
       "title" => "Pelayana Produk",
-      "nav" => $this->load->component("layout/nav_pelayanan")
+      "nav" => $this->load->component($this->is_admin ? "layout/nav_admin" : "layout/nav_pelayanan")
     ]);
   }
 

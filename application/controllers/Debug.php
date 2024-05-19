@@ -18,12 +18,6 @@ class Debug extends R_Controller
 
   public function index()
   {
-    $original = "Gembel";
-    $encrypted = Cypher::encrypt($original);
-
-    prindie(
-      $encrypted,
-      Cypher::urlsafe_decrypt(Cypher::safe($encrypted))
-    );
+    prindie($this->session->userdata());
   }
 }

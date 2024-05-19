@@ -64,19 +64,6 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-12">
-                  <div class="form-group mb-3">
-                    <label for="petugas_id">Petugas</label>
-                    <select required class="form-control" name="petugas_id" id="petugas_id">
-                      <option value="" selected disabled>--- Pilih Petugas ---</option>
-                      <?php foreach ($petugas as $p) : ?>
-                        <option value="<?= $p->id ?>" <?= $p->id == $loket->petugas_id ? 'selected' : '' ?>><?= $p->nama_petugas ?></option>
-                      <?php endforeach; ?>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
                 <div class="col-12 text-center">
                   <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-save"></i> Simpan</button>
                 </div>

@@ -12,7 +12,7 @@
     <?= $this->session->flashdata('flash_alert') ?>
     <?= $this->session->flashdata('flash_error') ?>
     <div class="col-3">
-      <?php if (!$is_admin) :
+      <?php if (!$is_admin && $currentLoket) :
         if ($currentLoket->status == 0 || !$currentLoket->antrian) { ?>
           <div class="p-4 mb-3 bg-primary">
             <div class="card-body">
@@ -28,11 +28,11 @@
       <div class="card">
         <div class="card-body">
           <h6 class="card-title text-center">Control Center</h6>
-          <?php if ($is_admin) { ?>
+          <?php if ($is_admin or !$currentLoket) { ?>
             <div class="alert alert-warning" role="alert">
               <div class="text-center">
                 <i class="fa fa-warning"></i>
-                <span>PEMANGGILAN HANYA BERLAKU UNTUK PETUGAS PTSP</span>
+                <strong>PEMANGGILAN TIDAK BISA JIKA ANDA MEMAKAI AKUN ADMIN, ATAU PENEMPATAN LOKET BELUM DITENTUKAN. SILAHKAN KLIK TUJUAN LOKET PADA MENU DI KANAN BAWAH</strong>
               </div>
             </div>
           <?php } else { ?>
@@ -47,16 +47,16 @@
                 </button>
               </div>
             </form>
+            <hr>
+            <form action="<?= base_url('/pelayanan/stop') ?>" method="POST">
+              <input type="hidden" name="kode" value="<?= $kode ?>">
+              <div class="d-grid gap-2">
+                <button name="panggil" value="baru" class="btn btn-outline-warning btn-lg btn-block" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Mengumumkan bahwa loket pelayanan ini akan berhenti/istirahat">
+                  Isitrahat <i class="fa fa-volume-up"></i>
+                </button>
+              </div>
+            </form>
           <?php } ?>
-          <hr>
-          <form action="<?= base_url('/pelayanan/stop') ?>" method="POST">
-            <input type="hidden" name="kode" value="<?= $kode ?>">
-            <div class="d-grid gap-2">
-              <button name="panggil" value="baru" class="btn btn-outline-warning btn-lg btn-block" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Mengumumkan bahwa loket pelayanan ini akan berhenti/istirahat">
-                Isitrahat <i class="fa fa-volume-up"></i>
-              </button>
-            </div>
-          </form>
         </div>
       </div>
     </div>
@@ -123,10 +123,58 @@
           </div>
         </div>
       </div>
+      <div class="card bg-primary">
+        <div class="card-body">
+          <div class="text-center">
+            <i class="fa fa-warning" style="font-size: xx-large;"></i>
+            <h5 class="text-kelap-kelip">Perhatian</h5>
+          </div>
+          <?php if (!$currentLoket) { ?>
+            <div class="bg-white rounded rounded-2 p-3 text-center">
+              <h6 class="text-danger">
+                <div class="text-warning text-kelap-kelip"> Anda Belum Menentukan Loket. Silahkan pilih loket yang anda tempati saat ini</div>
+              </h6>
+            </div>
+          <?php } else { ?>
+            <div class="bg-white rounded rounded-2 p-3 text-center">
+              <h6 class="text-danger">Anda Berada di loket
+                <div class="text-warning text-kelap-kelip"> <?= $currentLoket->nama_loket ?></div>
+              </h6>
+              <span class="text-dark"><strong>Apabila anda tidak/bukan berada di loket tersebut di atas</strong> silahkan ubah tujuan loket dibawah ini</span>
+            </div>
+          <?php } ?>
+          <form action="<?= base_url("pelayanan/ganti_loket/" . Cypher::urlsafe_encrypt($this->user['petugas']['id'])) ?>" method="post" class="mt-3">
+            <label for="select-loket">Pilih Tujuan Loket Disini</label>
+            <select name="loket_id" id="select-loket" class="form-select">
+              <?php foreach ($loket as $l) { ?>
+                <option <?= $l->id == $this->user['petugas']['loket_id'] ? 'selected' : null ?> value="<?= $l->id ?>"><?= $l->nama_loket ?></option>
+              <?php } ?>
+            </select>
+            <div class="text-center">
+              <button class="btn btn-block btn-success mt-3">
+                <i class="fa fa-arrow-right"></i>
+                Pindah</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
+  window.addEventListener("load", function() {
+    btnlengkapiDataKelapKelip()
+  })
 
+  function btnlengkapiDataKelapKelip() {
+    $(".text-kelap-kelip").each((i, e) => {
+      let cls = "text-danger";
+      setInterval(() => {
+        cls = cls === "text-danger" ? "text-warning" : "text-danger";
+        e.classList.remove("text-danger", "text-warning");
+        e.classList.add(cls);
+      }, 500);
+    })
+  }
 </script>

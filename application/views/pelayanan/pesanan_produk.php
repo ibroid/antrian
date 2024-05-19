@@ -53,20 +53,6 @@
       datatable.ajax.reload()
     })
 
-    // $("#btn-panggil-pihak").each((i, e) => {
-    //   $(e).click(() => {
-    //     $.ajax({
-    //       url: "<?= base_url('pelayanan_produk/panggil_pihak') ?>",
-    //       method: "POST",
-    //       data: {
-    //         pihak: $(e).data('pihak')
-    //       },
-    //       success: (data) => {
-    //         Swal.fire("Tunggu sebentar")
-    //       }
-    //     })
-    //   })
-    // })
   })
 
   function btnlengkapiDataKelapKelip() {

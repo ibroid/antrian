@@ -39,6 +39,15 @@
           <span>Bank Gugatan</span>
         </a>
       </li>
+      <li class="sidebar-list">
+        <i class="fa fa-thumb-tack"></i>
+        <a class="sidebar-link sidebar-title" href="<?= base_url('/pengunjung') ?>">
+          <svg class="stroke-icon">
+            <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-project"></use>
+          </svg>
+          <span>Identitas Pihak</span>
+        </a>
+      </li>
     </ul>
   </div>
   <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>

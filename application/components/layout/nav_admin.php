@@ -40,6 +40,33 @@
           <span>Loket</span>
         </a>
       </li>
+      <li class="sidebar-list">
+        <i class="fa fa-thumb-tack"></i>
+        <a class="sidebar-link sidebar-title" href="<?= base_url('/petugas_pelayanan') ?>">
+          <svg class="stroke-icon">
+            <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-user"></use>
+          </svg>
+          <span>Petugas</span>
+        </a>
+      </li>
+      <li class="sidebar-list">
+        <i class="fa fa-thumb-tack"></i>
+        <a class="sidebar-link sidebar-title" href="<?= base_url('/pelayanan_produk') ?>">
+          <svg class="stroke-icon">
+            <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-widget"></use>
+          </svg>
+          <span>Produk</span>
+        </a>
+      </li>
+      <li class="sidebar-list">
+        <i class="fa fa-thumb-tack"></i>
+        <a class="sidebar-link sidebar-title" href="<?= base_url('/pengunjung') ?>">
+          <svg class="stroke-icon">
+            <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-user"></use>
+          </svg>
+          <span>Pihak</span>
+        </a>
+      </li>
     </ul>
   </div>
   <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>

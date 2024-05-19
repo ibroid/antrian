@@ -93,6 +93,9 @@
   </div>
   <div class="row mx-1">
     <div class="col-6 col-sm-6">
+      <div class="text-center mb-4">
+        <h5>Loket Aktif</h5>
+      </div>
       <div class="p-2 border border-2 border-primary rounded-4" id="sortable-1">
         <?php foreach ($lokets->where('status', '!=', 2)->all() as $key => $value) : ?>
           <div class="bg-white p-3 mb-3 shadow-sm" data-id="<?= $value->id ?>">
@@ -101,7 +104,7 @@
               <div class="mx-4 flex-grow-1">
                 <h5 class="mb-0"><?= $value->nama_loket ?></h5>
                 <span class="f-light">Kode : <?= $value->kode_loket ?>.</span>
-                <span class="f-light"><?= $value->petugas->nama_petugas ?? null ?></span>
+                <span class="f-light"></span>
               </div>
               <div class="me-auto">
                 <a data-bs-toggle="tooltip" data-bs-title="Ubah data loket ini" href="<?= base_url('/loket/edit/' . Cypher::urlsafe_encrypt($value->id)) ?>" class="text-warning h5"><i class="fa fa-edit"></i></a>
@@ -114,6 +117,9 @@
       </div>
     </div>
     <div class="col-6 col-sm-6">
+      <div class="text-center mb-4">
+        <h5>Loket Tidak Aktif</h5>
+      </div>
       <div class="p-2 border border-2 border-secondary rounded-4" id="sortable-2">
         <?php foreach ($lokets->where('status',  2)->all() as $key => $value) : ?>
           <div class="bg-white p-3 mb-3 shadow-sm" data-id="<?= $value->id ?>">

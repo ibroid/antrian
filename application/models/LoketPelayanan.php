@@ -35,6 +35,6 @@ class LoketPelayanan extends Model
    */
   public function petugas()
   {
-    return $this->belongsTo(Petugas::class, "petugas_id", "id");
+    return $this->hasMany(Petugas::class, "loket_id", "id");
   }
 }

@@ -14,16 +14,6 @@ class Users extends Model
    */
   public static function booted()
   {
-    static::created(function ($user) {
-      if ($user->role_id == 2 or $user->role_id == 3) {
-        $user->petugas()->updateOrCreate([
-          "user_id" => $user->id
-        ], [
-          "nama_petugas" => $user->name,
-          "jenis_petugas" => R_Input::pos("jenis_petugas")
-        ]);
-      }
-    });
   }
 
   /**
