@@ -73,7 +73,7 @@
               </script>
             </div>
             <div class="form-group text-end mt-4">
-              <a href="<?= base_url("/pengguna") ?>" class="btn btn-secondary btn-block" style="margin-bottom:10px;">Kembali</a>
+              <a href="<?= $_SERVER['HTTP_REFERER'] ?? base_url("/pengguna") ?>" class="btn btn-secondary btn-block" style="margin-bottom:10px;">Kembali</a>
               <button type="submit" class="btn btn-primary btn-block" style="margin-bottom:10px;">Simpan</button>
             </div>
           </form>

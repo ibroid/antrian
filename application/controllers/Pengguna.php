@@ -12,10 +12,6 @@ class Pengguna extends R_Controller
   {
     parent::__construct();
 
-    if (!$this->is_admin) {
-      Redirect::wfe("Halaman khusus admin")->go($_SERVER["HTTP_REFERER"]);
-    }
-
     $this->load->library("Addons");
     $this->addons->init([
       "js" => [
@@ -36,6 +32,11 @@ class Pengguna extends R_Controller
    */
   public function index()
   {
+
+    if (!$this->is_admin) {
+      Redirect::wfe("Halaman khusus admin")->go($_SERVER["HTTP_REFERER"]);
+    }
+
     $this->load->page("admin/pengguna/daftar_pengguna", [
       "pengguna" => Users::where("role_id", ">", 1)->latest()->get()
     ])->layout("dashboard_layout", [
@@ -51,6 +52,11 @@ class Pengguna extends R_Controller
    */
   public function tambah()
   {
+
+    if (!$this->is_admin) {
+      Redirect::wfe("Halaman khusus admin")->go($_SERVER["HTTP_REFERER"]);
+    }
+
     $this->load->page("admin/pengguna/tambah_pengguna", [
       "roles" => Roles::where("id", ">", 1)->get()
     ])->layout("dashboard_layout", [
@@ -101,7 +107,7 @@ class Pengguna extends R_Controller
         "message" => "Pengguna ditambahkan",
         "text" => "Berhasil",
         "type" => "success",
-      ])->go("/pengguna");
+      ])->go($this->is_admin ? "/pengguna" : "/pelayanan");
     } catch (\Throwable $th) {
       if (R_Input::ci()->request_headers()["Accept"] == "application/json") {
         echo json_encode([
@@ -188,6 +194,10 @@ class Pengguna extends R_Controller
    */
   public function delete($user_id)
   {
+    if (!$this->is_admin) {
+      Redirect::wfe("Halaman khusus admin")->go($_SERVER["HTTP_REFERER"]);
+    }
+
     R_Input::mustPost();
     try {
       $user = Users::findOrFail(Cypher::urlsafe_decrypt($user_id));

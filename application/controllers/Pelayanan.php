@@ -291,8 +291,6 @@ class Pelayanan extends R_Controller
         return set_status_header(400);
       }
 
-
-
       return Redirect::wfa([
         "message" => "Berhasil menyimpan data",
         "text" => "Petugas Ditambahkan",
@@ -309,5 +307,18 @@ class Pelayanan extends R_Controller
 
       return Redirect::wfe($th->errorInfo[1] == 1062 ? "Data sudah ada" : $th->getMessage())->go($_SERVER["HTTP_REFERER"]);
     }
+  }
+
+  public function user_setting($id)
+  {
+    $user = Users::findOrFail(Cypher::urlsafe_decrypt($id));
+
+    $this->load->page("admin/pengguna/edit_pengguna", [
+      "roles" => Roles::where("id", ">", 1)->get(),
+      "pengguna" => $user
+    ])->layout("dashboard_layout", [
+      "title" => "Pengguna",
+      "nav" => $this->load->component("layout/nav_pelayanan")
+    ]);
   }
 }

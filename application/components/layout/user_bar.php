@@ -55,7 +55,10 @@ $user = $this->session->userdata('user_login');
                 <!-- <li><a href="<?= base_url('profile') ?>"><i data-feather="user"></i><span>Profile </span></a></li> -->
                 <!-- <li><a href="#"><i data-feather="mail"></i><span>Inbox</span></a></li> -->
                 <li><a href="<?= base_url("/menu") ?>"><i data-feather="home"></i><span>Menu</span></a></li>
-                <li><a href="<?= base_url('pengguna/setting/' . Cypher::urlsafe_encrypt($this->user['id'])) ?>"><i data-feather="user"></i><span>Setting</span></a></li>
+                <li>
+                    <?php $setting_url = $this->is_admin ? 'pengguna/setting/' : 'pelayanan/user_setting/' ?>
+                    <a href="<?= base_url($setting_url . Cypher::urlsafe_encrypt($this->user['id'])) ?>"><i data-feather="user"></i><span>Setting</span></a>
+                </li>
                 <li>
                     <form action="<?= base_url('auth/logout') ?>" id="logoutForm" method="POST">
                     </form>
