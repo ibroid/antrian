@@ -8,7 +8,7 @@ class BankGugatanDatatable extends Model
   protected $fillable = ['nama_pihak', 'filename'];
   protected $primaryKey = 'id';
   protected $columnSearch = ['nama_pihak', 'filename'];
-  protected $defaultOrder = ['id' => 'asc'];
+  protected $defaultOrder = ['id' => 'desc'];
 
   public function getData()
   {
