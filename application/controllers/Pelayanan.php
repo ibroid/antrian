@@ -29,6 +29,10 @@ class Pelayanan extends R_Controller
   {
     $currentLoket = LoketPelayanan::where('id', $this->user['petugas']['loket_id'])->first();
 
+    if ($currentLoket->nama_loket == "Loket Posbakum") {
+      // prindie($currentLoket);
+    }
+
     if ($currentLoket && $currentLoket->antrian && \Carbon\Carbon::today()->gt($currentLoket->antrian->created_at)) {
       $currentLoket->update([
         'status' => 0,

@@ -158,6 +158,10 @@ class Pengguna extends R_Controller
         "avatar" => R_Input::pos("avatar")
       ]);
 
+      $user->petugas()->update([
+        "jenis_petugas" => R_Input::pos("jenis_petugas")
+      ]);
+
       if (R_Input::ci()->request_headers()["Accept"] == "application/json") {
         echo json_encode([
           "status" => true,
@@ -168,10 +172,10 @@ class Pengguna extends R_Controller
       }
 
       return Redirect::wfa([
-        "message" => "Pengguna ditambahkan",
+        "message" => "Pengguna diupdate",
         "text" => "Berhasil",
         "type" => "success",
-      ])->go("/pengguna");
+      ])->go($this->is_admin ? "/pengguna" : $_SERVER['HTTP_REFERER']);
     } catch (\Throwable $th) {
       if (R_Input::ci()->request_headers()["Accept"] == "application/json") {
         echo json_encode([

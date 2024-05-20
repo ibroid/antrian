@@ -38,7 +38,8 @@
                     'Petugas Produk',
                     'Kasir',
                     'Petugas Antrian',
-                    'Petugas Akta'
+                    'Petugas Akta',
+                    'Petugas Posbakum',
                   ];
                 })() as $p) : ?>
                   <option><?= $p ?></option>
