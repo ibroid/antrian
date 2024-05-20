@@ -54,3 +54,6 @@ uploads/pengambil/*.gif
 
 uploads/pihak/*
 !uploads/pihak/index.html
+
+hasil/*
+!hasil/index.html

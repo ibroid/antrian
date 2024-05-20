@@ -39,7 +39,8 @@ class Kasir extends R_Controller
       $templateProcessor->setValue("TANGGAL_SEKARANG", tanggal_indo(date("Y-m-d")));
 
       $filename = str_replace("/", "_", $perkara->nomor_perkara) . ".docx";
-      $templateProcessor->saveAs("./" . $filename);
+      $templateProcessor->saveAs("./hasil/index.docx");
+      // prindie($filename);
 
       header('Content-Description: File Transfer');
       header('Content-Type: application/octet-stream');
@@ -48,12 +49,12 @@ class Kasir extends R_Controller
       header('Expires: 0');
       header('Cache-Control: must-revalidate');
       header('Pragma: public');
-      header('Content-Length: ' . filesize($filename));
+      header('Content-Length: ' . filesize("./hasil/index.docx"));
       ob_clean();
       flush();
-      readfile($filename);
+      readfile("./hasil/index.docx");
 
-      unlink($filename);
+      // unlink($filename);
     } catch (\Throwable $th) {
       Redirect::wfe($th->getMessage())->go($_SERVER['HTTP_REFERER']);
     }
