@@ -44,6 +44,9 @@ class R_Controller extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+
+        $userSessions = $this->eloquent->table('user_session')->where('expiration_time', '<', date('Y-m-d H:i:s'))->delete();
+
         if (empty($this->session->userdata('user_login'))) {
 
             $this->session->set_flashdata(

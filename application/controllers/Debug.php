@@ -1,9 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Schema;
 
-class Debug extends R_Controller
+class Debug extends CI_Controller
 {
   public Eloquent $eloquent;
 
@@ -18,6 +16,6 @@ class Debug extends R_Controller
 
   public function index()
   {
-    prindie($this->session->userdata());
+    prindie($_SERVER);
   }
 }

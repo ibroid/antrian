@@ -51,6 +51,9 @@ class Auth extends CI_Controller
     }
     try {
       $u = $this->mathcIdentifier();
+
+      $this->checkIfAlreadyLoggedIn($u);
+
       $this->matchPassword($u->password, $u->salt);
 
       $this->storeSession($u->toArray());
@@ -68,6 +71,18 @@ class Auth extends CI_Controller
       ]));
 
       redirect(base_url("/auth"));
+    }
+  }
+
+  /**
+   * Memeriksa apakah user sedang login di perangkat lain
+   */
+  private function checkIfAlreadyLoggedIn(Users $user)
+  {
+    $loggedUser = $this->eloquent->table('user_session')->where('user_id', $user->id)->first();
+
+    if ($loggedUser) {
+      throw new Exception("User ini sedang loggin di perangkat lain", 1);
     }
   }
 
@@ -149,6 +164,12 @@ class Auth extends CI_Controller
   private function storeSession(array $data)
   {
     $this->session->set_userdata(['user_login' => $data]);
+    $this->eloquent->table('user_session')->insert([
+      'user_id' => $data[id],
+      'device' => $_SERVER['HTTP_USER_AGENT'],
+      'session_id' => session_id(),
+      'expiration_time' =>  date('Y-m-d H:i:s', time() + $this->config->item('sess_expiration'))
+    ]);
   }
 
   /**
