@@ -120,7 +120,7 @@
       </div>
     </div>
     <div class="col-6">
-
+      <div id="loket-container"></div>
     </div>
   </div>
 
@@ -166,6 +166,7 @@
 
     antrianChannel.bind('panggil-antrian-ptsp', function(data) {
       audioMemanggil(data)
+      fetchTableLoketPelayanan()
     });
 
     antrianChannel.bind('stop-antrian-ptsp', function(data) {
@@ -304,55 +305,6 @@
     }, 500)
   }
 
-  /**
-   * Fungsi untuk mengganti link video tv player.
-   * @param {string} source
-   */
-  function changeIFrameVideoSource(source) {
-    const iframe = document.querySelector("#tvplayer")
-    iframe.setAttribute("src", source + "&amp;controls=1&autoplay=1")
-  }
-
-  /**
-   * Fungsi untuk mengambil data channel tv list.
-   * @returns {Promise<string[]>}
-   */
-  function fetchDataChannelTvList() {
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        url: "<?= base_url("layar/fetch_data_channel_tv_list") ?>",
-        headers: {
-          "Accept": "application/json"
-        },
-        success: function(data) {
-          resolve(data)
-        },
-        error: function(err) {
-          reject(err)
-        }
-      })
-    })
-  }
-
-  /**
-   * Fungsi untuk merender button data channel tv list.
-   * @param {{
-   *   nama_channel: string,
-   *   url: string,
-   *   status: number,
-   * }[]} data
-   */
-  function renderChannelTvList(data) {
-    data.forEach(d => {
-      const elementList = $("<li>").addClass("page-item")
-      const elementLink = $("<a>").attr("href", "javascript:void(0)").addClass("page-link").text(d.nama_channel)
-      elementList.append(elementLink)
-      elementList.click(() => {
-        changeIFrameVideoSource(d.url)
-      })
-      $("#channelTvList").append(elementList)
-    })
-  }
 
   /**
    * Fungsi untuk mengambil data banner.
@@ -398,13 +350,13 @@
    */
   function fetchTableLoketPelayanan() {
     $.ajax({
-      url: "<?= base_url("loket/fetch_table_loket_pelayanan") ?>",
+      url: "<?= base_url("tv/fetch_loket_antrian") ?>",
       method: "POST",
       success: function(html) {
-        $("#container-table-loket-pelayanan").html(html)
+        $("#loket-container").html(html)
       },
       error: function(err) {
-        $("#container-table-loket-pelayanan").html(`<div class="text-center"><h3>Terjadi kesalahaan saat memproses informasi tabel loket pelayanan. ${err.statusText ?? err.responseJSON }</h3></div>`)
+        $("#loket-container").html(`<div class="text-center"><h3>Terjadi kesalahaan saat memproses informasi tabel loket pelayanan. ${err.statusText ?? err.responseJSON }</h3></div>`)
       }
     })
   }

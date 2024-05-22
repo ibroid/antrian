@@ -2,7 +2,7 @@
 
 defined("BASEPATH") or exit("No direct script access allowed");
 
-class Layar extends R_Controller
+class Layar extends CI_Controller
 {
   /**
    * Mendefinisikan fungsi construct.
@@ -12,6 +12,7 @@ class Layar extends R_Controller
   public function __construct()
   {
     parent::__construct();
+    $this->load->library("addons");
     $this->addons->init([
       "js" => [
         "<script src=\"https://js.pusher.com/8.2.0/pusher.min.js\"></script>\n",

@@ -30,4 +30,10 @@ class Tv extends CI_Controller
       "antrian_hari_ini" => AntrianPtsp::whereDate("created_at", date("Y-m-d"))->get(),
     ])->layout("auth_layout");
   }
+
+
+  public function fetch_loket_antrian()
+  {
+    echo $this->load->component("card/current_antrian_tv");
+  }
 }

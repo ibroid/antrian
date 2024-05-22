@@ -83,9 +83,6 @@ class Auth extends CI_Controller
   {
     $loggedUser = $this->eloquent->table('user_session')->where('user_id', $user->id)->first();
 
-    if ($user->role->role_name == "Admin") {
-      return true;
-    }
     if ($loggedUser) {
       throw new Exception("User ini sedang loggin di perangkat lain", 1);
     }
@@ -103,32 +100,24 @@ class Auth extends CI_Controller
       return redirect("/menu");
     }
 
-    switch ($user->petugas->jenis_petugas) {
-      case "Petugas PTSP":
-        redirect("/pelayanan");
-        break;
+    $redirectList = [
+      "Petugas PTSP" => "/pelayanan",
+      "Petugas Sidang" => "/persidangan",
+      "Petugas Produk" => "/pelayanan_produk",
+      "Petugas Akta" => "/pelayanan_produk",
+      "Petugas Posbakum" => "/pelayanan",
+      "Kasir" => "/kasir",
+    ];
 
-      case "Petugas Sidang":
-        redirect("/persidangan");
-        break;
-
-      case "Petugas Produk":
-      case "Petugas Akta":
-        redirect("/pelayanan_produk");
-        break;
-
-      case "Petugas Posbakum":
-        redirect("/pelayanan");
-        break;
-
-      case "Kasir":
-        redirect("/kasir");
-        break;
-
-      default:
-        redirect("/menu");
-        break;
+    if (isset($redirectList[$user->petugas->jenis_petugas])) {
+      return Redirect::wfa([
+        "message" => "Selamat Datang",
+        "text" => "User " . $user->name,
+        "type" => "info"
+      ])->go($redirectList[$user->petugas->jenis_petugas]);
     }
+
+    return redirect("/menu");
   }
 
   /**
