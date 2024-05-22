@@ -129,33 +129,37 @@
             <i class="fa fa-warning" style="font-size: xx-large;"></i>
             <h5 class="text-kelap-kelip">Perhatian</h5>
           </div>
-          <?php if (!$currentLoket) { ?>
-            <div class="bg-white rounded rounded-2 p-3 text-center">
-              <h6 class="text-danger">
-                <div class="text-warning text-kelap-kelip"> Anda Belum Menentukan Loket. Silahkan pilih loket yang anda tempati saat ini</div>
-              </h6>
-            </div>
+          <?php if ($this->is_admin) { ?>
+            <p>Selain PTSP tidak bisa mengganti Loket</p>
           <?php } else { ?>
-            <div class="bg-white rounded rounded-2 p-3 text-center">
-              <h6 class="text-danger">Anda Berada di loket
-                <div class="text-warning text-kelap-kelip"> <?= $currentLoket->nama_loket ?></div>
-              </h6>
-              <span class="text-dark"><strong>Apabila anda tidak/bukan berada di loket tersebut di atas</strong> silahkan ubah tujuan loket dibawah ini</span>
-            </div>
+            <?php if (!$currentLoket) { ?>
+              <div class="bg-white rounded rounded-2 p-3 text-center">
+                <h6 class="text-danger">
+                  <div class="text-warning text-kelap-kelip"> Anda Belum Menentukan Loket. Silahkan pilih loket yang anda tempati saat ini</div>
+                </h6>
+              </div>
+            <?php } else { ?>
+              <div class="bg-white rounded rounded-2 p-3 text-center">
+                <h6 class="text-danger">Anda Berada di loket
+                  <div class="text-warning text-kelap-kelip"> <?= $currentLoket->nama_loket ?></div>
+                </h6>
+                <span class="text-dark"><strong>Apabila anda tidak/bukan berada di loket tersebut di atas</strong> silahkan ubah tujuan loket dibawah ini</span>
+              </div>
+            <?php } ?>
+            <form action="<?= base_url("pelayanan/ganti_loket/" . Cypher::urlsafe_encrypt($this->user['petugas']['id'] ?? null)) ?>" method="post" class="mt-3">
+              <label for="select-loket">Pilih Tujuan Loket Disini</label>
+              <select name="loket_id" id="select-loket" class="form-select">
+                <?php foreach ($loket as $l) { ?>
+                  <option <?= $l->id == $this->user['petugas']['loket_id'] ? 'selected' : null ?> value="<?= $l->id ?>"><?= $l->nama_loket ?></option>
+                <?php } ?>
+              </select>
+              <div class="text-center">
+                <button class="btn btn-block btn-success mt-3">
+                  <i class="fa fa-arrow-right"></i>
+                  Pindah</button>
+              </div>
+            </form>
           <?php } ?>
-          <form action="<?= base_url("pelayanan/ganti_loket/" . Cypher::urlsafe_encrypt($this->user['petugas']['id'])) ?>" method="post" class="mt-3">
-            <label for="select-loket">Pilih Tujuan Loket Disini</label>
-            <select name="loket_id" id="select-loket" class="form-select">
-              <?php foreach ($loket as $l) { ?>
-                <option <?= $l->id == $this->user['petugas']['loket_id'] ? 'selected' : null ?> value="<?= $l->id ?>"><?= $l->nama_loket ?></option>
-              <?php } ?>
-            </select>
-            <div class="text-center">
-              <button class="btn btn-block btn-success mt-3">
-                <i class="fa fa-arrow-right"></i>
-                Pindah</button>
-            </div>
-          </form>
         </div>
       </div>
     </div>
