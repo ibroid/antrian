@@ -17,7 +17,9 @@ class Auth extends CI_Controller
   {
     parent::__construct();
     $this->load->library("Addons");
-
+    $this->addons->init([
+      // "css" => ["<meta http-equiv=\"Content-Security-Policy\" content=\"upgrade-insecure-requests\">"]
+    ]);
     $this->eloquent->table('user_session')->where('expiration_time', '<', date('Y-m-d H:i:s'))->delete();
   }
 
@@ -53,6 +55,8 @@ class Auth extends CI_Controller
     }
     try {
       $u = $this->mathcIdentifier();
+
+      // $this->checkRemoteAddr();
 
       $this->checkIfAlreadyLoggedIn($u);
 
@@ -162,6 +166,8 @@ class Auth extends CI_Controller
       'user_id' => $data['id'],
       'device' => $_SERVER['HTTP_USER_AGENT'],
       'session_id' => session_id(),
+      // 'remote_addr' => R_Input::pos("remote_addr"),
+      // 'real_remote_addr' => $_SERVER['REMOTE_ADDR'],
       'expiration_time' =>  date('Y-m-d H:i:s', time() + $this->config->item('sess_expiration'))
     ]);
   }
@@ -187,5 +193,19 @@ class Auth extends CI_Controller
   private function destroySession()
   {
     $this->session->sess_destroy();
+  }
+
+  /**
+   * Check apakah user login di jaringan kantors
+   */
+  public function checkRemoteAddr()
+  {
+    if (!isset($_POST['remote_addr'])) {
+      throw new Exception("Presence Remote Address Gagal", 1);
+    }
+
+    if (explode('.', R_Input::pos("remote_addr"))[0] !== "192") {
+      throw new Exception("Login diluar jaringan kantor tidak diperbolehkan", 1);
+    }
   }
 }
