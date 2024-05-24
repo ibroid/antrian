@@ -23,8 +23,8 @@ final class CreateUserSessionTable extends AbstractMigration
         $table->addColumn('user_id', 'integer', ['null' => false]);
         $table->addColumn('session_id', 'string', ['null' => false, 'length' =>  128]);
         $table->addColumn('device', 'string', ['length' => 191]);
-        // $table->addColumn('remote_aßddr', 'string', ['length' => 64, 'null' => false]);
-        // $table->addColumn('real_remote_addr', 'string', ['length' => 64, 'null' => false]);
+        $table->addColumn('remote_addr', 'string', ['length' => 64, 'null' => false]);
+        $table->addColumn('real_remote_addr', 'string', ['length' => 64, 'null' => false]);
         $table->addColumn('expiration_time', 'datetime');
         $table->addColumn('created_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('updated_at', 'timestamp')

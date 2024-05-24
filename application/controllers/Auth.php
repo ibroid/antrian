@@ -56,7 +56,7 @@ class Auth extends CI_Controller
     try {
       $u = $this->mathcIdentifier();
 
-      // $this->checkRemoteAddr();
+      $this->checkRemoteAddr();
 
       $this->checkIfAlreadyLoggedIn($u);
 
@@ -166,8 +166,8 @@ class Auth extends CI_Controller
       'user_id' => $data['id'],
       'device' => $_SERVER['HTTP_USER_AGENT'],
       'session_id' => session_id(),
-      // 'remote_addr' => R_Input::pos("remote_addr"),
-      // 'real_remote_addr' => $_SERVER['REMOTE_ADDR'],
+      'remote_addr' => R_Input::pos("remote_addr"),
+      'real_remote_addr' => $_SERVER['REMOTE_ADDR'],
       'expiration_time' =>  date('Y-m-d H:i:s', time() + $this->config->item('sess_expiration'))
     ]);
   }
