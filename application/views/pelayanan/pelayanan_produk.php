@@ -6,6 +6,9 @@
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">Pesanan Produk Pengadilan</h4>
+          <div class="text-right">
+            <button class="btn btn-primary">Tambah Pengambilan Produk</button>
+          </div>
           <table class="table table-hovered table" id="table-produk">
             <thead>
               <tr>

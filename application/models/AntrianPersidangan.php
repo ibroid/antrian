@@ -36,18 +36,9 @@ class AntrianPersidangan extends Model
 
   private static function broadcast_new_antrian(AntrianPersidangan $antrianPersidangan)
   {
-    $pusher = new Pusher\Pusher(
-      'a360f9f6cfefca4c383b',
-      'f6262d370d723734da60',
-      '1758369',
-      [
-        'cluster' => 'ap1',
-        'useTLS' => true
-      ]
-    );
 
     $data['message'] = 'hello world';
-    $pusher->trigger('antrian-channel', 'new-antrian', $antrianPersidangan);
+    Broadcast::pusher()->trigger('antrian-channel', 'new-antrian', $antrianPersidangan);
   }
 
   private static function tambahKehadiranSetelahAmbilAntrian(AntrianPersidangan $antrianPersidangan)

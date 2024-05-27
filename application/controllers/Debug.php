@@ -1,7 +1,7 @@
 <?php
 
 
-class Debug extends CI_Controller
+class Debug extends R_ApiController
 {
   public Eloquent $eloquent;
 
@@ -16,6 +16,6 @@ class Debug extends CI_Controller
 
   public function index()
   {
-    prindie($_SERVER);
+    prindie($this->generateApiKey(32));
   }
 }

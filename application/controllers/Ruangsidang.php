@@ -77,7 +77,7 @@ class RuangSidang extends R_Controller
 
       $dalamPanggilan->save();
 
-      $this->pusher->trigger("antrian-channel", "update-persidangan", null);
+      Broadcast::pusher()->trigger("antrian-channel", "update-persidangan", null);
 
       $this->session->set_flashdata("flash_alert", $this->load->component(
         Constanta::ALERT_SUCCESS,
@@ -114,7 +114,7 @@ class RuangSidang extends R_Controller
           $textPengumuman = str_replace("{condition_pihak_dua}", "", $textPengumuman);
         }
 
-        $this->pusher->trigger("antrian-channel", "pengumuman", $textPengumuman);
+        Broadcast::pusher()->trigger("antrian-channel", "pengumuman", $textPengumuman);
       } else {
         $dalamPanggilan->antrian_persidangan->update(["status" => 3]);
       }
@@ -165,7 +165,7 @@ class RuangSidang extends R_Controller
           break;
       }
 
-      $this->pusher->trigger("antrian-channel", "panggil-pihak", $textPanggil);
+      Broadcast::pusher()->trigger("antrian-channel", "panggil-pihak", $textPanggil);
       echo json_encode(["status" => true, "message" => "Berhasil memanggil pihak"]);
     } catch (\Throwable $th) {
       set_status_header(400);

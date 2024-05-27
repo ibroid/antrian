@@ -141,7 +141,7 @@ class Pelayanan_produk extends R_Controller
       $textPengumuman = str_replace("masuk ", "", $textPengumuman);
 
 
-      $this->pusher->trigger("produk-channel", "panggil-pihak", $textPengumuman);
+      Broadcast::pusher()->trigger("produk-channel", "panggil-pihak", $textPengumuman);
 
       echo json_encode(["status" => true, "message" => "Panggilan berhasil dikirim. Silahkan tunggu sampai panggilan selesai dibacakan"]);
 
@@ -149,5 +149,9 @@ class Pelayanan_produk extends R_Controller
     } catch (\Throwable $th) {
       echo $th->getMessage();
     }
+  }
+
+  public function tambah()
+  {
   }
 }

@@ -29,12 +29,6 @@ class R_Controller extends CI_Controller
     public Addons $addons;
 
     /**
-     * Inisialisasi library Pusher
-     * @var Pusher
-     */
-    public Pusher $pusher;
-
-    /**
      * Inisialisasi fungsi construct. 
      * Mengecek apakah user sudah login atau belum.
      * Mengisikan variabel user dengan record user yang login.
@@ -68,15 +62,5 @@ class R_Controller extends CI_Controller
         }
 
         $this->load->library("Addons");
-
-        $this->pusher = new \Pusher\Pusher(
-            'a360f9f6cfefca4c383b',
-            'f6262d370d723734da60',
-            '1758369',
-            [
-                'cluster' => 'ap1',
-                'useTLS' => true
-            ]
-        );
     }
 }

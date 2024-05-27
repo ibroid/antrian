@@ -5,7 +5,10 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title">Pesanan Produk Pengadilan</h4>
+          <div class="card-title d-flex justify-content-between mb-5">
+            <h4 class="card-title">Pesanan Produk Pengadilan</h4>
+            <a href="<?= base_url('pelayanan_produk/tambah') ?>" class="btn btn-primary ">Tambah Pengambilan Produk</a>
+          </div>
           <table class="table table-hovered table" id="table-produk">
             <thead>
               <tr>
