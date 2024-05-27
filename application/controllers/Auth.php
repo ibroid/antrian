@@ -85,8 +85,11 @@ class Auth extends CI_Controller
    */
   private function checkIfAlreadyLoggedIn(Users $user)
   {
-    $loggedUser = $this->eloquent->table('user_session')->where('user_id', $user->id)->first();
+    if ($user->role->role_name == "Admin") {
+      return false;
+    }
 
+    $loggedUser = $this->eloquent->table('user_session')->where('user_id', $user->id)->first();
     if ($loggedUser) {
       throw new Exception("User ini sedang loggin di perangkat lain", 1);
     }

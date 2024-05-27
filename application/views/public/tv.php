@@ -166,7 +166,7 @@
 
     antrianChannel.bind('panggil-antrian-ptsp', function(data) {
       audioMemanggil(data)
-      fetchTableLoketPelayanan()
+      // fetchTableLoketPelayanan()
     });
 
     antrianChannel.bind('stop-antrian-ptsp', function(data) {

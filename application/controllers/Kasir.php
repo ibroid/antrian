@@ -5,7 +5,7 @@ class Kasir extends R_Controller
   public function index()
   {
     $this->load->page("kasir/putus_hari_ini", [
-      "perkara_putus_hari_ini" => PerkaraJadwalSidang::where("tanggal_sidang", date("Y-m-d"))->latest('diinput_tanggal  ')->get()
+      "perkara_putus_hari_ini" => PerkaraJadwalSidang::where("tanggal_sidang", date("Y-m-d"))->latest('diinput_tanggal')->get()
     ])->layout("dashboard_layout", [
       "nav" => $this->load->component("layout/nav_persidangan"),
       "title" => "Monitor Petugas Sidang",
