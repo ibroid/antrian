@@ -1,6 +1,6 @@
 <?php
 
-class Loket extends R_Controller
+class Loket extends CI_Controller
 {
   /**
    * Constructor for the Loket class.
@@ -8,6 +8,7 @@ class Loket extends R_Controller
   public function __construct()
   {
     parent::__construct();
+    $this->load->library("addons");
     $this->addons->init([
       'js' => [
         '<script src="https://unpkg.com/sortablejs@latest/Sortable.min.js"></script>',
