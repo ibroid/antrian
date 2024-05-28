@@ -123,23 +123,22 @@
 
   async function initAudo(data) {
     const audio = await requestVoice(data)
-    // push to queue
-    audioQueue.push(audio.data)
+    audio.forEach(a => audioQueue.push(a.base64))
+
     if (!isplaying) {
       playAudioinQueue()
     }
   }
 
   async function requestVoice(text) {
-    return await fetch("<?= $_ENV["TTS_URL_API"] ?>/request_voice", {
+    const body = new FormData()
+    body.append('text', text)
+    return await fetch("<?= base_url("request_voice") ?>", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Accept": "application/json",
         },
-        body: JSON.stringify({
-          key: "<?= $_ENV["TTS_API_KEY"] ?>",
-          text: text
-        })
+        body: body
       })
       .then(res => res.json())
       .catch(err => {

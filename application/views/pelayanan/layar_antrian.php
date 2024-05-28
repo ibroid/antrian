@@ -203,15 +203,14 @@
 
     const produkChannel = pusher.subscribe('produk-channel');
     produkChannel.bind('panggil-pihak', (data) => {
-      fetch("<?= $_ENV["TTS_URL_API"] ?>/request_voice", {
+      const body = new FormData()
+      body.append('text', data)
+      fetch("<?= base_url("request_voice/short") ?>", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Accept": "application/json"
           },
-          body: JSON.stringify({
-            key: "<?= $_ENV["TTS_API_KEY"] ?>",
-            text: data
-          })
+          body: body
         })
         .then(res => res.json())
         .then(res => {

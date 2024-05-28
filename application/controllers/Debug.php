@@ -1,7 +1,7 @@
 <?php
 
 
-class Debug extends R_ApiController
+class Debug extends CI_Controller
 {
   public Eloquent $eloquent;
 
@@ -16,6 +16,25 @@ class Debug extends R_ApiController
 
   public function index()
   {
-    prindie($this->generateApiKey(32));
+    $this->load->library("tts");
+    // Usage example
+    $text = "This is a sample text that is supposed to be converted to audio.";
+    $options = [
+      'lang' => 'en',
+      'slow' => false,
+      'host' => 'https://translate.google.com',
+      'timeout' => 10000,
+      'splitPunct' => ''
+    ];
+
+    try {
+      $results = Tts::generateAudio($text, $options);
+      foreach ($results as $result) {
+        echo "Short Text: " . $result['shortText'] . "\n";
+        echo "Base64: " . $result['base64'] . "\n";
+      }
+    } catch (Exception $e) {
+      echo 'Error: ' . $e->getMessage();
+    }
   }
 }

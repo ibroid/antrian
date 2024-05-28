@@ -109,7 +109,10 @@ class Persidangan extends R_Controller
       $textPengumuman = str_replace("{nama_pihak}", R_Input::pos("nama_pihak"), $textPengumuman);
       Broadcast::pusher()->trigger("antrian-channel", "panggil-pihak", $textPengumuman);
 
-      echo json_encode(["status" => true, "message" => "Panggilan berhasil dikirim. Silahkan tunggu sampai panggilan selesai dibacakan"]);
+      echo json_encode([
+        "status" => true,
+        "message" => "Panggilan berhasil dikirim. Silahkan tunggu sampai panggilan selesai dibacakan",
+      ]);
     } catch (\Throwable $th) {
       echo $th->getMessage();
     }
