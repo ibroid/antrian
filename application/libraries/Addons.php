@@ -5,7 +5,6 @@ class Addons
     public $addonsjs = [];
     public $addonscss = [];
 
-
     public function __construct($addonsjs = [], $addonscss = [])
     {
         $this->addonsjs = $addonsjs;
@@ -14,8 +13,8 @@ class Addons
 
     public function init($addons)
     {
-        $this->addonsjs = isset($addons['js']) ? $addons['js'] : [];
-        $this->addonscss = isset($addons['css']) ? $addons['css'] : [];
+        isset($addons['js']) ? array_push($this->addonsjs, ...$addons['js']) : null;
+        isset($addons['css']) ? array_push($this->addonscss, ...$addons['css']) : null;
     }
 
     public function js()

@@ -158,6 +158,14 @@
 				(tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
 			);
 		})
+
+
+		/**@param {string} date */
+		function tanggal(date) {
+			const [tahun, bulan, hari] = date.split('-');
+			const arrayBulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+			return `${hari} ${arrayBulan[parseInt(bulan) - 1]} ${tahun}`;
+		}
 	</script>
 </body>
 

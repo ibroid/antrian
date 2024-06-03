@@ -69,6 +69,8 @@ class R_Controller extends CI_Controller
 class R_ApiController extends CI_Controller
 {
 
+    public Eloquent $eloquent;
+
     public function __construct()
     {
         parent::__construct();
@@ -114,8 +116,13 @@ class R_ApiController extends CI_Controller
         }
 
         $apiKey = R_Input::ci()->request_headers()["Authorization"] ?? '';
+
         if (!$apiKey) {
             throw new ApiException("API KEY not provided in client");
+        }
+
+        if (strpos($apiKey, 'Bearer ') === 0) {
+            $apiKey = substr($apiKey, 7); // Hapus 'Bearer '
         }
 
         if ($apiKey !== $_ENV["API_KEY"]) {
@@ -137,6 +144,30 @@ class ApiException extends Exception
         echo json_encode([
             "message" => $this->getMessage(),
             "data" => null
+        ]);
+    }
+}
+
+trait ApiResponse
+{
+    private function ok($data, $message = "Berhasil")
+    {
+        set_status_header(200);
+        header('Content-Type: application/json');
+        echo json_encode([
+            "message" => $message,
+            "data" => $data
+        ]);
+    }
+
+    private function fail($err, $stack = null, $message = "Terjadi kesalahan")
+    {
+        set_status_header(400);
+        header('Content-Type: application/json');
+        echo json_encode([
+            "message" => $message,
+            "error" => $err,
+            "stack" => $stack
         ]);
     }
 }

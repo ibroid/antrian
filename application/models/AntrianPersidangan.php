@@ -14,9 +14,6 @@ class AntrianPersidangan extends Model
 
       self::tambahKehadiranSetelahAmbilAntrian($antrianPersidangan);
     });
-
-    static::created(function (AntrianPersidangan $antrianPersidangan) {
-    });
   }
 
   public function kehadiran_pihak()
