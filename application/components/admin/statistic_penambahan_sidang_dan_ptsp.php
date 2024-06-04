@@ -1,4 +1,4 @@
-<div class="card visitor-card">
+<div class="card visitor-card" id="card-statistic-pengunjung-sidang-ptsp">
   <div class="card-header card-no-border">
     <div class="header-top">
       <h6 class="m-0">Pengunjung Pelayanan dan Persidangan<span class="f-14 font-primary f-w-500 ms-1">
@@ -6,12 +6,10 @@
             <use href="../assets/svg/icon-sprite.svg#user-visitor"></use>
           </svg>(Campuran)</span></h6>
       <div class="card-header-right-icon">
-        <div class="dropdown icon-dropdown">
-          <button class="btn dropdown-toggle" id="visitorButton" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="icon-more-alt"></i></button>
-          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="visitorButton"><a class="dropdown-item" href="#">Today</a><a class="dropdown-item" href="#">Tomorrow</a><a class="dropdown-item" href="#">Yesterday</a></div>
-        </div>
+        <?= $this->load->component("admin/button_chart_toolbar") ?>
       </div>
     </div>
+    <span class="f-light f-w-500 f-14">Tanggal <?= tanggal_indo(date("Y-m-d")) ?></span>
   </div>
   <div class="card-body pt-0">
     <div class="visitors-container">
@@ -27,6 +25,36 @@
     var chartvisitor;
 
     window.addEventListener("load", function() {
+      $("#card-statistic-pengunjung-sidang-ptsp").find("a:nth-child(1)").on("click", function() {
+        $("#card-statistic-pengunjung-sidang-ptsp").find("span.f-light.f-w-500.f-14").text("Tanggal " + tanggal("<?= date("Y-m-d") ?>"))
+
+        fetchToday()
+      })
+
+      $("#card-statistic-pengunjung-sidang-ptsp").find("input").change(async e => {
+        const theInput = $(e.target)
+
+        $("#card-statistic-pengunjung-sidang-ptsp").find("span.f-light.f-w-500.f-14").text("Tanggal " + tanggal(theInput.val()))
+
+        const response = await requestData(theInput.val())
+        const container = [];
+        response.forEach((r, i) => {
+          if (r.status == "fulfilled") {
+            container[i] = JSON.parse(r.value);
+          } else {
+            console.error("Terjadi kesalahan saat fetching : " + r.reason)
+            container[i] = [];
+          }
+        })
+
+        chartvisitor.destroy()
+        appendData(container)
+
+        const buttonToolbar = $("#card-statistic-pengunjung-sidang-ptsp").find("button")
+
+        buttonToolbar.click()
+      })
+
       fetchToday()
     })
 
@@ -38,14 +66,11 @@
       const data = await requestData()
 
       const container = [];
-      console.log(data)
       data.forEach((r, i) => {
         if (r.status == "fulfilled") {
           container[i] = JSON.parse(r.value);
-          console.log(container[i])
         } else {
           console.error("Terjadi kesalahan saat fetching : " + r.reason)
-          console.log(r.reason.stack)
           container[i] = [];
         }
       })
@@ -64,11 +89,11 @@
       const options = {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          // 'Content-Type': 'application/x-www-form-urlencoded',
           'User-Agent': 'insomnia/2023.5.8',
           Authorization: 'Bearer <?= $_ENV['API_KEY'] ?>'
         },
-        body: date
+        body: formBody
       };
 
       return Promise.allSettled([
@@ -80,14 +105,19 @@
     }
 
     function appendData(data) {
+
       const optionsvisitor = {
         series: [{
             name: "Pelayanan",
-            data: data[0].data,
+            data: data[0].data.map(v => {
+              return v.count
+            }),
           },
           {
             name: "Persidangan",
-            data: data[1].data,
+            data: data[1].data.map(v => {
+              return v.count
+            }),
           },
         ],
         chart: {
@@ -150,7 +180,7 @@
         },
         yaxis: {
           min: 0,
-          max: 100,
+          // max: 100,
           tickAmount: 5,
           tickPlacement: "between",
           labels: {

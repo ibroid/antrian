@@ -4,21 +4,11 @@
       <h6>Statistik Pengambilan Antrian Per Jam</h6>
       <span class="f-light f-w-500 f-14">Tanggal <?= tanggal_indo(date("Y-m-d")) ?></span>
     </div>
-    <div class="ms-auto text-end">
-      <div class="dropdown icon-dropdown">
-        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="icon-more-alt"></i></button>
-        <div class="dropdown-menu dropdown-menu-end">
-          <a class="dropdown-item" href="javascript:void(0)">Hari Ini</a>
-          <a class="dropdown-item" href="javascript:void(0)">
-            <input class="date-picker form-control border-0 p-0 form-control-sm" placeholder="Pilih Tanggal" type="text">
-          </a>
-        </div>
-      </div>
-    </div>
+    <?= $this->load->component("admin/button_chart_toolbar") ?>
   </div>
   <div class="card-body pt-0">
     <div class="row m-0 overall-card overview-card">
-      <div class="col-xl-9 col-md-9 col-sm-9 p-0 box-col-9">
+      <div class="col-xl-9 col-md-12 col-sm-12 p-0 box-col-9">
         <div class="chart-right">
           <div class="row">
             <div class="col-xl-12">
@@ -36,7 +26,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-3 col-md-3 col-sm-3 p-0 box-col-3">
+      <div class="col-xl-3 col-md-12 col-sm-12 p-0 box-col-3">
         <div class="row g-sm-3 g-2">
           <div class="col-md-12">
             <div class="light-card balance-card widget-hover">
