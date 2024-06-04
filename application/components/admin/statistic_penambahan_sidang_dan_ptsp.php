@@ -97,9 +97,9 @@
       };
 
       return Promise.allSettled([
-        fetch('https://antrian.test/api/statistic_penambahan_ptsp', options)
+        fetch('<?= base_url('api/statistic_penambahan_ptsp') ?>', options)
         .then(response => response.text()),
-        fetch('https://antrian.test/api/statistic_penambahan_sidang', options)
+        fetch('<?= base_url('api/statistic_penambahan_sidang') ?>', options)
         .then(response => response.text())
       ])
     }
