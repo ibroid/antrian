@@ -38,11 +38,14 @@
       const data = await requestData()
 
       const container = [];
+      console.log(data)
       data.forEach((r, i) => {
         if (r.status == "fulfilled") {
-          container[i] = r.value.data;
+          container[i] = JSON.parse(r.value);
+          console.log(container[i])
         } else {
           console.error("Terjadi kesalahan saat fetching : " + r.reason)
+          console.log(r.reason.stack)
           container[i] = [];
         }
       })
@@ -63,16 +66,16 @@
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'User-Agent': 'insomnia/2023.5.8',
-          Authorization: 'Bearer 8aImjXIeOiLRpdIdfZYJRsvMZUj87WmL'
+          Authorization: 'Bearer <?= $_ENV['API_KEY'] ?>'
         },
         body: date
       };
 
       return Promise.allSettled([
         fetch('https://antrian.test/api/statistic_penambahan_ptsp', options)
-        .then(response => response.json()),
+        .then(response => response.text()),
         fetch('https://antrian.test/api/statistic_penambahan_sidang', options)
-        .then(response => response.json())
+        .then(response => response.text())
       ])
     }
 
@@ -80,11 +83,11 @@
       const optionsvisitor = {
         series: [{
             name: "Pelayanan",
-            data: data[0],
+            data: data[0].data,
           },
           {
             name: "Persidangan",
-            data: data[1],
+            data: data[1].data,
           },
         ],
         chart: {
