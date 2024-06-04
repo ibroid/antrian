@@ -28,7 +28,6 @@ class Statistic_penambahan_sidang extends R_ApiController
         ->orderBy('hours.hour')
         ->get();
 
-
       $this->ok($results);
     } catch (\Throwable $th) {
 

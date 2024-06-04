@@ -13,6 +13,11 @@
       <?= $this->load->component("admin/statistic_pengambilan_sidang") ?>
     </div>
   </div>
+  <div class="row">
+    <div class="col-xxl-7 col-xl-7 col-md-7 col-sm-12">
+      <?= $this->load->component("admin/statistic_penambahan_sidang_dan_ptsp") ?>
+    </div>
+  </div>
 </div>
 
 <script>

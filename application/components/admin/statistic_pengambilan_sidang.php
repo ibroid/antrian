@@ -29,10 +29,7 @@
                   <li><span class="circle bg-success"> </span><span class="f-light ms-1">Syuraih</span></li>
                 </ul>
                 <div class="current-sale-container order-container">
-                  <div class="overview-wrapper" id="orderoverview"></div>
-                  <div class="back-bar-container">
-                    <div id="order-bar"></div>
-                  </div>
+                  <div class="overview-wrapper" id="chart-779"></div>
                 </div>
               </div>
             </div>
@@ -45,12 +42,12 @@
             <div class="light-card balance-card widget-hover">
               <div class="svg-box">
                 <svg class="svg-fill">
-                  <use href="../assets/svg/icon-sprite.svg#orders"></use>
+                  <use href="../assets/svg/icon-sprite.svg#clock"></use>
                 </svg>
               </div>
               <div>
-                <span class="f-light">Di Putus</span>
-                <h6 class="mt-1 mb-0">77 </h6>
+                <span class="f-light">Pertama</span>
+                <h6 class="mt-1 mb-0">00.00</h6>
               </div>
             </div>
           </div>
@@ -58,11 +55,11 @@
             <div class="light-card balance-card widget-hover">
               <div class="svg-box">
                 <svg class="svg-fill">
-                  <use href="../assets/svg/icon-sprite.svg#expense"></use>
+                  <use href="../assets/svg/icon-sprite.svg#clock"></use>
                 </svg>
               </div>
-              <div> <span class="f-light">Total Siang Sipp</span>
-                <h6 class="mt-1 mb-0">178</h6>
+              <div> <span class="f-light">Kedua</span>
+                <h6 class="mt-1 mb-0">00.00</h6>
               </div>
             </div>
           </div>
@@ -70,11 +67,11 @@
             <div class="light-card balance-card widget-hover">
               <div class="svg-box">
                 <svg class="svg-fill">
-                  <use href="../assets/svg/icon-sprite.svg#doller-return"></use>
+                  <use href="../assets/svg/icon-sprite.svg#clock"></use>
                 </svg>
               </div>
-              <div> <span class="f-light">Tidak hadir Sidang</span>
-                <h6 class="mt-1 mb-0">3</h6>
+              <div> <span class="f-light">Ketiga</span>
+                <h6 class="mt-1 mb-0">00.00</h6>
               </div>
             </div>
           </div>
@@ -95,21 +92,25 @@
         const theInput = $(e.target)
         const optionButton = $(e.target).closest("a").closest("div").prev();
 
+        $("#card-static-pengambilan-sidang")
+          .find("span.f-light.f-w-500.f-14")
+          .text("Tanggal " + tanggal(theInput.val()))
+
         requestData((res) => {
           chartoverview.destroy()
           appendData(res.data)
+          updateRank(res.data)
         }, theInput.val());
-
-        requestDataBar((res) => {
-          chartoverview.destroy()
-          appendBar(res.data)
-        }, theInput.val())
 
         optionButton.click()
       })
 
-      $("#card-static-pengambilan-sidang").find("a:nth-child(0)").click(() => {
+      $("#card-static-pengambilan-sidang").find("a:nth-child(1)").click(() => {
+        console.log('ok')
         fetchToday()
+        $("#card-static-pengambilan-sidang")
+          .find("span.f-light.f-w-500.f-14")
+          .text("Tanggal " + tanggal("<?= date("Y-m-d") ?>"))
       })
 
       fetchToday()
@@ -120,40 +121,61 @@
         chartoverview.destroy();
       }
 
-      if (chartorder) {
-        chartorder.destroy();
-      }
-
       requestData((res) => {
         appendData(res.data)
+        updateRank(res.data)
       })
+    }
 
-      requestDataBar((res) => {
-        appendBar(res.data)
+    function updateRank(data) {
+
+      let rank1, rank2, rank3;
+
+      data.forEach((v, i) => {
+        const totalPanggilan = v.result_1 + v.result_2 + v.result_3;
+        if (i > 0) {
+          if (totalPanggilan >= rank1[1]) {
+            rank3[1] = rank2[1];
+            rank3[0] = rank3[0];
+
+            rank2[1] = rank1[1];
+            rank2[0] = rank1[0];
+
+            rank1[1] = totalPanggilan;
+            rank1[0] = v.hour;
+          }
+
+          if (totalPanggilan < rank1[1] && totalPanggilan >= rank2[1]) {
+            rank3[1] = rank2[1];
+            rank3[0] = rank2[0];
+
+            rank2[1] = totalPanggilan;
+            rank2[0] = v.hour;
+          }
+
+          if (totalPanggilan < rank1[1] && totalPanggilan < rank2[1] && totalPanggilan >= rank3[1]) {
+            rank3[1] = totalPanggilan;
+            rank3[0] = v.hour;
+          }
+
+        } else {
+          rank1 = [v.hour, parseFloat(totalPanggilan)];
+          rank2 = [v.hour, parseFloat(totalPanggilan)];
+          rank3 = [v.hour, parseFloat(totalPanggilan)];
+        }
+      });
+
+      // $('#card-static-pengambilan-sidang .card-body .col-xl-3 .box-col-3 > div:nth-child(2) > div:nth-child(2) > h6.mt-1.mb-1')
+      $('#card-static-pengambilan-sidang').find('h6:nth-child(2)').each((i, e) => {
+        i++;
+        const total = eval('rank' + i)
+        $(e).text(total[1] + " Antrian di jam " + total[0])
       })
     }
 
     function requestData(callback, date = "<?= date("Y-m-d") ?>") {
       $.ajax({
         url: "<?= base_url('api/statistic_pemanggilan_sidang') ?>",
-        method: "POST",
-        data: {
-          date
-        },
-        beforeSend(xhr) {
-          xhr.setRequestHeader("Authorization", "Bearer <?= $_ENV["API_KEY"] ?>")
-          xhr.setRequestHeader("Accept", "application/json")
-        },
-        success: callback,
-        error(err) {
-          console.log(err)
-        }
-      })
-    }
-
-    function requestDataBar(callback, date = "<?= date("Y-m-d") ?>") {
-      $.ajax({
-        url: "<?= base_url('api/statistic_penambahan_sidang') ?>",
         method: "POST",
         data: {
           date
@@ -176,17 +198,23 @@
         series: [{
             name: "Umar",
             type: "area",
-            data: data[0],
+            data: data.map((v, i) => {
+              return v.result_1
+            }),
           },
           {
             name: "Syuraih",
             type: "area",
-            data: data[1],
+            data: data.map((v, i) => {
+              return v.result_2
+            }),
           },
           {
             name: "Musa",
             type: "area",
-            data: data[2],
+            data: data.map((v, i) => {
+              return v.result_3
+            }),
           },
         ],
         chart: {
@@ -279,6 +307,7 @@
         },
         yaxis: {
           min: 0,
+          max: 12,
           tickAmount: 6,
           tickPlacement: "between",
         },
@@ -298,12 +327,8 @@
 
       const marker = [];
 
-      data.forEach((v, i, a) => {
-        v.forEach((x, y) => {
-          if (x == 0) {
-            return;
-          }
-
+      for (let i = 0; i < 3; i++) {
+        data.forEach((v, y, a) => {
           marker.push({
             seriesIndex: i,
             dataPointIndex: y,
@@ -313,118 +338,17 @@
             sizeOffset: i == 0 ? 3 : 0,
           })
         })
-      })
+      }
+
 
       optionsoverview.markers.discrete = marker
 
       chartoverview = new ApexCharts(
-        document.querySelector("#orderoverview"),
+        document.querySelector("#chart-779"),
         optionsoverview
       );
       chartoverview.render();
       // bar overview chart
-    }
-
-    function appendBar(data) {
-      console.log(data.map((v, n, a) => {
-        return v.count
-      }))
-      var optionsorder = {
-        series: [{
-          name: "Revenue",
-          data: data.map((v, n, a) => {
-            return v.count;
-          }),
-        }, ],
-        chart: {
-          type: "bar",
-          height: 180,
-          toolbar: {
-            show: false,
-          },
-        },
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            columnWidth: "55%",
-          },
-        },
-        colors: ["var(--light-bg)"],
-        grid: {
-          show: false,
-        },
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          show: true,
-          width: 2,
-          colors: ["transparent"],
-        },
-        xaxis: {
-          categories: data.map((v, n, a) => {
-            return v.hour;
-          }),
-          labels: {
-            show: false,
-          },
-          axisBorder: {
-            show: false,
-          },
-          axisTicks: {
-            show: false,
-          },
-        },
-        yaxis: {
-          labels: {
-            show: false,
-          },
-          axisBorder: {
-            show: false,
-          },
-          axisTicks: {
-            show: false,
-          },
-        },
-        fill: {
-          opacity: 0.7,
-        },
-        tooltip: {
-          enabled: false,
-        },
-        states: {
-          normal: {
-            filter: {
-              type: "none",
-            },
-          },
-          hover: {
-            filter: {
-              type: "none",
-            },
-          },
-          active: {
-            allowMultipleDataPointsSelection: false,
-            filter: {
-              type: "none",
-            },
-          },
-        },
-        responsive: [{
-          breakpoint: 405,
-          options: {
-            chart: {
-              height: 150,
-            },
-          },
-        }, ],
-      };
-
-      chartorder = new ApexCharts(
-        document.querySelector("#order-bar"),
-        optionsorder
-      );
-      chartorder.render();
     }
   })()
 </script>

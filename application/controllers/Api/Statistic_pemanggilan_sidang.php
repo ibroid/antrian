@@ -6,40 +6,48 @@ class Statistic_pemanggilan_sidang extends R_ApiController
   public function index()
   {
     try {
-      $dataSidang = AntrianPersidangan::whereDate("created_at", R_Input::pos('date'))->get();
+      $hours = collect(range(6, 15));
 
-      $workHour = [
-        "06:00",
-        "07:00",
-        "08:00",
-        "09:00",
-        "10:00",
-        "11:00",
-        "12:00",
-        "13:00",
-        "14:00",
-        "15:00",
-      ];
+      $hoursSqlList = $hours->map(function ($i, $k) {
+        return "SELECT $i AS hour";
+      })->implode(" UNION ALL ");
 
-      $data = [
-        [],
-        [],
-        [],
-      ];
+      $hoursSubQuery = $this->eloquent::raw("($hoursSqlList) as hours");
 
-      for ($i = 0; $i < count($data); $i++) {
-        foreach ($workHour as $n => $hour) {
-          $totalByHour = $dataSidang->where("nomor_ruang", $i + 1)->filter(
-            function ($i, $k) use ($hour) {
-              return $i->updated_at->hour == $hour;
-            }
-          )->count();
+      $rawResults = $this->eloquent::table($hoursSubQuery)
+        ->crossJoin($this->eloquent::raw('(SELECT DISTINCT nomor_ruang FROM antrian_persidangan WHERE nomor_ruang IN (1, 2, 3)) as rooms'))
+        ->leftJoin('antrian_persidangan', function ($join) {
+          $join->on($this->eloquent::raw('HOUR(antrian_persidangan.updated_at)'), '=', 'hours.hour')
+            ->on('antrian_persidangan.nomor_ruang', '=', 'rooms.nomor_ruang')
+            ->whereDate('antrian_persidangan.updated_at',  R_Input::pos('date'));
+        })
+        ->select('hours.hour', 'rooms.nomor_ruang', $this->eloquent::raw('COUNT(antrian_persidangan.id) as count'))
+        ->groupBy('hours.hour', 'rooms.nomor_ruang')
+        ->orderBy('hours.hour')
+        ->orderBy('rooms.nomor_ruang')
+        ->get();
 
-          $data[$i][$n] = $totalByHour;
+      $results = [];
+
+      foreach ($hours as $hour) {
+        $hourData = [
+          'hour' => $hour,
+          'result_1' => 0,
+          'result_2' => 0,
+          'result_3' => 0
+        ];
+
+        foreach ($rawResults as $row) {
+          if ($row->hour == $hour) {
+            $hourData['result_' . $row->nomor_ruang] = $row->count;
+          }
         }
+
+        $results[] = $hourData;
       }
 
-      $this->ok($data);
+
+      $this->ok($results);
     } catch (\Throwable $th) {
       $this->fail($th->getMessage(), $th->getTrace());
     }
