@@ -101,6 +101,9 @@
     $.ajax({
       url: "<?= base_url("/api/dalam_persidangan") ?>",
       method: "POST",
+      headers: {
+        Authorization: "Bearer <?= $_ENV['API_KEY'] ?>"
+      },
       data: {
         password: "<?= password_hash($_ENV["API_PASSWORD"], PASSWORD_DEFAULT) ?>"
       },
@@ -130,9 +133,11 @@
     }
   }
 
+
+  /**@param {string} text  */
   async function requestVoice(text) {
     const body = new FormData()
-    body.append('text', text)
+    body.append('text', text.toLowerCase())
     return await fetch("<?= base_url("request_voice") ?>", {
         method: "POST",
         headers: {
