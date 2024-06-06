@@ -113,6 +113,7 @@ class Auth extends CI_Controller
       "Petugas Produk" => "/pelayanan_produk",
       "Petugas Akta" => "/pelayanan_produk",
       "Petugas Posbakum" => "/pelayanan",
+      "Petugas Antrian" => "/ambil",
       "Kasir" => "/kasir",
     ];
 
