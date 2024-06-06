@@ -9,7 +9,7 @@ class PesananProdukDatatable extends Model
   protected $fillable = ['nomor_perkara', 'nomor_akta_cerai', 'jenis_perkara', 'nama_pengambil', 'jenis_pihak', 'jenis_produk'];
   protected $primaryKey = 'id';
   protected $columnSearch = ['nomor_perkara', 'nomor_akta_cerai', 'jenis_perkara', 'nama_pengambil', 'jenis_pihak', 'jenis_produk'];
-  protected $defaultOrder = ['id' => 'asc'];
+  protected $defaultOrder = ['created_at' => 'desc'];
 
   public function getData()
   {

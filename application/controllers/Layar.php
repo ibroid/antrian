@@ -21,7 +21,7 @@ class Layar extends CI_Controller
         "<script src=\"https://js.pusher.com/8.2.0/pusher.min.js\"></script>"
       ],
       "css" => [
-        "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/toastify-js/src/toastify.min.css\">\n"
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/toastify-js@1.12.0/src/toastify.css\">\n"
       ]
     ]);
   }

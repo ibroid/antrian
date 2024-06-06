@@ -10,6 +10,11 @@ class ProdukPengadilan extends Model
   public static function booted()
   {
     static::creating(function ($model) {
+
+      if ($model->perkara_id) {
+        return $model;
+      }
+
       $pihak = Pihak::find($model->pihak_id);
       $perkara = Perkara::where("nomor_perkara", $model->nomor_perkara)->first();
 
@@ -21,6 +26,7 @@ class ProdukPengadilan extends Model
       $model->nomor_akta_cerai = $perkara->akta_cerai->nomor_akta_cerai ?? null;
       $model->jenis_perkara = $perkara->jenis_perkara_nama;
       $model->tahun_perkara = date("Y", strtotime($perkara->tanggal_pendaftaran));
+      $model->perkara_id = $perkara->perkara_id;
 
       return $model;
     });

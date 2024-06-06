@@ -1,6 +1,6 @@
 <?php
 
-class Request_voice extends R_Controller
+class Request_voice extends CI_Controller
 {
   public function __construct()
   {
