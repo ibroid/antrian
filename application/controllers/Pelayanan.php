@@ -318,7 +318,7 @@ class Pelayanan extends R_Controller
       "pengguna" => $user
     ])->layout("dashboard_layout", [
       "title" => "Pengguna",
-      "nav" => $this->load->component("layout/nav_pelayanan")
+      "nav" => $this->user["petugas"]["jenis_petugas"] == "Petugas Sidang" ?  $this->load->component("layout/nav_persidangan") : $this->load->component("layout/nav_pelayanan")
     ]);
   }
 }

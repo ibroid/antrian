@@ -103,9 +103,11 @@
   function playAudioPengumuman(data) {
     const audio = new Audio("<?= base_url('audio/pengumuman/') ?>" + data.filename);
     audio.play()
+
+    const audioPenutupan = new Audio("<?= base_url('audio/pengumuman/nama_ketua.mp3') ?>");
     audio.addEventListener("ended", () => {
       if (data.nama_ketua_penutup == "yes") {
-        audio.src = "<?= base_url('audio/pengumuman/nama_ketua.mp3') ?>"
+        audioPenutupan.play()
       }
       $.ajax({
         url: "<?= base_url("layar/pengumuman_selesai") ?>",

@@ -95,17 +95,24 @@
         </ul>
       </div>
       <div class="tab-pane fade" id="c-pills-layouts" role="tabpanel" aria-labelledby="c-pills-layouts-tab">
-        <ol class="list-group badge-list">
-          <?php foreach ($this->eloquent->table("audio")->get() as $a) { ?>
-            <li class="list-group-item">
-              <a href="<?= base_url("/layar/audio_pengumuman/" . Cypher::urlsafe_encrypt($a->id)) ?>"><i class="fa fa-volume-up"></i> <?= $a->title ?></a>
-              <?php if ($a->is_playing == "yes") { ?>
-                <span class="badge badge-danger text-white rounded-pill p-2">Sedang Diputar</span>
-              <?php } ?>
+        <?php if (($this->user["petugas"]["jenis_petugas"] ?? false) !== "Petugas Sidang") { ?>
+          <div class="text-center">
+            <h3>Pengumuman hanya untuk petugas persidangan 😅</h3>
+          </div>
+        <?php } else { ?>
+          <ol class="list-group badge-list">
+            <?php foreach ($this->eloquent->table("audio")->get() as $a) { ?>
+              <li class="list-group-item">
+                <a href="<?= base_url("/layar/audio_pengumuman/" . Cypher::urlsafe_encrypt($a->id)) ?>"><i class="fa fa-volume-up"></i> <?= $a->title ?></a>
+                <?php if ($a->is_playing == "yes") { ?>
+                  <span class="badge badge-danger text-white rounded-pill p-2">Sedang Diputar</span>
+                <?php } ?>
+              </li>
+            <?php } ?>
             </li>
-          <?php } ?>
-          </li>
-        </ol>
+          </ol>
+        <?php } ?>
+
       </div>
     </div>
   </div>
