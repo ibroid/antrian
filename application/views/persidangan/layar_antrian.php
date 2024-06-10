@@ -81,6 +81,7 @@
     });
 
     const channel = pusher.subscribe('antrian-channel');
+    const pengumumanChannel = pusher.subscribe('audio-pengumuman')
 
     channel.bind('pengumuman', async function(data) {
       initAudo(data)
@@ -95,7 +96,32 @@
     })
 
     fetchNomorAntrian()
+
+    pengumumanChannel.bind("play", playAudioPengumuman)
   })
+
+  function playAudioPengumuman(data) {
+    const audio = new Audio("<?= base_url('audio/pengumuman/') ?>" + data.filename);
+    audio.play()
+    audio.addEventListener("ended", () => {
+      if (data.nama_ketua_penutup == "yes") {
+        audio.src = "<?= base_url('audio/pengumuman/nama_ketua.mp3') ?>"
+      }
+      $.ajax({
+        url: "<?= base_url("layar/pengumuman_selesai") ?>",
+        method: "POST",
+        data: {
+          id: data.id
+        },
+        success(res) {
+          console.log("Pengumuman telah selesai diputar", res);
+        },
+        error(err) {
+          console.error("Pengumuman gagal diselesaikan :", err)
+        }
+      })
+    })
+  }
 
   function fetchNomorAntrian() {
     $.ajax({
@@ -132,7 +158,6 @@
       playAudioinQueue()
     }
   }
-
 
   /**@param {string} text  */
   async function requestVoice(text) {

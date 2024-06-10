@@ -5,6 +5,8 @@
       <strong>Guide !</strong> Gunakan button tools untuk kostumisasi tanggal.
     </div>
   </div>
+  <?= $this->session->flashdata("flash_alert") ?>
+  <?= $this->session->flashdata("flash_error") ?>
   <div class="row">
     <div class="col-xxl-3 col-md-12 col-sm-12 box-col-6">
       <?= $this->load->component("admin/sidang_today_chart_pie") ?>

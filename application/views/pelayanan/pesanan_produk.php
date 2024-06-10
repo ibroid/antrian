@@ -67,5 +67,13 @@
         e.classList.add(cls);
       }, 500);
     })
+
+
+    $(".btn-sinkron-ac").each((i, e) => {
+      const theButton = $(e)
+      theButton.on("click", () => {
+        console.log(theButton)
+      })
+    })
   }
 </script>

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Redis;
+
 defined("BASEPATH") or exit("No direct script access allowed");
 
 class Layar extends CI_Controller
@@ -130,8 +132,55 @@ class Layar extends CI_Controller
         ->where('status', 0)
         ->count();
 
-
       echo json_encode(["sudah_dipanggil" => $sudah_dipanggil, "belum_dipanggil" => $belum_dipanggil]);
+    } catch (\Throwable $th) {
+      echo json_encode([
+        "status" => false,
+        "message" => $th->getMessage()
+      ]);
+      set_status_header(500);
+    }
+  }
+
+  public function audio_pengumuman($id = null)
+  {
+    if ($id == null) {
+      show_404();
+    }
+
+    try {
+      $check = $this->eloquent->table("audio")->where("is_playing", "yes")->first();
+      if ($check) {
+        throw new Exception("Audio Pengumuman Sedang Sibuk. Silahkan Coba Lagi", 1);
+      }
+
+      $this->eloquent->table("audio")->where('id', Cypher::urlsafe_decrypt($id))->update([
+        "is_playing" => "yes"
+      ]);
+
+      $audio = $this->eloquent->table("audio")->where('id', Cypher::urlsafe_decrypt($id))->first();
+      $audio->id = Cypher::urlsafe_encrypt($audio->id);
+
+      Broadcast::pusher()->trigger("audio-pengumuman", "play", $audio);
+
+      return Redirect::wfa([
+        "message" => "Memulai pemutaran pengumuman"
+      ])->go($_SERVER["HTTP_REFERER"]);
+    } catch (\Throwable $th) {
+      return Redirect::wfe($th->getMessage())->go($_SERVER["HTTP_REFERER"]);
+    }
+  }
+
+  public function pengumuman_selesai()
+  {
+    R_Input::mustPost();
+    try {
+      $this->eloquent->table("audio")->where('id', Cypher::urlsafe_decrypt(R_Input::pos('id')))->update([
+        "is_playing" => "no"
+      ]);
+
+      header("Content-Type: application/json");
+      echo json_encode(["message" => "ok"]);
     } catch (\Throwable $th) {
       echo json_encode([
         "status" => false,

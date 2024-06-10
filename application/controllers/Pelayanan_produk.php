@@ -208,10 +208,14 @@ class Pelayanan_produk extends R_Controller
       ->where("nomor_perkara", "LIKE", "$params%")
       ->limit(10)
       ->latest("perkara.diinput_tanggal")
-      ->get()
-      ->toArray();
+      ->get();
+
+    $dataParseResult = $nomorPerkaraResults->map(function ($item) {
+      $item->perkara_id = Cypher::urlsafe_encrypt($item->perkara_id);
+      return $item;
+    })->all();
 
     header("Content-Type: application/json");
-    echo json_encode($nomorPerkaraResults);
+    echo json_encode($dataParseResult);
   }
 }

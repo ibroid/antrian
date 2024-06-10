@@ -95,7 +95,7 @@ class R_ApiController extends CI_Controller
         $domain = count($separetedOriginUrl) == 3 ? $separetedOriginUrl[2] : $separetedOriginUrl[1];
 
         if (preg_match('/^https?:\/\/([a-z0-9-]+\.)?' . $domainName . '\.' . $domain . '$/', $_ENV["BASE_URL"])) {
-            header("Access-Control-Allow-Origin: $origin");
+            header("Access-Control-Allow-Origin: *");
             header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
             header("Access-Control-Allow-Headers: Content-Type, Authorization");
             header("Access-Control-Allow-Credentials: true");

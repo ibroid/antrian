@@ -19,6 +19,7 @@ class ProdukPengadilan extends Model
       $perkara = Perkara::where("nomor_perkara", $model->nomor_perkara)->first();
 
       if (!$pihak || !$perkara) {
+        $model->perkara_id  = Cypher::urlsafe_decrypt($model->perkara_id);
         return $model;
       }
 

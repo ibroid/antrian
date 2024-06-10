@@ -9,6 +9,6 @@
         <button name="pihak" value="<?= $data->nama_pengambil ?>" class="dropdown-item" href="#">Panggil Pihak</button>
       </form>
     </li>
-    <li><a onclick="Swal.fire('Belum bisa bos. Dana belum cair 😓')" class="dropdown-item" href="#">Sinkron Ke SIPP</a></li>
+    <li><a data-id="<?= Cypher::urlsafe_encrypt($data->id) ?>" class="dropdown-item btn-sinkron-ac" href="#">Sinkron Ke SIPP</a></li>
   </ul>
 </div>
