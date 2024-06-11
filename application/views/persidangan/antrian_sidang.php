@@ -196,11 +196,12 @@
                 <th>Para Pihak</th>
                 <th>Majelis</th>
                 <th>Status</th>
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody>
               <?php foreach ($antrian as $a) { ?>
-                <tr onclick='handleRowClick(<?= $a->id ?>)'>
+                <tr>
                   <td> <?= badge_nama_ruang_sidang($a->nomor_ruang) ?></td>
                   <td>
 
@@ -226,6 +227,11 @@
                     <?= badge_status_antrian_sidang($a->status) ?>
                     <br>
                     <?= $a->priority == 1 ? "<div class=\"badge badge-primary\">Prioritas</div>" : null ?>
+                  </td>
+                  <td>
+                    <button onclick='handleRowClick(<?= $a->id ?>)' class="btn btn-sm btn-dark">
+                      Pilihan
+                    </button>
                   </td>
                 </tr>
               <?php } ?>
@@ -406,7 +412,12 @@
     modalSidang = new bootstrap.Modal(document.getElementById('modalSidangHariIni'))
     modalBelumAmbilAntrian = new bootstrap.Modal(document.getElementById('modalBelumAmbilAntrian'))
 
-    const tableSidang = $('#table-antrian').DataTable()
+    const tableSidang = $('#table-antrian').DataTable({
+      columnDefs: [{
+        orderable: false,
+        targets: [6]
+      }],
+    })
     $('#table-sidang').DataTable()
 
     $(".btn-search").each((i, e) => {
