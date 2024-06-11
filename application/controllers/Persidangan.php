@@ -117,4 +117,19 @@ class Persidangan extends R_Controller
       echo $th->getMessage();
     }
   }
+
+  public function set_prioritas($id = null)
+  {
+    R_Input::mustPost();
+    try {
+      $antrianSidang = AntrianPersidangan::findOrFail(Cypher::urlsafe_decrypt($id));
+      $antrianSidang->update([
+        "priority" => 1
+      ]);
+
+      return Redirect::wfa(["message" => "Antrian nomor $antrianSidang->nomor_urutan dengan nomor perkara $antrianSidang->nomor_perkara telah di tetapkan prioritas"])->go("persidangan");
+    } catch (\Throwable $th) {
+      return Redirect::wfe($th->getMessage())->go("persidangan");
+    }
+  }
 }

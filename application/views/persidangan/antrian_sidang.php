@@ -169,7 +169,7 @@
               </div>
             </div>
             <div>
-              <h4>000</h4><span class="f-light">Lahan Kosong</span>
+              <h4><?= $antrian->where("priority", 1)->count() ?></h4><span class="f-light">Antrian Prioritas</span>
             </div>
           </div>
           <div class="font-warning f-w-500"></div>
@@ -210,17 +210,23 @@
                   <td>
                     <?= $a->nomor_perkara ?>
                     <br>
-                    <div class="badge badge-secondary">
-                      <?= $a->perkara->jenis_perkara_nama ?>
-                    </div>
-                    <br>
-                    <?= $a->jadwal_sidang->agenda ?? "" ?>
+                    <details>
+                      <div class="badge badge-secondary">
+                        <?= $a->perkara->jenis_perkara_nama ?>
+                      </div>
+                      <br>
+                      <?= $a->jadwal_sidang->agenda ?? "" ?>
+                    </details>
                   </td>
                   <td>
                     <?= $a->perkara->para_pihak  ?>
                   </td>
                   <td><?= $a->majelis_hakim  ?></td>
-                  <td><?= badge_status_antrian_sidang($a->status) ?></td>
+                  <td>
+                    <?= badge_status_antrian_sidang($a->status) ?>
+                    <br>
+                    <?= $a->priority == 1 ? "<div class=\"badge badge-primary\">Prioritas</div>" : null ?>
+                  </td>
                 </tr>
               <?php } ?>
             </tbody>

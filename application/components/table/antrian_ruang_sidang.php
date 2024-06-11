@@ -19,7 +19,13 @@
           </div><br>
           <?= badge_status_antrian_sidang($a->status) ?>
         </td>
-        <td><?= $a->nomor_perkara ?><br><?= $a->perkara->jenis_perkara_nama ?></td>
+        <td>
+          <?= $a->nomor_perkara ?>
+          <br>
+          <?= $a->perkara->jenis_perkara_nama ?>
+          <br>
+          <?= $a->priority == 1 ? "<div class=\"badge badge-primary\">Prioritas</div>" : null ?>
+        </td>
         <td>
           <?= $a->perkara->para_pihak  ?>
         </td>

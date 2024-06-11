@@ -6,6 +6,11 @@
   <button onclick="checkIn(<?= $data->id ?>)" class="btn btn-info btn-sm">
     <i class="fa fa-check"></i> Check-In Ruang Tunggu
   </button>
+  <form action="<?= base_url("persidangan/set_prioritas/" . Cypher::urlsafe_encrypt($data->id)) ?>" method="POST">
+    <button class="btn btn-primary btn-sm">
+      <i class="fa fa-support"></i> Antrian Prioritas
+    </button>
+  </form>
   <button class="btn btn-warning btn-sm btn-panggil" data-tujuan="semua-pihak-ke-ruang-tunggu">
     <i class="fa fa-volume-up"></i> Panggil Semua Pihak Ke Ruang Tunggu
   </button>
@@ -29,7 +34,6 @@
       <tr>
         <td><?= $kp->pihak; ?></td>
         <td>
-
           <button class="btn btn-primary btn-sm btn-panggil" data-tujuan="<?= $kp->sebagai == "S" ? "saksi-saksi-ke-ruang-tunggu" : "pihak-ke-ruang-tunggu" ?>" data-nama="<?= $kp->pihak ?>">
             <i class="fa fa-volume-up"></i>
             Panggil ke Ruang Tunggu

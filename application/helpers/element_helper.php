@@ -39,7 +39,7 @@ if (!function_exists("badge_status_antrian_sidang")) {
   {
     $typeAndMessage = [
       ["type" => "danger", "message" => "Belum Dipanggil"],
-      ["type" => "danger", "message" => "Menunggu Di Ruang Tunggu"],
+      ["type" => "warning", "message" => "Di Ruang Tunggu"],
       ["type" => "info", "message" => "Di Ruang Sidang"],
       ["type" => "success", "message" => "Sudah Di Panggil"],
       ["type" => "dark", "message" => "Di Skors"],
