@@ -17,9 +17,9 @@ class Statistic_pemanggilan_sidang extends R_ApiController
       $rawResults = $this->eloquent::table($hoursSubQuery)
         ->crossJoin($this->eloquent::raw('(SELECT DISTINCT nomor_ruang FROM antrian_persidangan WHERE nomor_ruang IN (1, 2, 3)) as rooms'))
         ->leftJoin('antrian_persidangan', function ($join) {
-          $join->on($this->eloquent::raw('HOUR(antrian_persidangan.updated_at)'), '=', 'hours.hour')
+          $join->on($this->eloquent::raw('HOUR(antrian_persidangan.waktu_panggil)'), '=', 'hours.hour')
             ->on('antrian_persidangan.nomor_ruang', '=', 'rooms.nomor_ruang')
-            ->whereDate('antrian_persidangan.updated_at',  R_Input::pos('date'));
+            ->whereDate('antrian_persidangan.waktu_panggil',  R_Input::pos('date'));
         })
         ->select('hours.hour', 'rooms.nomor_ruang', $this->eloquent::raw('COUNT(antrian_persidangan.id) as count'))
         ->groupBy('hours.hour', 'rooms.nomor_ruang')

@@ -177,8 +177,6 @@
       </div>
     </div>
   </div>
-  <?= $this->session->flashdata("flash_alert") ?>
-  <?= $this->session->flashdata("flash_error") ?>
   <div class="row mx-1">
     <div class="card">
       <div class="card-body">

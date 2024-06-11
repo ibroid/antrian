@@ -11,7 +11,10 @@ class DalamPersidangan extends Model
   {
     static::created(
       function (DalamPersidangan $dalamPersidangan) {
-        $dalamPersidangan->antrian_persidangan->update(["status" => 2]);
+        $dalamPersidangan->antrian_persidangan->update([
+          "status" => 2,
+          "waktu_panggil" => date("H:i:s")
+        ]);
       }
     );
 
