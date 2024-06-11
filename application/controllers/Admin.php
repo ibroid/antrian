@@ -24,6 +24,10 @@ class Admin extends R_Controller
         <script src=\"$baseUrl/assets/js/chart/apex-chart/stock-prices.js\"></script>"
       ]
     ]);
+
+    if (!$this->is_admin) {
+      redirect($_SERVER["HTTP_REFERER"] ?? "menu");
+    }
   }
 
   public function index()

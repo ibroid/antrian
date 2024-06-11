@@ -114,9 +114,20 @@
         <?php } ?>
 
       </div>
+      <div class="tab-pane fade" id="c-pills-cctv" role="tabpanel" aria-labelledby="c-pills-cctv-tab">
+        <div class="text-start">
+          <h5>CCTV Aktivitas Pelayanan 🎥</h5>
+        </div>
+        <div id="cctv-container">
+          <div class="text-center">
+            <button class="btn btn-block btn-primary">Load CCTV</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
 <script>
   (function($) {
     if (localStorage.getItem("color"))
@@ -131,6 +142,18 @@
     (function() {})();
     //live customizer js
     $(document).ready(function() {
+
+      $("#cctv-container").find("button").on("click", function(e) {
+        $(e.target).replaceWith("<h3>Mohon Tunggu ... </h3>")
+
+        $.ajax({
+          url: "<?= base_url("cctv/load_sidebar_player") ?>",
+          success(html) {
+            $("#cctv-container").html(html)
+          }
+        })
+      })
+
       $(".customizer-color li").on("click", function() {
         $(".customizer-color li").removeClass("active");
         $(this).addClass("active");
@@ -165,8 +188,9 @@
           localStorage.getItem("secondary")
         );
       }
+
       $(
-        ".customizer-links #c-pills-home-tab, .customizer-links #c-pills-layouts-tab"
+        ".customizer-links #c-pills-home-tab, .customizer-links #c-pills-layouts-tab, .customizer-links #c-pills-cctv-tab"
       ).click(function() {
         $(".customizer-contain").addClass("open");
         $(".customizer-links").addClass("open");
@@ -179,6 +203,20 @@
       $(".customizer-contain .icon-close").on("click", function() {
         $(".customizer-contain").removeClass("open");
         $(".customizer-links").removeClass("open");
+        $("#cctv-container").html(`<div class="text-center">
+            <button class="btn btn-block btn-primary">Load CCTV</button>
+          </div>`)
+
+        $("#cctv-container").find("button").on("click", function(e) {
+          $(e.target).replaceWith("<h3>Mohon Tunggu ... </h3>")
+
+          $.ajax({
+            url: "<?= base_url("cctv/load_sidebar_player") ?>",
+            success(html) {
+              $("#cctv-container").html(html)
+            }
+          })
+        })
       });
 
       $(".color-apply-btn").click(function() {

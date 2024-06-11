@@ -480,6 +480,10 @@
           <button class="btn btn-success btn-audio btn-lg mt-4" data-file-audio="audio-penjelasan-loket-ecourt.mp3">Penjelasan Loket E-Court
             <i class="fa fa-volume-up"></i>
           </button>
+          <hr>
+          <form action="<?= base_url('auth/logout') ?>" method="POST">
+            <button class="btn btn-danger">Logout</button>
+          </form>
         </div>
       </div>
     </div>

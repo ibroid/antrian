@@ -148,7 +148,16 @@
 	<!-- Theme js-->
 	<script src="<?= base_url() ?>assets/js/script.js"></script>
 	<!-- <script src="../assets/js/theme-customizer/customizer.js"></script> -->
-	<?= $this->load->component("sidebar", null, TRUE) ?>
+	<?php
+	$sidebarUrlAllowList = [
+		"ruangsidang" => "ok",
+		"persidangan" => "ok",
+		"pelayanan" => "ok",
+		"admin" => "ok",
+	];
+	$cond = $sidebarUrlAllowList[$this->uri->segment(1)] ?? false
+	?>
+	<?= !$cond ? null : $this->load->component("sidebar", null, TRUE) ?>
 	<script>
 		$(document).ready(() => {
 			const tooltipTriggerList = document.querySelectorAll(

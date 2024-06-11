@@ -1,7 +1,5 @@
 <?php
 
-use Pusher\Pusher;
-
 class R_Controller extends CI_Controller
 {
     /**
@@ -170,4 +168,8 @@ trait ApiResponse
             "stack" => $stack
         ]);
     }
+}
+
+class R_MobileController extends CI_Controller
+{
 }
