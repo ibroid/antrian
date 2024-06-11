@@ -8,7 +8,8 @@
   </button>
   <form action="<?= base_url("persidangan/set_prioritas/" . Cypher::urlsafe_encrypt($data->id)) ?>" method="POST">
     <button class="btn btn-primary btn-sm">
-      <i class="fa fa-support"></i> Antrian Prioritas
+      <i class="fa fa-support"></i>
+      <?= $data->priority == 1 ? "Hapus Prioritas" : "Tambah Prioritas" ?>
     </button>
   </form>
   <button class="btn btn-warning btn-sm btn-panggil" data-tujuan="semua-pihak-ke-ruang-tunggu">

@@ -124,10 +124,10 @@ class Persidangan extends R_Controller
     try {
       $antrianSidang = AntrianPersidangan::findOrFail(Cypher::urlsafe_decrypt($id));
       $antrianSidang->update([
-        "priority" => 1
+        "priority" => !$antrianSidang->priority ? 1 : 0
       ]);
 
-      return Redirect::wfa(["message" => "Antrian nomor $antrianSidang->nomor_urutan dengan nomor perkara $antrianSidang->nomor_perkara telah di tetapkan prioritas"])->go("persidangan");
+      return Redirect::wfa(["message" => "Antrian nomor $antrianSidang->nomor_urutan dengan nomor perkara $antrianSidang->nomor_perkara telah di ubah prioritasnya"])->go("persidangan");
     } catch (\Throwable $th) {
       return Redirect::wfe($th->getMessage())->go("persidangan");
     }
