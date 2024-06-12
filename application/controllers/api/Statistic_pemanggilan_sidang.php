@@ -19,7 +19,7 @@ class Statistic_pemanggilan_sidang extends R_ApiController
         ->leftJoin('antrian_persidangan', function ($join) {
           $join->on($this->eloquent::raw('HOUR(antrian_persidangan.waktu_panggil)'), '=', 'hours.hour')
             ->on('antrian_persidangan.nomor_ruang', '=', 'rooms.nomor_ruang')
-            ->whereDate('antrian_persidangan.waktu_panggil',  R_Input::pos('date'));
+            ->whereDate('antrian_persidangan.created_at',  R_Input::pos('date'));
         })
         ->select('hours.hour', 'rooms.nomor_ruang', $this->eloquent::raw('COUNT(antrian_persidangan.id) as count'))
         ->groupBy('hours.hour', 'rooms.nomor_ruang')

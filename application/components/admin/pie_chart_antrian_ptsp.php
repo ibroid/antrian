@@ -102,7 +102,6 @@
     }
 
     function appendData(label, data, total) {
-      console.log(data)
       var optionsprofit = {
         labels: label,
         series: data.map(r => parseFloat(r)),

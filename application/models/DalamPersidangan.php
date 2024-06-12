@@ -9,18 +9,12 @@ class DalamPersidangan extends Model
 
   public static function booted(): void
   {
-    static::created(
+    static::saved(
       function (DalamPersidangan $dalamPersidangan) {
         $dalamPersidangan->antrian_persidangan->update([
           "status" => 2,
           "waktu_panggil" => date("H:i:s")
         ]);
-      }
-    );
-
-    static::updated(
-      function (DalamPersidangan $dalamPersidangan) {
-        $dalamPersidangan->antrian_persidangan->update(["status" => 2]);
       }
     );
 
