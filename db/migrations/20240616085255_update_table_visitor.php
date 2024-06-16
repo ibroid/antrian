@@ -23,6 +23,7 @@ final class UpdateTableVisitor extends AbstractMigration
         $table->addColumn("remote_ip", "string", ["limit" => 45, "null" => true]);
         $table->addColumn("user_agent", "string", ["limit" => 255, "null" => true]);
         $table->addColumn("country_id", "string", ["null" => true, "limit" => 4]);
+        $table->addColumn("device", "string", ["null" => true, "limit" => 64]);
         $table->update();
     }
 }

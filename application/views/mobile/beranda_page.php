@@ -63,16 +63,6 @@
 <script>
   htmx.onLoad(function(content) {
     // console.log("from htmx")
+
   })
 </script>
-
-<?php
-if (!isset($_GET["antrian"])) { ?>
-  <script>
-    window.addEventListener("load", () => {
-      setTimeout(() => {
-        notification("no-antrian-notif")
-      }, 3000)
-    })
-  </script>
-<?php } ?>

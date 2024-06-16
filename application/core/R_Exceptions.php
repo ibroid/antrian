@@ -13,7 +13,7 @@ class R_Exceptions extends CI_Exceptions
     if ($exception instanceof Illuminate\Database\QueryException) {
       switch ($exception->errorInfo["1"]) {
         case 2002:
-          Redirect::wfe("Error : " . $exception->errorInfo["2"])->go("/menu");
+          echo $exception->errorInfo["2"];
           break;
 
         default:

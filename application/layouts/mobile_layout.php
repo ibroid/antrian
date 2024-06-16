@@ -57,7 +57,7 @@
     <div class="right">
       <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#modal-notifikasi" class="headerButton">
         <ion-icon name="notifications-outline"></ion-icon>
-        <span class="badge badge-danger">5</span>
+        <span class="badge badge-danger">1</span>
       </a>
       <a href="javascript:void(0)" class="headerButton" onclick="installApp()">
         <ion-icon color="success" name="download-outline"></ion-icon>
@@ -161,7 +161,7 @@
     <a href="page-chat.html" class="item">
       <div class="col">
         <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
-        <span class="badge badge-danger">1</span>
+        <span class="badge badge-danger"></span>
       </div>
     </a>
     <a href="app-pages.html" class="item">
@@ -293,6 +293,30 @@
         offcanvas.toggle();
       }
     }
+
+    window.addEventListener("load", function() {
+      console.log('sadjpsao ')
+      const osDetection = navigator.userAgent || navigator.vendor || window.opera;
+      const iosDetection = /iPad|iPhone|iPod/.test(osDetection) && !window.MSStream;
+
+      const body = new FormData();
+      body.append("device", iosDetection ? "ios" : "android");
+
+      fetch("<?= base_url("mobile/visitor") ?>", {
+          method: "POST",
+          body: body,
+        }).then(res => {
+          if (!res.ok) {
+            throw new Error(res.statusText);
+          }
+
+          return res.text();
+        })
+        .then((r) => console.log(r))
+        .catch(err => {
+          console.log("Visitor present error.", err);
+        })
+    })
   </script>
 </body>
 
