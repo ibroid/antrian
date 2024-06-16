@@ -50,4 +50,14 @@ class AntrianPtsp extends Model
   {
     return $this->belongsTo(IdentitasPihak::class, 'identitas_pihak_id', 'id');
   }
+
+  /**
+   * Retrieve the associated IdentitasPihak for the AntrianPtsp.
+   *
+   * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+   */
+  public function loket()
+  {
+    return $this->hasOne(LoketPelayanan::class, 'antrian_pelayanan_id', 'id');
+  }
 }

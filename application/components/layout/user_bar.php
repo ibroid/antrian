@@ -4,13 +4,13 @@ $user = $this->session->userdata('user_login');
 
 <div class="nav-right col-xxl-7 col-xl-6 col-md-7 col-8 pull-right right-header p-0 ms-auto">
     <ul class="nav-menus">
-        <!-- <li>
-            <span class="header-search">
+        <li>
+            <a href="<?= base_url("mobile/beranda") ?>">
                 <svg>
-                    <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#search"></use>
+                    <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#star"></use>
                 </svg>
-            </span>
-        </li> -->
+            </a>
+        </li>
         <li>
             <div class="mode">
                 <svg>
