@@ -35,6 +35,14 @@ class R_Controller extends CI_Controller
      */
     public function __construct()
     {
+        if ($_SERVER['HTTP_HOST'] !== 'antrian.test') {
+            $remoteIp = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'];
+            if ($remoteIp !== $_ENV['ALLOWED_REMOTE_IP']) {
+                http_response_code(404);
+                die();
+            }
+        }
+
         parent::__construct();
 
         $this->eloquent->table('user_session')->where('expiration_time', '<', date('Y-m-d H:i:s'))->delete();

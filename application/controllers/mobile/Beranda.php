@@ -6,7 +6,12 @@ class Beranda extends R_MobileController
 {
   public function index()
   {
-
+    $this->eloquent->table("visitor")->insert([
+      "visit_date" => date("Y-m-d"),
+      "remote_ip" => $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'],
+      "user_agent" => $_SERVER['HTTP_USER_AGENT'] ?? "UNKNOWN",
+      "country_id" => $_SERVER['HTTP_CF_IPCOUNTRY'] ?? "UKNW",
+    ]);
     $this->load->page("mobile/beranda_page")->layout("mobile_layout");
   }
 

@@ -285,11 +285,6 @@ define('VIEWPATH', $view_folder . DIRECTORY_SEPARATOR);
 
 require_once "./vendor/autoload.php";
 
-if ($_SERVER['HTTP_CF_CONNECTING_IP'] !== '103.177.176.25') {
-	http_response_code(404);
-	die();
-}
-
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
 require_once BASEPATH . 'core/CodeIgniter.php';

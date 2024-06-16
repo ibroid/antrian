@@ -161,7 +161,7 @@
     <a href="page-chat.html" class="item">
       <div class="col">
         <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
-        <span class="badge badge-danger">5</span>
+        <span class="badge badge-danger">1</span>
       </div>
     </a>
     <a href="app-pages.html" class="item">
