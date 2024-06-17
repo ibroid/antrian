@@ -36,4 +36,11 @@ class Beranda extends R_MobileController
       echo "Terjadi Kesalahan. " . $th->getMessage() . " Silahkan coba lagi nanti";
     }
   }
+
+  public function slide_antrian_sidang()
+  {
+    echo $this->load->view("mobile/components/slide_antrian_sidang", [
+      "data" =>  DalamPersidangan::with("antrian_persidangan.kehadiran_pihak")->whereDate('tanggal_panggil', date("Y-m-d"))->get()
+    ], true);
+  }
 }

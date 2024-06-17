@@ -186,7 +186,8 @@ class R_MobileController extends CI_Controller
     {
         parent::__construct();
         $this->headerMenu = [
-            "app_header" => $this->load->view("mobile/components/app_header", null, true)
+            "app_header" => $this->load->view("mobile/components/app_header", null, true),
+            "app_bottom_menu" => $this->load->view("mobile/components/app_bottom_menu", null, true),
         ];
     }
 

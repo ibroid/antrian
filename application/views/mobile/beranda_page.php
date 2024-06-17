@@ -7,7 +7,6 @@
   <?= $this->load->view("mobile/components/carousel", null, TRUE) ?>
 </div>
 
-<div class="divider bg-primary m-2"></div>
 <div class="header-large-title">
   <div class="alert alert-outline-primary" role="alert">
     <div class="d-flex justify-content-between gap-5">
@@ -20,49 +19,26 @@
   </div>
 </div>
 
-<div hx-get="<?= base_url("mobile/beranda/slide_loket_pelayanan") ?>" hx-trigger="load delay:2s" class="section full mb-3">
+<div hx-get="<?= base_url("mobile/beranda/slide_loket_pelayanan") ?>" hx-trigger="load" class="section full mb-3">
   <div class="text-center m-4" class="htmx-indicator">
     <div class="spinner-border text-primary" role="status"></div>
   </div>
 </div>
 
-
-<div class="notification-box" id="no-antrian-notif">
-  <div class="notification-dialog android-style">
-    <div class="notification-header">
-      <div class="in">
-        <img src="<?= base_url('/assets/mobile/favicon_io/android-chrome-192x192.png') ?>" alt="image" class="imaged w24">
-        <strong>Notifikasi</strong>
-        <span>just now</span>
-      </div>
-      <a href="#" class="close-button">
-        <ion-icon name="close"></ion-icon>
-      </a>
+<div class="header-large-title">
+  <div class="alert alert-outline-danger" role="alert">
+    <div class="d-flex justify-content-between gap-5">
+      <h4 class="alert-title">Antrian Persidangan yang sedang berjalan.</h4>
+      <h4>
+        <ion-icon size="large" color="danger" name="alert-circle-outline"></ion-icon>
+      </h4>
     </div>
-    <div class="notification-content">
-      <div class="in">
-        <h3 class="subtitle">Selamat Datang</h3>
-        <div class="text">
-          Sepertinya anda tidak/belum mendapatkan antrian. Silahkan klik dibawah ini untuk memulai dengan antrian anda.
-        </div>
-        <br>
-        <div class="tetx">
-          Pilih Ambil Antrian apabila anda belum mendapat antrian, apabila sudah silahkan klik Masukan Antrian.
-        </div>
-        <div class="d-flex my-3 gap-2">
-          <button class="btn btn-sm btn-outline-primary">Ambil Antrian</button>
-          <button class="btn btn-sm btn-outline-success">Masukan Antrian</button>
-        </div>
-      </div>
-    </div>
+    <h5>Pastikan nomor antrian anda tidak terlewat. Apabila terlewat silahkan melapor ke petugas. Mohon untuk diperhatikan nama ruang sidang dan nomor ruang sidang yang tertera pada bagian atas karcis antrian anda</h5>
   </div>
 </div>
 
-
-
-<script>
-  htmx.onLoad(function(content) {
-    // console.log("from htmx")
-
-  })
-</script>
+<div hx-get="<?= base_url("mobile/beranda/slide_antrian_sidang") ?>" hx-trigger="load" class="section full mb-3">
+  <div class="text-center m-4" class="htmx-indicator">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+</div>

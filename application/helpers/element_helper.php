@@ -61,3 +61,13 @@ if (!function_exists("badge_nama_ruang_sidang")) {
     return  $ci->load->component("badge/badge_nama_ruang_sidang", $typeAndName[$ruang_id - 1]);
   }
 }
+
+if (!function_exists("warna_ruang_sidang")) {
+  function warna_ruang_sidang($no)
+  {
+    $typeAndName = [
+      "primary", "danger", "warning",
+    ];
+    return  $typeAndName[$no - 1];
+  }
+}

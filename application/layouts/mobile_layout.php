@@ -49,68 +49,38 @@
   <!-- App Capsule -->
   <div id="appCapsule" class="full-height">
     <?= $page ?>
+  </div>
 
-    <div id="appFooter" class="appFooter">
-      <img src="<?= base_url("assets/logo_pa.png?2") ?>" alt="logo pa" class="footer-logo mb-2">
-      <div class="footer-title">
-        Copyright © Pengadilan Agama Jakarta Utara <span class="yearNow"></span>.
-      </div>
-      <div>Smart Portal Paju Web.</div>
-      Follow kami melalui media sosial dibawah ini.
+  <div id="appFooter" class="appFooter mb-5">
+    <img src="<?= base_url("assets/logo_pa.png?2") ?>" alt="logo pa" class="footer-logo mb-2">
+    <div class="footer-title">
+      Copyright © Pengadilan Agama Jakarta Utara <span class="yearNow"></span>.
+    </div>
+    <div>Smart Portal Paju Web.</div>
+    Follow kami melalui media sosial dibawah ini.
 
-      <div class="mt-2">
-        <a target="_blank" href="https://www.facebook.com/pa.jakartautara/" class="btn btn-icon btn-sm btn-facebook">
-          <ion-icon name="logo-facebook"></ion-icon>
-        </a>
-        <a target="_blank" href="https://x.com/pa_jakartautara" class="btn btn-icon btn-sm btn-twitter">
-          <ion-icon name="logo-twitter"></ion-icon>
-        </a>
-        <!-- <a target="_blank" href="#" class="btn btn-icon btn-sm btn-linkedin">
-      <ion-icon name="logo-linkedin"></ion-icon>
-    </a> -->
-        <a target="_blank" href="https://www.instagram.com/pa.jakartautara/" class="btn btn-icon btn-sm btn-instagram">
-          <ion-icon name="logo-instagram"></ion-icon>
-        </a>
-        <a target="_blank" href="https://pa-jakartautara.go.id" class="btn btn-icon btn-sm btn-dark">
-          <ion-icon name="globe"></ion-icon>
-        </a>
-        <a target="_blank" href="#" class="btn btn-icon btn-sm btn-secondary goTop">
-          <ion-icon name="arrow-up-outline"></ion-icon>
-        </a>
-      </div>
+    <div class="mt-2">
+      <a target="_blank" href="https://www.facebook.com/pa.jakartautara/" class="btn btn-icon btn-sm btn-facebook">
+        <ion-icon name="logo-facebook"></ion-icon>
+      </a>
+      <a target="_blank" href="https://x.com/pa_jakartautara" class="btn btn-icon btn-sm btn-twitter">
+        <ion-icon name="logo-twitter"></ion-icon>
+      </a>
+      <a target="_blank" href="https://www.instagram.com/pa.jakartautara/" class="btn btn-icon btn-sm btn-instagram">
+        <ion-icon name="logo-instagram"></ion-icon>
+      </a>
+      <a target="_blank" href="https://pa-jakartautara.go.id" class="btn btn-icon btn-sm btn-dark">
+        <ion-icon name="globe"></ion-icon>
+      </a>
+      <a target="_blank" href="#" class="btn btn-icon btn-sm btn-secondary goTop">
+        <ion-icon name="arrow-up-outline"></ion-icon>
+      </a>
     </div>
   </div>
   <!-- * App Capsule -->
 
   <!-- App Bottom Menu -->
-  <div class="appBottomMenu">
-    <a href="<?= base_url("mobile/beranda") ?>" class="item">
-      <div class="col">
-        <ion-icon name="home-outline"></ion-icon>
-      </div>
-    </a>
-    <a href="app-components.html" class="item">
-      <div class="col">
-        <ion-icon name="cube-outline"></ion-icon>
-      </div>
-    </a>
-    <a href="page-chat.html" class="item">
-      <div class="col">
-        <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
-        <span class="badge badge-danger"></span>
-      </div>
-    </a>
-    <a href="app-pages.html" class="item">
-      <div class="col">
-        <ion-icon name="layers-outline"></ion-icon>
-      </div>
-    </a>
-    <a href="#sidebarPanel" class="item" data-bs-toggle="offcanvas">
-      <div class="col">
-        <ion-icon name="menu-outline"></ion-icon>
-      </div>
-    </a>
-  </div>
+  <?= $app_bottom_menu ?? null ?>
   <!-- * App Bottom Menu -->
 
   <!-- iOS Add to Home Action Sheet -->
@@ -162,6 +132,39 @@
     </div>
   </div>
   <!-- * Android Add to Home Action Sheet -->
+
+  <!-- Notification Box -->
+  <div class="notification-box" id="no-antrian-notif">
+    <div class="notification-dialog android-style">
+      <div class="notification-header">
+        <div class="in">
+          <img src="<?= base_url('/assets/mobile/favicon_io/android-chrome-192x192.png') ?>" alt="image" class="imaged w24">
+          <strong>Notifikasi</strong>
+          <span>just now</span>
+        </div>
+        <a href="#" class="close-button">
+          <ion-icon name="close"></ion-icon>
+        </a>
+      </div>
+      <div class="notification-content">
+        <div class="in">
+          <h3 class="subtitle">Selamat Datang</h3>
+          <div class="text">
+            Sepertinya anda tidak/belum mendapatkan antrian. Silahkan klik dibawah ini untuk memulai dengan antrian anda.
+          </div>
+          <br>
+          <div class="tetx">
+            Pilih Ambil Antrian apabila anda belum mendapat antrian, apabila sudah silahkan klik Masukan Antrian.
+          </div>
+          <div class="d-flex my-3 gap-2">
+            <button class="btn btn-sm btn-outline-primary">Ambil Antrian</button>
+            <button class="btn btn-sm btn-outline-success">Masukan Antrian</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- * Notification Box -->
 
   <!-- ============== Js Files ==============  -->
   <!-- Bootstrap -->

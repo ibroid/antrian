@@ -11,7 +11,7 @@
    <div class="right">
      <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#modal-notifikasi" class="headerButton">
        <ion-icon hx-get="<?= base_url('mobile/notif') ?>" hx-trigger="every 3s" name="notifications-outline" hx-target="next"></ion-icon>
-       <span class="badge badge-danger">0</span>
+       <span class="badge badge-danger"></span>
      </a>
      <a href="javascript:void(0)" class="headerButton" onclick="installApp()">
        <ion-icon color="success" name="download-outline"></ion-icon>
