@@ -44,71 +44,7 @@
   </div>
   <!-- * loader -->
 
-  <!-- App Header -->
-  <div class="appHeader bg-primary scrolled">
-    <div class="pageTitle">
-      <?= $page_title ?? "Beranda" ?>
-    </div>
-    <div class="left">
-      <a data-bs-toggle="modal" data-bs-target="#dialog-info" href="javascript:void(0)" class="headerButton">
-        <ion-icon name="information-circle-outline"></ion-icon>
-      </a>
-    </div>
-    <div class="right">
-      <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#modal-notifikasi" class="headerButton">
-        <ion-icon name="notifications-outline"></ion-icon>
-        <span class="badge badge-danger">1</span>
-      </a>
-      <a href="javascript:void(0)" class="headerButton" onclick="installApp()">
-        <ion-icon color="success" name="download-outline"></ion-icon>
-      </a>
-    </div>
-  </div>
-
-  <div class="modal fade dialogbox" id="dialog-info" data-bs-backdrop="static" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Deskripsi</h5>
-        </div>
-        <div class="modal-body">
-          Aplikasi Smart Portal Paju versi Web PWA
-          <p hx-get="<?= base_url("mobile/visitor") ?>" hx-trigger="intersect">Visitor hari ini : 0</p>
-        </div>
-        <div class="modal-footer">
-          <div class="btn-inline">
-            <a href="#" class="btn btn-text-secondary" data-bs-dismiss="modal">Tutup</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="modal fade modalbox" id="modal-notifikasi" data-bs-backdrop="static" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header bg-primary">
-          <h5 class="modal-title text-light">Pemberitahuan</h5>
-          <a href="#" class="text-light" data-bs-dismiss="modal">Tutup</a>
-        </div>
-        <div class="modal-body p-0">
-          <ul class="listview image-listview flush mb-2">
-            <li>
-              <a href="javascript:void(0)" data-bs-dismiss="modal" onclick=" notification('no-antrian-notif')" class="item">
-                <img src="<?= base_url('assets/mobile/favicon_io/android-chrome-192x192.png') ?>" alt="image" class="image">
-                <div class="in">
-                  <div class="d-flex flex-column">
-                    <div>Notifikasi System</div>
-                    <div class="text-muted">Kami tidak bisa mengirim pemberitahuan panggilan antrian kepada anda. Klik untuk mendapatkan layanan yang lebih banyak.</div>
-                  </div>
-                </div>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- * App Header -->
+  <?= $app_header ?? null ?>
 
   <!-- App Capsule -->
   <div id="appCapsule" class="full-height">
@@ -138,9 +74,9 @@
         <a target="_blank" href="https://pa-jakartautara.go.id" class="btn btn-icon btn-sm btn-dark">
           <ion-icon name="globe"></ion-icon>
         </a>
-        <!-- <a target="_blank" href="#" class="btn btn-icon btn-sm btn-secondary goTop">
-      <ion-icon name="arrow-up-outline"></ion-icon>
-    </a> -->
+        <a target="_blank" href="#" class="btn btn-icon btn-sm btn-secondary goTop">
+          <ion-icon name="arrow-up-outline"></ion-icon>
+        </a>
       </div>
     </div>
   </div>
@@ -295,12 +231,21 @@
     }
 
     window.addEventListener("load", function() {
-      console.log('sadjpsao ')
+      const searchParams = new URLSearchParams(window.location.search);
+
       const osDetection = navigator.userAgent || navigator.vendor || window.opera;
       const iosDetection = /iPad|iPhone|iPod/.test(osDetection) && !window.MSStream;
 
       const body = new FormData();
       body.append("device", iosDetection ? "ios" : "android");
+
+      if (searchParams.has("visitor")) {
+        body.append("visitor_id", searchParams.get("visitor"));
+      }
+
+      if (!searchParams.has("antrian")) {
+        body.append("need_notification", "1");
+      }
 
       fetch("<?= base_url("mobile/visitor") ?>", {
           method: "POST",
@@ -312,7 +257,17 @@
 
           return res.text();
         })
-        .then((r) => console.log(r))
+        .then(r => {
+          const iconNotif = document.querySelector("ion-icon.md.hydrated[name='notifications-outline']");
+          const modalNotif = document.querySelector("#modal-notifikasi > .modal-dialog > .modal-content > .modal-body");
+
+          iconNotif.setAttribute("hx-vals", `{"visitor": "${r}"}`);
+          modalNotif.setAttribute("hx-vals", `{"visitor": "${r}"}`);
+
+          searchParams.set("visitor", r);
+          window.history.replaceState(null, null, "<?= base_url("/mobile?") ?>" +
+            searchParams);
+        })
         .catch(err => {
           console.log("Visitor present error.", err);
         })

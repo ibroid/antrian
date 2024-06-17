@@ -180,4 +180,23 @@ trait ApiResponse
 
 class R_MobileController extends CI_Controller
 {
+    public $headerMenu;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->headerMenu = [
+            "app_header" => $this->load->view("mobile/components/app_header", null, true)
+        ];
+    }
+
+    public function fullRender($page, $data = [])
+    {
+        $this->load->page("mobile/" . $page, $data)->layout("mobile_layout", $this->headerMenu);
+    }
+
+    public function pageRender($page, $data = [])
+    {
+        echo $this->load->view("mobile/" . $page,  $data, true);
+    }
 }

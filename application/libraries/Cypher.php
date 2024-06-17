@@ -1,6 +1,5 @@
 <?php
 
-use PHPCrypter\Encryption\Encryption;
 use Hashids\Hashids;
 
 class Cypher
@@ -28,6 +27,6 @@ class Cypher
   {
     $hashids = new Hashids();
 
-    return $hashids->decode($string)[0];
+    return $hashids->decode($string)[0] ?? null;
   }
 }
