@@ -1,5 +1,5 @@
-<?php if (!$data) { ?>
-  <div class="text-center">
+<?php if (count($data) == 0) { ?>
+  <div class="text-center my-3">
     <h2>Persidangan Belum Dimulai</h2>
   </div>
 <?php } else { ?>

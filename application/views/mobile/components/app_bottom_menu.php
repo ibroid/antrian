@@ -1,14 +1,15 @@
 <div class="appBottomMenu">
-  <a href="javascript:void(0)" hx-get="<?= base_url("mobile/beranda/page") ?>" class="item" hx-target="#appCapsule" hx-indicator="#app-loading-indicator">
+  <a href="javascript:void(0)" hx-get="<?= base_url("mobile/beranda/page") ?>" class="item" hx-target="#appCapsule">
     <div class="col">
       <ion-icon name="home-outline"></ion-icon>
     </div>
   </a>
-  <!-- <a href="app-components.html" class="item">
+  <a href="javascript:void(0)" hx-get="<?= base_url("mobile/antrian/page") ?>" class="item" hx-target="#appCapsule">
     <div class="col">
-      <ion-icon name="cube-outline"></ion-icon>
+      <ion-icon name="apps-outline"></ion-icon>
     </div>
   </a>
+  <!-- 
   <a href="page-chat.html" class="item">
     <div class="col">
       <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
