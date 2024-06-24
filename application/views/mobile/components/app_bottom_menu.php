@@ -1,29 +1,29 @@
 <div class="appBottomMenu">
-  <a href="javascript:void(0)" hx-get="<?= base_url("mobile/beranda/page") ?>" class="item" hx-target="#appCapsule">
+  <a href="javascript:void(0)" hx-get="<?= base_url("mobile/beranda/page") ?>" class="item" hx-target="#appCapsule" hx-indicator=".htmx-indicator">
     <div class="col">
       <ion-icon name="home-outline"></ion-icon>
+      Beranda
     </div>
   </a>
-  <a href="javascript:void(0)" hx-get="<?= base_url("mobile/antrian/page") ?>" class="item" hx-target="#appCapsule">
+  <a href="javascript:void(0)" hx-get="<?= base_url("mobile/antrian/page") ?>" class="item" hx-target="#appCapsule" hx-indicator=".htmx-indicator">
     <div class="col">
       <ion-icon name="apps-outline"></ion-icon>
+      Ambil Antrian
     </div>
   </a>
-  <!-- 
-  <a href="page-chat.html" class="item">
+  <a href="javascript:void(0)" hx-get="<?= base_url("mobile/jadwal/page") ?>" class="item" hx-target="#appCapsule" hx-indicator=".htmx-indicator">
     <div class="col">
-      <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+      <ion-icon name="calendar-outline"></ion-icon>
       <span class="badge badge-danger"></span>
+      Jadwal Sidang
     </div>
   </a>
-  <a href="app-pages.html" class="item">
-    <div class="col">
-      <ion-icon name="layers-outline"></ion-icon>
+</div>
+
+<div class="htmx-indicator toast-box toast-center show">
+  <div class="in">
+    <div class="text">
+      Mohon tunggu ...
     </div>
-  </a>
-  <a href="#sidebarPanel" class="item" data-bs-toggle="offcanvas">
-    <div class="col">
-      <ion-icon name="menu-outline"></ion-icon>
-    </div>
-  </a> -->
+  </div>
 </div>

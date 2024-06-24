@@ -4,6 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AntrianPersidangan extends Model
 {
+  protected $connection = "default";
   protected $table = "antrian_persidangan";
   protected $guarded = [];
 

@@ -30,6 +30,29 @@
           </tbody>
         </table>
       </div>
+      <div class="card-footer d-flex justify-content-between">
+        <p>Detail untuk melihat antrian yang sudah/belum dipanggil</p>
+        <button hx-get="<?= base_url('mobile/beranda/detail_antrian_sidang?nomor_ruang=' . $d->nomor_ruang) ?>" hx-trigger="click" hx-target="#modalDetailAntrianSidang > .modal-dialog > .modal-content > .modal-body > ul.listview" hx-indicator=".htmx-indicator" data-bs-toggle="modal" data-bs-target="#modalDetailAntrianSidang" class="btn btn-outline-<?= warna_ruang_sidang($d->nomor_ruang) ?>">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          Detail
+        </button>
+      </div>
     </div>
   <?php } ?>
 <?php } ?>
+
+<div class="modal fade modalbox" id="modalDetailAntrianSidang" data-bs-backdrop="static" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Detail Antrian</h5>
+        <a href="#" data-bs-dismiss="modal">Tutup</a>
+      </div>
+      <div class="modal-body p-0">
+        <ul class="listview flush mb-2">
+
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

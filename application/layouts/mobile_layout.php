@@ -47,8 +47,13 @@
   <?= $app_header ?? null ?>
 
   <!-- App Capsule -->
-  <div id="appCapsule" class="full-height">
-    <?= $page ?>
+  <div class="full-height">
+    <!-- <div id="page-indicator" class="text-center htmx-indicator">
+      <h3>Mohon Tunggu...</h3>
+    </div> -->
+    <div id="appCapsule" class="full-height">
+      <?= $page ?>
+    </div>
   </div>
 
   <div id="appFooter" class="appFooter mb-5">
@@ -166,6 +171,16 @@
   </div>
   <!-- * Notification Box -->
 
+  <div id="toast-wifi" class="toast-box toast-bottom">
+    <div class="in">
+      <ion-icon name="information-circle-outline" class="text-primary"></ion-icon>
+      <div class="text" id="text-notif-wifi">
+
+      </div>
+    </div>
+    <button type="button" class="btn btn-sm btn-text-light close-button">OK</button>
+  </div>
+
   <!-- ============== Js Files ==============  -->
   <!-- Bootstrap -->
   <script src="<?= base_url('assets/mobile/') ?>js/lib/bootstrap.min.js"></script>
@@ -189,6 +204,10 @@
       // Menampilkan tombol atau UI untuk mengajak pengguna menginstal PWA
       showInstallPromotion();
     });
+
+    window.addEventListener('load', () => {
+      register_visitor();
+    })
 
     function showInstallPromotion() {
       const installButton = document.createElement('button');
@@ -220,6 +239,19 @@
       });
     }
 
+    async function copyPassWifi() {
+      try {
+        await navigator.clipboard.writeText("wbbmpasti");
+        // alert("Password wifi berhasil disalin")
+        document.getElementById("text-notif-wifi").textContent = "Password wifi berhasil disalin"
+        toastbox('toast-wifi', 2000);
+      } catch (err) {
+        // alert("Gagal menyalin password wifi")
+        document.getElementById("text-notif-wifi").textContent = "Gagal menyalin password wifi"
+        toastbox('toast-wifi', 2000);
+      }
+    }
+
     function installApp() {
       const osDetection = navigator.userAgent || navigator.vendor || window.opera;
       const iosDetection = /iPad|iPhone|iPod/.test(osDetection) && !window.MSStream;
@@ -233,9 +265,8 @@
       }
     }
 
-    window.addEventListener("load", function() {
+    function register_visitor() {
       const searchParams = new URLSearchParams(window.location.search);
-
       const osDetection = navigator.userAgent || navigator.vendor || window.opera;
       const iosDetection = /iPad|iPhone|iPod/.test(osDetection) && !window.MSStream;
 
@@ -243,11 +274,15 @@
       body.append("device", iosDetection ? "ios" : "android");
 
       if (searchParams.has("visitor")) {
-        body.append("visitor_id", searchParams.get("visitor"));
+        body.append("visitor", searchParams.get("visitor"));
       }
 
-      if (!searchParams.has("antrian")) {
-        body.append("need_notification", "1");
+      if (searchParams.has("antrian_ptsp")) {
+        body.append("antrian_ptsp", searchParams.get("antrian_ptsp"));
+      }
+
+      if (searchParams.has("antrian_sidang")) {
+        body.append("antrian_sidang", searchParams.get("antrian_sidang"));
       }
 
       fetch("<?= base_url("mobile/visitor") ?>", {
@@ -274,7 +309,7 @@
         .catch(err => {
           console.log("Visitor present error.", err);
         })
-    })
+    }
   </script>
 </body>
 

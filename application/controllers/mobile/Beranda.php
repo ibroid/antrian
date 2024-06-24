@@ -29,9 +29,9 @@ class Beranda extends R_MobileController
   public function detail_list_antrian_ptsp()
   {
     try {
-      echo $this->load->view("components/detail_list_antrian_ptsp", [
-        "antrian" => AntrianPtsp::whereDate("created_at", date("Y-m-d"))->get()
-      ], true);
+      $this->pageRender("components/detail_list_antrian_ptsp", [
+        "antrian" => AntrianPtsp::where('kode', R_Input::gett("kode"))->whereDate("created_at", date("Y-m-d"))->latest()->get()
+      ]);
     } catch (\Throwable $th) {
       echo "Terjadi Kesalahan. " . $th->getMessage() . " Silahkan coba lagi nanti";
     }
@@ -42,5 +42,12 @@ class Beranda extends R_MobileController
     echo $this->load->view("mobile/components/slide_antrian_sidang", [
       "data" =>  DalamPersidangan::with("antrian_persidangan.kehadiran_pihak")->whereDate('tanggal_panggil', date("Y-m-d"))->get()
     ], true);
+  }
+
+  public function detail_antrian_sidang()
+  {
+    $this->componentRender("detail_antrian_sidang", [
+      "data" => AntrianPersidangan::with('perkara')->whereDate("created_at", date("Y-m-d"))->where("nomor_ruang", R_Input::gett("nomor_ruang"))->latest()->get()
+    ]);
   }
 }

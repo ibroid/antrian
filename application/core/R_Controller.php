@@ -36,9 +36,14 @@ class R_Controller extends CI_Controller
     public function __construct()
     {
         if ($_SERVER['HTTP_HOST'] !== 'antrian.test') {
+            if ($_SERVER['HTTP_CF_IPCOUNTRY'] !== 'ID') {
+                http_response_code(403);
+                die();
+            }
+
             $remoteIp = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'];
             if ($remoteIp !== $_ENV['ALLOWED_REMOTE_IP']) {
-                http_response_code(404);
+                http_response_code(403);
                 die();
             }
         }
@@ -80,6 +85,20 @@ class R_ApiController extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+
+        if ($_SERVER['HTTP_HOST'] !== 'antrian.test') {
+            if ($_SERVER['HTTP_CF_IPCOUNTRY'] !== 'ID') {
+                http_response_code(403);
+                die();
+            }
+
+            $remoteIp = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'];
+            if ($remoteIp !== $_ENV['ALLOWED_REMOTE_IP']) {
+                http_response_code(403);
+                die();
+            }
+        }
+
         try {
             $this->handleCors();
             $this->apiKeyCheck();
@@ -182,13 +201,32 @@ class R_MobileController extends CI_Controller
 {
     public $headerMenu;
 
+    public $visitor;
+
+    public $settings;
+
     public function __construct()
     {
+        if ($_SERVER['HTTP_HOST'] !== 'antrian.test') {
+            if ($_SERVER['HTTP_CF_IPCOUNTRY'] !== 'ID') {
+                http_response_code(403);
+                die();
+            }
+        }
+
         parent::__construct();
         $this->headerMenu = [
             "app_header" => $this->load->view("mobile/components/app_header", null, true),
             "app_bottom_menu" => $this->load->view("mobile/components/app_bottom_menu", null, true),
         ];
+
+        $referer = parse_url(R_Input::ci()->request_headers()["Hx-Current-Url"] ?? null);
+
+        if ($referer['path'] != null) {
+            parse_str($referer['query'] ?? "", $par);
+        }
+
+        $this->visitor = $this->eloquent->table("visitor")->find(Cypher::urlsafe_decrypt($par['visitor'] ?? null));
     }
 
     public function fullRender($page, $data = [])
@@ -199,5 +237,52 @@ class R_MobileController extends CI_Controller
     public function pageRender($page, $data = [])
     {
         echo $this->load->view("mobile/" . $page,  $data, true);
+    }
+
+    public function componentRender($comp, $data = [])
+    {
+        echo $this->load->view("mobile/components/" . $comp,  $data, true);
+    }
+
+    public function visitor_register()
+    {
+        try {
+            $this->eloquent->connection("default")->beginTransaction();
+
+            $visitor = Visitors::firstOrCreate([
+                "id" => Cypher::urlsafe_decrypt(R_Input::pos("visitor"))
+            ], [
+                "visit_date" => date("Y-m-d"),
+                "remote_ip" => $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'],
+                "user_agent" => $_SERVER['HTTP_USER_AGENT'],
+                "country_id"  => $_SERVER['HTTP_CF_IPCOUNTRY'] ?? "UKWN",
+                "device" => R_Input::pos("device"),
+                "antrian_ptsp_id" => Cypher::urlsafe_decrypt(R_Input::pos("antrian_ptsp")),
+                "antrian_sidang_id" => Cypher::urlsafe_decrypt(R_Input::pos("antrian_sidang"))
+            ]);
+
+
+            if (!$visitor->antrian_ptsp_id or !$visitor->antrian_sidang_id) {
+
+                if (count($visitor->mobile_notification)) {
+                    $this->eloquent::table("mobile_notification")->insert([
+                        "visitor_id" => $id ?? $visitor->id,
+                        "title" => "System Notification",
+                        "body" => "Kami tidak bisa mengirim pemberitahuan panggilan antrian kepada anda. Klik untuk mendapatkan pemberitahuan dan layanan yang lebih banyak.",
+                        "action" => "call_function",
+                        "action_param" => "data-bs-dismiss=\"modal\" onclick=\" notification('no-antrian-notif')\"",
+                    ]);
+                }
+            }
+
+            $this->eloquent->connection("default")->commit();
+
+            return Cypher::urlsafe_encrypt($id ?? $visitor->id);
+        } catch (\Throwable $th) {
+            $this->eloquent->connection("default")->rollback();
+
+            set_status_header(400);
+            echo "Terjadi kesalahan. " . $th->getMessage();
+        }
     }
 }

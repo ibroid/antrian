@@ -1,7 +1,7 @@
 <ul class="listview image-listview media mt-1">
   <?php foreach ($loket_pelayanan as $l) { ?>
     <li>
-      <a href="javascript:void(0)" class="item" data-bs-toggle="modal" data-bs-target="#modalDetailListAntrianPtsp" hx-get="<?= base_url("mobile/beranda/detail_list_antrian_ptsp") ?>" hx-trigger="click" hx-target="div#modalDetailListAntrianPtsp > div.modal-dialog > div.modal-content > div.modal-body">
+      <a href="javascript:void(0)" class="item" data-bs-toggle="modal" data-bs-target="#modalDetailListAntrianPtsp" hx-get="<?= base_url("mobile/beranda/detail_list_antrian_ptsp?kode=" . $l->kode_loket) ?>" hx-trigger="click" hx-target="div#modalDetailListAntrianPtsp > div.modal-dialog > div.modal-content > div.modal-body">
         <div class="py-1 px-3 bg-<?= $l->warna_loket == "secondary" ? "danger" : $l->warna_loket ?> rounded rounded-50 me-2">
           <h3 class="text-center text-white"><?= $l->antrian->nomor_antrian ?? "R-00" ?></h3>
         </div>
