@@ -93,7 +93,7 @@ class Antrian extends R_MobileController
 
     $antrian_id = isset($par['antrian_ptsp'])
       ? Cypher::urlsafe_decrypt($par['antrian_ptsp'])
-      : Visitors::find(Cypher::urlsafe_decrypt($par['visitor']))->antrian_ptsp_id;
+      : Visitors::find(Cypher::urlsafe_decrypt($par['visitor'] ?? 0))->antrian_ptsp_id ?? 0;
 
     $antrian = AntrianPtsp::find($antrian_id);
     if (!$antrian) {
@@ -114,7 +114,7 @@ class Antrian extends R_MobileController
 
     $antrian_id = isset($par['antrian_sidang'])
       ? Cypher::urlsafe_decrypt($par['antrian_sidang'])
-      : Visitors::find(Cypher::urlsafe_decrypt($par['visitor']))->antrian_sidang_id;
+      : Visitors::find(Cypher::urlsafe_decrypt($par['visitor'] ?? 0))->antrian_sidang_id ?? 0;
 
     $antrian = AntrianPersidangan::find($antrian_id);
     if (!$antrian) {
