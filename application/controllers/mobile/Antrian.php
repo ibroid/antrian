@@ -53,7 +53,7 @@ class Antrian extends R_MobileController
     try {
 
       $antrian = AntrianPtsp::find($this->visitor->antrian_ptsp_id);
-      if ($antrian->status == 0) {
+      if ($antrian && $antrian->status == 0) {
         throw new Exception("Anda sudah mengambil antrian. Silahkan tunggu dipanggil untuk mengambil antrian selanjutnya.", 1);
       }
 

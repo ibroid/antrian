@@ -72,9 +72,9 @@
 
 <div class="section">
   <div class="alert alert-outline-danger my-4">
-    <div class="d-flex align-items-center justify-content-between p-1">
+    <div class="d-flex align-items-center flex-column p-1">
       <img src="<?= base_url('static/vector/stop.png') ?>" alt="Stop Sign" width="200">
-      <h3 class="text-end text-start ">STOP ! <br> Sebelum anda meninggalkan gedung pengadilan <?= ucwords(strtolower($this->settings->satker_name)) ?>, Pastikan anda mengembalikan barang berikut.</h3>
+      <h3 class="text-end text-center ">STOP ! <br> Sebelum anda meninggalkan gedung pengadilan <?= ucwords(strtolower($this->settings->satker_name)) ?>, Pastikan anda mengembalikan barang berikut.</h3>
     </div>
     <ol>
       <li class="h6">Kalung Identitas Pengunjung yang dibagikan petugas saat memasuki gedung pengadilan</li>
