@@ -21,6 +21,21 @@
     </div>
   </div>
   <div class="row mx-1">
+    <?php foreach ($antrian->filter(function ($i) {
+      return $i->priority == 1;
+    })->all() as $a) { ?>
+      <div class="alert alert-primary p-2 rounded" role="alert">
+        <div class="d-flex justify-content-between align-self-center">
+          <div class="left">
+            <h5>Pemberitahuan</h5>
+            <p>Ada antrian prioritas pada nomor : <?= $a->nomor_urutan ?> | Nomor Perkara : <?= $a->nomor_perkara ?></p>
+          </div>
+          <div class="right">
+            <i style="font-size: 2rem;" class="fa fa-warning"></i>
+          </div>
+        </div>
+      </div>
+    <?php }  ?>
     <div class="card">
       <div class="card-body" id="card-body-antrian">
         <div class="text-center">

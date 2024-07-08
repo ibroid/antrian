@@ -44,13 +44,15 @@ class RuangSidang extends R_Controller
       die;
     }
 
+    $dalamPanggilan = DalamPersidangan::where("nomor_ruang", $id)->whereDate("created_at", date("Y-m-d"))->first();
+
     $this->load->page("persidangan/ruang_sidang", [
       "pagename" => "Dashboard Ruang Sidang",
       "antrian" => AntrianPersidangan::where("nomor_ruang", $id)->whereDate("created_at", date("Y-m-d"))->get(),
-      "dalam_panggilan" => DalamPersidangan::where("nomor_ruang", $id)->whereDate("created_at", date("Y-m-d"))->first(),
+      "dalam_panggilan" => $dalamPanggilan,
       "nama_ruang" => $nama_ruang[$id - 1],
       "nomor_ruang" => $id,
-      "dalam_persidangan" => DalamPersidangan::where("nomor_ruang", $id)->whereDate("created_at", date("Y-m-d"))->first(),
+      "dalam_persidangan" => $dalamPanggilan,
     ])->layout("dashboard_layout", [
       "nav" => $this->load->component("layout/nav_persidangan"),
       "title" => "Dashboard Ruang Sidang"

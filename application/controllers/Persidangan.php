@@ -59,7 +59,7 @@ class Persidangan extends R_Controller
     R_Input::mustPost();
     try {
       $data = KehadiranPihak::find($id);
-      $data->update(R_Input::pos());
+      $data->update(R_Input::pos()->toArray());
       echo json_encode(["status" => true, "message" => "Berhasil mengubah data"]);
     } catch (\Throwable $th) {
       set_status_header(400);
