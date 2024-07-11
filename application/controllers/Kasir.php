@@ -37,6 +37,7 @@ class Kasir extends R_Controller
       $templateProcessor->setValue("NOMINAL_SISA_PANJAR", rupiah(floatval($totalTransaksiMasuk - $totalTransaksiKeluar)));
       $templateProcessor->setValue("TERBILANG_SISA_PANJAR", terbilang($totalTransaksiMasuk - $totalTransaksiKeluar));
       $templateProcessor->setValue("TANGGAL_SEKARANG", tanggal_indo(date("Y-m-d")));
+      $templateProcessor->setValue("penandatangan", R_Input::pos("penandatangan"));
 
       $filename = str_replace("/", "_", $perkara->nomor_perkara) . ".docx";
       $templateProcessor->saveAs("./hasil/index.docx");

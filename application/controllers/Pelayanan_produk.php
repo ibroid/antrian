@@ -170,6 +170,7 @@ class Pelayanan_produk extends R_Controller
 
       $data["tahun_perkara"] = explode("/", $data["nomor_perkara"])[2];
       $data["foto_pengambil"] = $this->save_foto_pengambil();
+      $data["perkara_id"] = Cypher::urlsafe_decrypt($data["perkara_id"]);
 
       $produk = ProdukPengadilan::create($data);
 

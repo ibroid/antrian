@@ -32,7 +32,7 @@
     </tr>
     <tr>
       <th colspan="4" class="text-end text-danger">Sisa Panjar</th>
-      <th class="bg-dark text-light"><?= floatval($masuk)  - floatval($keluar) ?></th>
+      <th class="bg-dark text-light"><?= rupiah($data->where("jenis_transaksi", 1)->sum("jumlah") - $data->where("jenis_transaksi", -1)->sum("jumlah")) ?? 0 ?></th>
     </tr>
   </thead>
 </table>

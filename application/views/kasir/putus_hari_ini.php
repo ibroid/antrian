@@ -27,7 +27,7 @@
               <td><?= $ph->perkara->penetapan->panitera_pengganti_text ?></td>
               <td><?= $ph->perkara->penetapan->majelis_hakim_text ?></td>
               <td>
-                <button data-bs-toggle="modal" data-perkara-id="<?= $ph->perkara_id ?>" data-bs-target="#modalPsp" class="btn btn-success btn-cetak-psp">Cetak <i class="fa fa-print"></i></button>
+                <button data-bs-toggle="modal" data-perkara-id="<?= $ph->perkara_id ?>" onclick="setcontent(this)" data-bs-target="#modalPsp" class="btn btn-success btn-cetak-psp">Cetak <i class="fa fa-print"></i></button>
               </td>
             </tr>
           <?php } ?>
@@ -61,37 +61,37 @@
 </div>
 
 <script>
+  function setcontent(el) {
+    const perkara_id = $(el).data("perkara-id")
+    $.ajax({
+      url: "<?= base_url("informasi/perkara_biaya_w_view") ?>/" + perkara_id,
+      success: function(data) {
+        $("#modalPsp .modal-body").append(data);
+      },
+      error: function(err) {
+        $("#modalPsp .modal-body").html("<tr><td colspan='4'>Terjadi Kesalahan. Error : " + err.message && err.responseText + ". Silahkan tutup jendela dan klik cetak kembali</td></tr>");
+      }
+    })
+
+    $.ajax({
+      url: "<?= base_url("kasir/form_skum") ?>/" + perkara_id,
+      success: function(data) {
+        $("#modalPsp .modal-body").prepend(data);
+      },
+      error: function(err) {
+        $("#modalPsp .modal-body").append("<tr><td colspan='4'>Terjadi Kesalahan. Error : " + err.message && err.responseText + ". Silahkan tutup jendela dan klik cetak kembali</td></tr>");
+      }
+    })
+  }
   window.addEventListener("load", function() {
     $("#table-psp").DataTable({
       "language": {
         "search": "Cari Disini :",
       },
-      "pageLength": 10
+      "pageLength": 10,
     });
 
-    $(".btn-cetak-psp").on("click", function() {
-      const perkara_id = $(this).data("perkara-id");
 
-      $.ajax({
-        url: "<?= base_url("informasi/perkara_biaya_w_view") ?>/" + perkara_id,
-        success: function(data) {
-          $("#modalPsp .modal-body").append(data);
-        },
-        error: function(err) {
-          $("#modalPsp .modal-body").html("<tr><td colspan='4'>Terjadi Kesalahan. Error : " + err.message && err.responseText + ". Silahkan tutup jendela dan klik cetak kembali</td></tr>");
-        }
-      })
-
-      $.ajax({
-        url: "<?= base_url("kasir/form_skum") ?>/" + perkara_id,
-        success: function(data) {
-          $("#modalPsp .modal-body").prepend(data);
-        },
-        error: function(err) {
-          $("#modalPsp .modal-body").append("<tr><td colspan='4'>Terjadi Kesalahan. Error : " + err.message && err.responseText + ". Silahkan tutup jendela dan klik cetak kembali</td></tr>");
-        }
-      })
-    })
 
     $("#modalPsp").on("hidden.bs.modal", function() {
       $("#modalPsp .modal-body").html("");
