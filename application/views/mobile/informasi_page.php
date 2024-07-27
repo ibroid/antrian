@@ -6,7 +6,7 @@
 <div class="section full mt-5">
   <div class="mt-2 p-2 pt-0 pb-0">
     <div class="d-flex justify-content-between mx-2">
-      <div class="border border-3 p-2 rounded-5">
+      <div class="border border-3 p-2 rounded-5" hx-get="<?= base_url("mobile/persyaratan/page") ?>" hx-target="#appCapsule" hx-indicator=".htmx-indicator">
         <div class="text-center">
           <img src="<?= base_url('static/icons/documents.png?r') ?>" alt="">
         </div>
