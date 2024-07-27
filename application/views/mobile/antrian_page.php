@@ -106,9 +106,9 @@
         <p class="card-text" style="font-size: larger;">Mau ngmabil akte/surat cerai ?. Ambil disini ya</p>
       </div>
       <?php if ($allowed_ambil_ptsp) { ?>
-        <form hx-post="<?= base_url("mobile/antrian/ambil_produk") ?>" hx-indicator=".htmx-indicator" hx-swap="outerHTML">
-          <input type="hidden" name="kode" value="A">
-          <input type="hidden" name="tujuan" value="INFORMASI">
+        <form hx-post="<?= base_url("mobile/antrian/ambil_ptsp") ?>" hx-indicator=".htmx-indicator" hx-swap="outerHTML">
+          <input type="hidden" name="kode" value="D">
+          <input type="hidden" name="tujuan" value="PRODUK">
           <button type="submit" class="btn btn-light">Ambil Antrian</button>
         </form>
       <?php } else { ?>
