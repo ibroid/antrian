@@ -18,6 +18,13 @@
       Jadwal Sidang
     </div>
   </a>
+  <a href="javascript:void(0)" hx-get="<?= base_url("mobile/informasi/page") ?>" class="item" hx-target="#appCapsule" hx-indicator=".htmx-indicator">
+    <div class="col">
+      <ion-icon name="easel-outline"></ion-icon>
+      <span class="badge badge-danger"></span>
+      Informasi
+    </div>
+  </a>
 </div>
 
 <div class="htmx-indicator toast-box toast-center show">
