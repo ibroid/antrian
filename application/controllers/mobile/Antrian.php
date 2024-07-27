@@ -10,7 +10,7 @@ class Antrian extends R_MobileController
           return false;
         }
 
-        $antrian = AntrianPtsp::find($this->visitor->antrian_ptsp_id);
+        $antrian = AntrianPtsp::where('id', $this->visitor->antrian_ptsp_id)->whereDate('created_at', date('Y-m-d'))->first();
 
         if (!$antrian) {
           return true;
@@ -29,7 +29,7 @@ class Antrian extends R_MobileController
           return false;
         }
 
-        $antrian = AntrianPersidangan::find($this->visitor->antrian_sidang_id);
+        $antrian = AntrianPersidangan::where('id', $this->visitor->antrian_sidang_id)->whereDate('created_at', date('Y-m-d'))->first();
 
         if (!$antrian) {
           return true;
@@ -51,8 +51,7 @@ class Antrian extends R_MobileController
     $this->eloquent->connection("default")->beginTransaction();
 
     try {
-
-      $antrian = AntrianPtsp::find($this->visitor->antrian_ptsp_id);
+      $antrian = AntrianPtsp::where('id', $this->visitor->antrian_ptsp_id)->whereDate('created_at', date('Y-m-d'))->first();
       if ($antrian && $antrian->status == 0) {
         throw new Exception("Anda sudah mengambil antrian. Silahkan tunggu dipanggil untuk mengambil antrian selanjutnya.", 1);
       }
@@ -95,7 +94,8 @@ class Antrian extends R_MobileController
       ? Cypher::urlsafe_decrypt($par['antrian_ptsp'])
       : Visitors::find(Cypher::urlsafe_decrypt($par['visitor'] ?? 0))->antrian_ptsp_id ?? 0;
 
-    $antrian = AntrianPtsp::find($antrian_id);
+    $antrian = AntrianPtsp::where('id', $antrian_id)->whereDate('created_at', date("Y-m-d"))->first();
+
     if (!$antrian) {
       echo null;
     } else {
@@ -129,8 +129,82 @@ class Antrian extends R_MobileController
     echo "Maaf untuk saat ini pengambilan antrian produk hanya bisa dilakukan secara manual.";
   }
 
+  public function set_nomor_perkara()
+  {
+    try {
+      if (!isset($_POST['post_url'])) {
+        throw new Exception("Post URL tidak ada");
+      }
+
+      $this->componentRender("input_nomor_perkara", ["post_url" => '/mobile/antrian/ambil_sidang']);
+    } catch (\Throwable $th) {
+      echo "Terjadi kesalahan. " . $th->getMessage();
+    }
+  }
+
   public function ambil_sidang()
   {
-    echo "Maaf untuk saat ini pengambilan antrian persidangan hanya bisa dilakukan secara manual.";
+    try {
+      $perkara = Perkara::where("nomor_perkara", R_Input::pos("nomor_perkara"))->first();
+
+      if (!$perkara) {
+        throw new Exception("Nomor perkara yang anda masukan tidak ditemukan. Pastikan format sesuai contoh");
+      }
+
+      $this->eloquent->connection("default")->beginTransaction();
+
+      $lastSidang = $perkara->jadwal_sidang->last();
+
+      $antrianSidang = AntrianPersidangan::firstOrCreate([
+        "nomor_perkara" => $perkara->nomor_perkara,
+        "tanggal_sidang" => date("Y-m-d"),
+      ],  [
+        'status' => 0,
+        'nomor_urutan' =>  floatval($this->nomor_urut_sidang_terakhir(
+          $lastSidang->ruangan_id
+        ))  + 1,
+        'nomor_ruang' => $lastSidang->ruangan_id,
+        'nama_ruang' => $lastSidang->ruangan,
+        'nomor_perkara' => $perkara->nomor_perkara,
+        'tanggal_sidang' => $lastSidang->tanggal_sidang,
+        'majelis_hakim' => $perkara->penetapan->majelis_hakim_nama,
+        'jadwal_sidang_id' => $lastSidang->id,
+      ]);
+
+      $this->eloquent->table("visitor")->where('id', $this->visitor->id)->update([
+        'antrian_sidang_id' => $antrianSidang->id
+      ]);
+
+      $this->eloquent->table("mobile_notification")->insert([
+        "visitor_id" => $this->visitor->id,
+        "title" => "Antrian Sidang Notification",
+        "body" => "Berhasil. Nomor Antrian Anda : $antrianSidang->nomor_urutan. Anda memiliki waktu 15 menit dari sejak pertama kali anda dipanggil. Jadi pastikan selalu memeriksa antrian. Antrian ini hanya berlaku pada tanggal " . tanggal_indo($antrianSidang->tanggal_sidang),
+        "action" => "none",
+        "action_param" => null,
+      ]);
+
+      $this->eloquent->connection("default")->commit();
+
+      echo "<h3 class='text-white'>Berhasil. Nomor Antrian Anda : $antrianSidang->nomor_urutan Anda memiliki waktu 15 menit dari sejak pertama kali anda dipanggil. Jadi pastikan selalu memeriksa antrian</h3>";
+    } catch (\Throwable $th) {
+
+      $this->eloquent->connection("default")->rollback();
+
+      $this->componentRender(
+        "error_input_nomor_perkara",
+        [
+          "repost_url" => '/mobile/antrian/set_nomor_perkara',
+          "error_message" => 'Terjadi Kesalahan. ' . $th->getMessage(),
+          "past_value" => R_Input::pos()->toArray()
+        ]
+      );
+    }
+  }
+
+  public function nomor_urut_sidang_terakhir($ruang)
+  {
+    $qrcMaxAntrian = AntrianPersidangan::whereDate("created_at", date("Y-m-d"))->where("nomor_ruang", $ruang)->max('nomor_urutan');
+
+    return $qrcMaxAntrian;
   }
 }

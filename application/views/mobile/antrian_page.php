@@ -6,17 +6,18 @@
 <div class="section">
   <div class="card bg-dark text-white mt-3">
     <img src="<?= base_url('static/img/m_img_sidang.png') ?>" class="card-img overlay-img" alt="image">
-    <div class="card-img-overlay d-flex flex-column justify-content-between">
+    <div id="card-body-antrian-sidang" class="card-img-overlay d-flex flex-column justify-content-between">
       <div>
         <h5 class="card-title">Antrian Persidangan</h5>
         <p class="card-text" style="font-size: larger;">Khusus yang akan bersidang hari ini. Untuk melihat jadwal sidang silahkan ke menu jadwal sidang</p>
       </div>
       <?php if ($allowed_ambil_sidang) { ?>
-        <form hx-post="<?= base_url("mobile/antrian/ambil_sidang") ?>" hx-indicator=".htmx-indicator" hx-swap="outerHTML">
+        <form hx-post="<?= base_url("mobile/antrian/set_nomor_perkara") ?>" hx-indicator=".htmx-indicator" hx-target="#card-body-antrian-sidang">
+          <input type="hidden" name="post_url" value="/mobile/antrian/ambil_sidang">
           <button type="submit" class="btn btn-light">Ambil Antrian</button>
         </form>
       <?php } else { ?>
-        <p>Anda sudah mengambil antrian. Silahkan tunggu dipanggil. Lacak panggilan anda di menu beranda</p>
+        <p>Anda belum bisa mengambil antrian sidang</p>
       <?php } ?>
     </div>
   </div>
@@ -35,7 +36,7 @@
           <button type="submit" class="btn btn-light">Ambil Antrian</button>
         </form>
       <?php } else { ?>
-        <p>Anda sudah mengambil antrian. Silahkan tunggu dipanggil. Lacak panggilan anda di menu beranda</p>
+        <p>Anda belum bisa mengambil antrian pelayanan</p>
       <?php } ?>
     </div>
   </div>
@@ -54,7 +55,7 @@
           <button type="submit" class="btn btn-light">Ambil Antrian</button>
         </form>
       <?php } else { ?>
-        <p>Anda sudah mengambil antrian. Silahkan tunggu dipanggil. Lacak panggilan anda di menu beranda</p>
+        <p>Anda belum bisa mengambil antrian pelayanan</p>
       <?php } ?>
     </div>
   </div>
@@ -73,7 +74,7 @@
           <button type="submit" class="btn btn-light">Ambil Antrian</button>
         </form>
       <?php } else { ?>
-        <p>Anda sudah mengambil antrian. Silahkan tunggu dipanggil. Lacak panggilan anda di menu beranda</p>
+        <p>Anda belum bisa mengambil antrian pelayanan</p>
       <?php } ?>
     </div>
   </div>
@@ -92,7 +93,7 @@
           <button type="submit" class="btn btn-light">Ambil Antrian</button>
         </form>
       <?php } else { ?>
-        <p>Anda sudah mengambil antrian. Silahkan tunggu dipanggil. Lacak panggilan anda di menu beranda</p>
+        <p>Anda belum bisa mengambil antrian pelayanan</p>
       <?php } ?>
     </div>
   </div>
@@ -111,7 +112,7 @@
           <button type="submit" class="btn btn-light">Ambil Antrian</button>
         </form>
       <?php } else { ?>
-        <p>Anda sudah mengambil antrian. Silahkan tunggu dipanggil. Lacak panggilan anda di menu beranda</p>
+        <p>Anda belum bisa mengambil antrian pelayanan</p>
       <?php } ?>
     </div>
   </div>

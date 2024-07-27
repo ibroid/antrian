@@ -249,30 +249,31 @@ class R_MobileController extends CI_Controller
         try {
             $this->eloquent->connection("default")->beginTransaction();
 
-            $visitor = Visitors::firstOrCreate([
-                "id" => Cypher::urlsafe_decrypt(R_Input::pos("visitor"))
-            ], [
-                "visit_date" => date("Y-m-d"),
-                "remote_ip" => $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'],
-                "user_agent" => $_SERVER['HTTP_USER_AGENT'],
-                "country_id"  => $_SERVER['HTTP_CF_IPCOUNTRY'] ?? "UKWN",
-                "device" => R_Input::pos("device"),
-                "antrian_ptsp_id" => Cypher::urlsafe_decrypt(R_Input::pos("antrian_ptsp")),
-                "antrian_sidang_id" => Cypher::urlsafe_decrypt(R_Input::pos("antrian_sidang"))
-            ]);
+            $visitor = Visitors::where([
+                "id" => Cypher::urlsafe_decrypt(R_Input::pos("visitor")),
+            ])->first();
 
+            if (!$visitor) {
+                $visitor = Visitors::create([
+                    "visit_date" => date("Y-m-d"),
+                    "remote_ip" => $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'],
+                    "user_agent" => $_SERVER['HTTP_USER_AGENT'],
+                    "country_id"  => $_SERVER['HTTP_CF_IPCOUNTRY'] ?? "UKWN",
+                    "device" => R_Input::pos("device"),
+                    "antrian_ptsp_id" => Cypher::urlsafe_decrypt(R_Input::pos("antrian_ptsp")),
+                    "antrian_sidang_id" => Cypher::urlsafe_decrypt(R_Input::pos("antrian_sidang"))
+                ]);
+            }
 
             if (!$visitor->antrian_ptsp_id or !$visitor->antrian_sidang_id) {
-
-                if (count($visitor->mobile_notification)) {
-                    $this->eloquent::table("mobile_notification")->insert([
-                        "visitor_id" => $id ?? $visitor->id,
-                        "title" => "System Notification",
-                        "body" => "Kami tidak bisa mengirim pemberitahuan panggilan antrian kepada anda. Klik untuk mendapatkan pemberitahuan dan layanan yang lebih banyak.",
-                        "action" => "call_function",
-                        "action_param" => "data-bs-dismiss=\"modal\" onclick=\" notification('no-antrian-notif')\"",
-                    ]);
-                }
+                $this->eloquent::table("mobile_notification")->updateOrInsert([
+                    "visitor_id" => $id ?? $visitor->id,
+                ], [
+                    "title" => "System Notification",
+                    "body" => "Kami tidak bisa mengirim pemberitahuan panggilan antrian kepada anda. Klik untuk mendapatkan pemberitahuan dan layanan yang lebih banyak.",
+                    "action" => "call_function",
+                    "action_param" => "data-bs-dismiss=\"modal\" onclick=\" notification('no-antrian-notif')\"",
+                ]);
             }
 
             $this->eloquent->connection("default")->commit();
