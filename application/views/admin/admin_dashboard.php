@@ -26,6 +26,35 @@
       <?= $this->load->component("admin/online_user") ?>
     </div>
   </div>
+  <div class="row">
+    <div class="col-4">
+      <div class="card">
+        <div class="card-header">
+          <h6>
+            Jumlah Pengguna Antrian Online
+          </h6>
+        </div>
+        <div class="card-body p-0">
+          <table class="table m-0">
+            <thead>
+              <tr class="text-center">
+                <th>Hari Ini</th>
+                <th>Bulan Ini</th>
+                <th>Tahun Ini</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="text-center">
+                <td><?= $pengunjung_mobile['hari_ini']->total ?></td>
+                <td><?= $pengunjung_mobile['bulan_ini']->total ?></td>
+                <td><?= $pengunjung_mobile['tahun_ini']->total ?></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
