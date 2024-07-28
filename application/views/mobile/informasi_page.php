@@ -22,7 +22,7 @@
           Biaya
         </div>
       </div>
-      <div class="border border-5 p-2 rounded-5">
+      <div class="border border-5 p-2 rounded-5" hx-get="<?= base_url("mobile/prodeo/page") ?>" hx-target="#appCapsule" hx-indicator=".htmx-indicator">
         <div class="text-center">
           <img src="<?= base_url('static/icons/free.png?s') ?>" alt="">
         </div>
