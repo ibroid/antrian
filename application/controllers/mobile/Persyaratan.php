@@ -2,13 +2,24 @@
 
 class Persyaratan extends R_MobileController
 {
+  public function __construct()
+  {
+    parent::__construct();
+    $this->load->library("InformasiApi");
+    $this->infoApi = $this->informasiapi::make("jenis_perkara/records?expand=persyaratan_via_jenis_perkara_id");
+  }
+
+  public function index()
+  {
+    $this->fullRender("persyaratan_page", [
+      "data" => $this->infoApi->response->parseJson()
+    ]);
+  }
+
   public function page()
   {
-    $this->load->library("InformasiApi");
-    $infoApi = $this->informasiapi::make("jenis_perkara/records?expand=persyaratan_via_jenis_perkara_id");
-
     $this->pageRender("persyaratan_page", [
-      "data" => $infoApi->response->parseJson()
+      "data" => $this->infoApi->response->parseJson()
     ]);
   }
 }

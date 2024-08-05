@@ -105,9 +105,11 @@ class R_ApiController extends CI_Controller
         } catch (\Throwable $th) {
             if ($th instanceof ApiException) {
                 $th->render_json();
+                die;
             } else {
                 set_status_header(400);
                 echo json_encode(["message" => $th->getMessage()]);
+                die;
             }
         }
     }
@@ -139,8 +141,8 @@ class R_ApiController extends CI_Controller
         if (!isset($_ENV["API_KEY"])) {
             throw new ApiException("API KEY not provided in environment");
         }
-
-        $apiKey = R_Input::ci()->request_headers()["Authorization"] ?? '';
+        // prindie(R_Input::ci()->request_headers());
+        $apiKey = R_Input::ci()->request_headers()["Authorization"] ?? null;
 
         if (!$apiKey) {
             throw new ApiException("API KEY not provided in client");
@@ -165,7 +167,7 @@ class ApiException extends Exception
 
     public function render_json()
     {
-        header("HTTP/1.1 403 Forbidden");
+        // header("HTTP/1.1 403 Forbidden");
         echo json_encode([
             "message" => $this->getMessage(),
             "data" => null
