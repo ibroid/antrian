@@ -6,7 +6,7 @@ class Persyaratan extends R_MobileController
   {
     parent::__construct();
     $this->load->library("InformasiApi");
-    $this->infoApi = $this->informasiapi::make("jenis_perkara/records?expand=persyaratan_via_jenis_perkara_id");
+    $this->infoApi = $this->informasiapi::make("jenis_perkara/records?expand=persyaratan_via_jenis_perkara");
   }
 
   public function index()

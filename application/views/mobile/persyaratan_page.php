@@ -12,7 +12,7 @@
       <div class="card-body">
         <div class="card-title">Persyaratan <?= $d->nama_perkara ?></div>
         <div class="card-text">
-          <?php print_r($d->expand->persyaratan_via_jenis_perkara_id[0]->isi) ?>
+          <?= $d->expand->persyaratan_via_jenis_perkara[0]->isi ?>
         </div>
       </div>
     </div>

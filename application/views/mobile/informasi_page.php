@@ -14,7 +14,7 @@
           Persyaratan
         </div>
       </div>
-      <div class="border border-5 p-2 rounded-5">
+      <div class="border border-5 p-2 rounded-5" hx-get="<?= base_url("mobile/biaya/page") ?>" hx-target="#appCapsule" hx-indicator=".htmx-indicator">
         <div class="text-center">
           <img src="<?= base_url('static/icons/money.png?s') ?>" alt="">
         </div>
