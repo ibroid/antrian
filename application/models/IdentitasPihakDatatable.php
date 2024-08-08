@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class PengunjungDatatable extends Model
+class IdentitasPihakDatatable extends Model
 {
   protected $table = 'identitas_pihak';
   protected $fillable = ['nama_lengkap', 'nik', 'alamat', 'jenis_kelamin'];

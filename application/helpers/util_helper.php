@@ -84,3 +84,42 @@ if (!function_exists("terbilang")) {
     return $hasil;
   }
 }
+
+if (!function_exists("read_uploaded_file")) {
+  function read_uploaded_file($folder, $filename)
+  {
+    $file_path = realpath('./uploads/' . $folder . '/' . $filename);
+
+    if (file_exists($file_path)) {
+      header('Content-Type: ' . mime_content_type($file_path));
+      header('Content-Length: ' . filesize($file_path));
+      readfile($file_path);
+      exit;
+    } else {
+      header("HTTP/1.0 404 Not Found");
+      echo "File not found!";
+    }
+  }
+}
+
+if (!function_exists("delete_all_temporary")) {
+  function delete_all_temporary()
+  {
+    try {
+      $ci = &get_instance();
+      $ci->eloquent->table("temporary_data")->delete();
+      $folder_path = "./uploads/temp";
+
+      $files = glob($folder_path . '/*');
+      foreach ($files as $file) {
+
+        if (is_file($file))
+          unlink($file);
+      }
+      echo "ok";
+    } catch (\Throwable $th) {
+      set_status_header(500);
+      echo $th->getMessage();
+    }
+  }
+}

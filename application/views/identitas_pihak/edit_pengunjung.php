@@ -5,17 +5,17 @@
       <?= $this->session->flashdata("flash_error") ?>
       <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
-          <h5 class="m-0">Tambah Pengunjung</h5>
-          <a href="<?= base_url('pengunjung') ?>" class="btn btn-sm btn-secondary"><i class="fa fa-arrow-left"></i> Kembali</a>
+          <h5 class="m-0">Edit Pengunjung</h5>
+          <a href="<?= base_url('identitas_pihak') ?>" class="btn btn-sm btn-secondary"><i class="fa fa-arrow-left"></i> Kembali</a>
         </div>
       </div>
       <div class="card-body">
-        <form class="form needs-validation" novalidate action="<?= base_url('pengunjung/save') ?>" method="post" enctype="multipart/form-data">
+        <form class="form needs-validation" novalidate action="<?= base_url('identitas_pihak/update/' . Cypher::urlsafe_encrypt($data->id)) ?>" method="post" enctype="multipart/form-data">
           <div class="row">
             <div class="col-12">
               <div class="form-group mb-3">
                 <label for="name">Nama Lengkap</label>
-                <input type="text" required class="form-control" name="nama_lengkap" id="name">
+                <input type="text" required class="form-control" name="nama_lengkap" id="name" value="<?= $data->nama_lengkap  ?>">
               </div>
             </div>
           </div>
@@ -23,7 +23,7 @@
             <div class="col-12">
               <div class="form-group mb-3">
                 <label for="nik">NIK</label>
-                <input type="text" required class="form-control" name="nik" id="nik">
+                <input type="text" required class="form-control" name="nik" id="nik" value="<?= $data->nik  ?>">
               </div>
             </div>
           </div>
@@ -31,7 +31,7 @@
             <div class="col-12">
               <div class="form-group mb-3">
                 <label for="alamat">Alamat/Domisili</label>
-                <input type="text" required class="form-control" name="alamat" id="alamat">
+                <input type="text" required class="form-control" name="alamat" id="alamat" value="<?= $data->alamat  ?>">
               </div>
             </div>
           </div>
@@ -39,9 +39,13 @@
             <div class="col-12">
               <div class="form-group mb-3">
                 <label for="jenis_kelamin">Jenis Kelamin</label>
-                <select required name="jenis_kelamin" id="jenis_kelamin" class="form-control">
-                  <option>Laki-laki</option>
-                  <option>Perempuan</option>
+                <select name="jenis_kelamin" id="jenis_kelamin" class="form-control">
+                  <option <?= $data->jenis_kelamin == 'Laki-laki' ? 'selected' : null ?>>
+                    Laki-laki
+                  </option>
+                  <option <?= $data->jenis_kelamin == 'Perempuan' ? 'selected' : null ?>>
+                    Perempuan
+                  </option>
                 </select>
               </div>
             </div>
@@ -50,7 +54,7 @@
             <div class="col-12">
               <div class="form-group mb-3">
                 <label for="tempat_lahir">Tempat Lahir</label>
-                <input required type="text" class="form-control" name="tempat_lahir" id="tempat_lahir" required>
+                <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir" value="<?= $data->tempat_lahir  ?? null ?>" required>
               </div>
             </div>
           </div>
@@ -58,7 +62,7 @@
             <div class="col-12">
               <div class="form-group mb-3">
                 <label for="tanggal_lahir">Tanggal Lahir</label>
-                <input type="text" class="form-control datepicker" name="tanggal_lahir" id="tanggal_lahir" required>
+                <input type="text" class="form-control datepicker" name="tanggal_lahir" id="tanggal_lahir" value="<?= $data->tanggal_lahir ?? null  ?>" required>
               </div>
             </div>
           </div>
@@ -76,7 +80,7 @@
                     'Strata 1/Diploma IV',
                     'Lebih dari strata 1/Diploma IV',
                   ] as $d) { ?>
-                    <option><?= $d ?></option>
+                    <option <?= $d == $data->pendidikan ? 'selected' : null ?>><?= $d ?></option>
                   <?php } ?>
                 </select>
               </div>
@@ -104,7 +108,7 @@
                     'Kedokteran',
                     'Supir/Driver',
                   ] as $g) { ?>
-                    <option><?= $g ?></option>
+                    <option <?= $g == $data->pekerjaan ? 'selected' : null ?>><?= $g ?></option>
                   <?php } ?>
                 </select>
               </div>
@@ -122,7 +126,7 @@
                 <canvas id="canvas" class="d-none"></canvas>
               </div>
               <div style="display: flex; align-items: center; justify-content: center;" class="mb-4">
-                <img src="<?= base_url('/uploads/pihak/') ?>" alt="Preview Image" id="img-capture-preview">
+                <img src="<?= base_url('/uploads/pihak/' . $data->foto) ?>" alt="Preview Image" id="img-capture-preview">
               </div>
               <div class="d-flex justify-content-center mb-4 gap-3">
                 <button type="button" id="btn-ganti-kamera" class="btn btn-warning btn-sm">

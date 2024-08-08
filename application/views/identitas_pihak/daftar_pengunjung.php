@@ -5,7 +5,7 @@
     <div class="card-header">
       <div class="d-flex justify-content-between">
         <h5>Daftar Pengunjung</h5>
-        <a href="<?= base_url('/pengunjung/tambah') ?>" class="btn btn-primary">
+        <a href="<?= base_url('/identitas_pihak/tambah') ?>" class="btn btn-primary">
           <i class="fa fa-plus"></i>
           Tambah Pengunjung
         </a>
@@ -39,7 +39,7 @@
       "order": [],
       "ajax": {
         //panggil method ajax list dengan ajax
-        "url": '<?= base_url('pengunjung/datatable_pengunjung'); ?>',
+        "url": '<?= base_url('identitas_pihak/datatable_pengunjung'); ?>',
         "type": "POST"
       },
       "columnDefs": [{

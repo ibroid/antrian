@@ -15,7 +15,10 @@ class Redirect
   public static function wfa($data = [])
   {
     $red = new static;
-    $red->ci->session->set_flashdata('flash_alert', $red->ci->load->component(Constanta::ALERT_INFO, $data));
+    $red->ci->session->set_flashdata(
+      'flash_alert',
+      $red->ci->load->component(Constanta::ALERT_INFO, $data)
+    );
     return $red;
   }
 

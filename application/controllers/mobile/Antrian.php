@@ -155,6 +155,10 @@ class Antrian extends R_MobileController
 
       $lastSidang = $perkara->jadwal_sidang->last();
 
+      if ($lastSidang->tanggal_sidang !== date("Y-m-d")) {
+        throw new Exception("Tidak ada jadwal sidang untuk perkara ini");
+      }
+
       $antrianSidang = AntrianPersidangan::firstOrCreate([
         "nomor_perkara" => $perkara->nomor_perkara,
         "tanggal_sidang" => date("Y-m-d"),

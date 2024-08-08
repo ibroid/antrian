@@ -60,7 +60,7 @@
       </li>
       <li class="sidebar-list">
         <i class="fa fa-thumb-tack"></i>
-        <a class="sidebar-link sidebar-title" href="<?= base_url('/pengunjung') ?>">
+        <a class="sidebar-link sidebar-title" href="<?= base_url('/identitas_pihak') ?>">
           <svg class="stroke-icon">
             <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-user"></use>
           </svg>

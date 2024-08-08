@@ -1,6 +1,6 @@
 <?php
 
-class Pengunjung extends R_Controller
+class Identitas_pihak extends R_Controller
 {
 
   public function __construct()
@@ -21,7 +21,7 @@ class Pengunjung extends R_Controller
 
   public function index()
   {
-    $this->load->page("pengunjung/daftar_pengunjung")->layout("dashboard_layout", [
+    $this->load->page("identitas_pihak/daftar_pengunjung")->layout("dashboard_layout", [
       "title" => "Daftar Pengunjung",
       "nav" => $this->load->component($this->is_admin ? "layout/nav_admin" : "layout/nav_pelayanan")
     ]);
@@ -29,7 +29,7 @@ class Pengunjung extends R_Controller
 
   public function datatable_pengunjung()
   {
-    $pengunjungDatatable = new PengunjungDatatable();
+    $pengunjungDatatable = new IdentitasPihakDatatable();
 
 
     $lists = $pengunjungDatatable->getData();
@@ -61,7 +61,7 @@ class Pengunjung extends R_Controller
   {
     $data = IdentitasPihak::findOrFail(Cypher::urlsafe_decrypt($id));
 
-    $this->load->page("pengunjung/edit_pengunjung", compact("data"))->layout("dashboard_layout", [
+    $this->load->page("identitas_pihak/edit_pengunjung", compact("data"))->layout("dashboard_layout", [
       "title" => "Edit Pengunjung",
       "nav" => $this->load->component($this->is_admin ? "layout/nav_admin" : "layout/nav_pelayanan")
     ]);
@@ -132,7 +132,7 @@ class Pengunjung extends R_Controller
 
   public function tambah()
   {
-    $this->load->page("pengunjung/tambah_pengunjung")->layout("dashboard_layout", [
+    $this->load->page("identitas_pihak/tambah_pengunjung")->layout("dashboard_layout", [
       "title" => "Tambah Pengunjung",
       "nav" => $this->load->component($this->is_admin ? "layout/nav_admin" : "layout/nav_pelayanan")
     ]);

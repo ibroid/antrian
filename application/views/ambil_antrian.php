@@ -32,7 +32,10 @@
         <?= $this->session->flashdata('flash_error') ?>
         <?= $this->session->flashdata('flash_alert') ?>
         <div class="text-center mb-3">
-
+          <a class="btn btn-primary btn-sm mb-4" href="<?= base_url('ktp') ?>">
+            Ambil Menggunakan KTP
+            <i class="fa fa-arrow-right"></i>
+          </a>
           <h3>Menu Pengambilan Antrian PTSP.</h3>
 
         </div>
@@ -408,6 +411,13 @@
         }
       }
     })
+
+    $("#webcam").bind("loadedmetadata", function() {
+      displaySize = {
+        width: this.scrollWidth,
+        height: this.scrollHeight
+      }
+    });
   })
 </script>
 

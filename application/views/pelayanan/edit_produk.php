@@ -78,7 +78,7 @@
                 <canvas id="canvas" class="d-none"></canvas>
               </div>
               <div style="display: flex; align-items: center; justify-content: center;" class="mb-4">
-                <img src="<?= base_url('/uploads/pengambil/' . $data->foto_pengambil) ?>" alt="Preview Image" id="img-capture-preview">
+                <img src="<?= base_url('/penyimpanan/pengambil/' . $data->foto_pengambil) ?>" alt="Preview Image" id="img-capture-preview">
               </div>
               <div class="d-flex justify-content-center mb-4 gap-3">
                 <button type="button" id="btn-ganti-kamera" class="btn btn-warning btn-sm">

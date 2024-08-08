@@ -52,6 +52,16 @@ uploads/pengambil/*.jpg
 uploads/pengambil/*.jpeg
 uploads/pengambil/*.gif
 
+uploads/temp/*.png
+uploads/temp/*.jpg
+uploads/temp/*.jpeg
+uploads/temp/*.gif
+
+uploads/pengunjung/*.png
+uploads/pengunjung/*.jpg
+uploads/pengunjung/*.jpeg
+uploads/pengunjung/*.gif
+
 uploads/pihak/*
 !uploads/pihak/index.html
 

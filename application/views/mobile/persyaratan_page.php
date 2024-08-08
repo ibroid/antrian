@@ -8,13 +8,22 @@
 
 <div class="section mt-2">
   <?php foreach ($data->items as $k => $d) { ?>
-    <div class="card my-2">
-      <div class="card-body">
-        <div class="card-title">Persyaratan <?= $d->nama_perkara ?></div>
-        <div class="card-text">
-          <?= $d->expand->persyaratan_via_jenis_perkara[0]->isi ?>
+    <?php if (isset($d->expand)) { ?>
+      <div class="card my-2">
+        <div class="card-body">
+          <div class="card-title">Persyaratan <?= $d->nama_perkara ?></div>
+          <div class="card-text">
+            <?= $d->expand->persyaratan_via_jenis_perkara[0]->isi ?? null ?>
+          </div>
+          <div class="card-text">
+            <?php foreach ($d->expand->persyaratan_via_jenis_perkara as $n => $v) { ?>
+              <?php foreach ($v->contoh as $c) { ?>
+                <img width="300" src="<?= base_url('penyimpanan/infoapi/' . $v->id . '/' . $c) ?>" alt="contoh">
+              <?php } ?>
+            <?php } ?>
+          </div>
         </div>
       </div>
-    </div>
+    <?php } ?>
   <?php } ?>
 </div>
