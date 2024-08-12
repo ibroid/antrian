@@ -1,6 +1,6 @@
 <?php
 
-class Loket extends CI_Controller
+class Loket extends R_Controller
 {
   /**
    * Constructor for the Loket class.
