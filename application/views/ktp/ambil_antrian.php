@@ -4,11 +4,15 @@
       <div class="login-main" style="width: 1200px;">
         <?= $this->session->flashdata('flash_error') ?>
         <?= $this->session->flashdata('flash_alert') ?>
-        <form action="<?= base_url('ktp/simpan') ?>" method="POST">
+        <form id="form-ktp" action="<?= base_url('ktp/simpan') ?>" method="POST">
           <div class="text-center mb-3">
             <a class="btn btn-secondary btn-sm mb-4" href="<?= base_url('ambil') ?>">
               <i class="fa fa-arrow-left"></i>
               Ambil Langsung
+            </a>
+            <a class="btn btn-primary btn-sm mb-4" href="<?= base_url('ktp') ?>">
+              <i class="fa fa-refresh"></i>
+              Reset
             </a>
             <h3>Menu Pengambilan Antrian.</h3>
           </div>
@@ -517,6 +521,13 @@
   }
 
   window.addEventListener("load", function() {
+    $("#form-ktp").keydown(function(event) {
+      if (event.keyCode == 13) {
+        event.preventDefault();
+        return false;
+      }
+    });
+
     var pusher = new Pusher('<?= $_ENV['PUSHER_APP_KEY'] ?>', {
       cluster: 'ap1'
     });

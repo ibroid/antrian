@@ -20,7 +20,7 @@
         </div>
         <div class="row">
           <div class="col-xl-4">
-            <div class="card widget-1" style="background-image: none;" onclick="window.location.href='<?= base_url('/ambil') ?>'">
+            <div class="card widget-1" style="background-image: none;" onclick="window.location.href='<?= base_url('/ktp') ?>'">
               <div class="card-body">
                 <div class="widget-content">
                   <div class="widget-round secondary">

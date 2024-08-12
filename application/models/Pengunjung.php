@@ -11,4 +11,9 @@ class Pengunjung extends Model
   {
     return $this->hasMany(Kunjungan::class, 'pengunjung_id');
   }
+
+  public function serial()
+  {
+    return $this->hasOne(SerialNumber::class, 'pengunjung_id');
+  }
 }

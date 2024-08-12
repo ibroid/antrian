@@ -1,10 +1,14 @@
 <?php
 
-use Mike42\Escpos\Printer;
-use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
+include_once APPPATH . 'traits/CetakThermalHelper.php';
+include_once APPPATH . 'traits/AntrianPtspHelper.php';
+include_once APPPATH . 'traits/AntrianSidangHelper.php';
+include_once APPPATH . 'traits/PengunjungHelper.php';
 
 class Ktp extends R_Controller
 {
+  use CetakThermalHelper, AntrianPtspHelper, AntrianSidangHelper, PengunjungHelper;
+
   public function index()
   {
     $base_url = base_url();
@@ -19,7 +23,8 @@ class Ktp extends R_Controller
         "<script src=\"$base_url/assets/js/flat-pickr/flatpickr.js\"></script>\n",
         "<script src=\"$base_url/assets/js/datatable/datatables/jquery.dataTables.min.js\"></script>\n",
         "<script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script>",
-        "<script src=\"https://js.pusher.com/8.2.0/pusher.min.js\"></script>"
+        "<script src=\"https://js.pusher.com/8.2.0/pusher.min.js\"></script>",
+        "<script src=\"$base_url/assets/js/typeahead/typeahead.bundle.js\"></script>"
       ]
     ]);
 
@@ -40,8 +45,16 @@ class Ktp extends R_Controller
       $data->photo = $temp->temp_photo;
       $data->img = $temp->temp_img;
 
+      $pengunjung = Pengunjung::where('nik', $data->nik)->first();
+
+      if ($pengunjung) {
+        $pengunjung->photo = $temp->temp_photo;
+        $pengunjung->img = $temp->temp_img;
+      }
+
       echo $this->load->component('pengunjung/form_pengunjung', [
-        'data' => $data
+        'data' => $pengunjung ?? $data,
+        'temp' => $temp
       ]);
     } catch (\Throwable $th) {
       set_status_header(400);
@@ -65,245 +78,99 @@ class Ktp extends R_Controller
       }
 
       $this->eloquent->connection("default")->transaction(function () {
-        $pengunjung = Pengunjung::firstOrCreate([
-          "nik" => R_Input::pos('nik')
-        ], [
-          'nama_lengkap' => R_Input::pos('nama_lengkap'),
-          'jenis_kelamin' => R_Input::pos('jenis_kelamin'),
-          'nik' => R_Input::pos('nik'),
-          'pekerjaan' => R_Input::pos('pekerjaan'),
-          'pendidikan' => R_Input::pos('pendidikan'),
-          'tempat_lahir' => R_Input::pos('tempat'),
-          'tanggal_lahir' => R_Input::pos('tanggal_lahir'),
-          'provinsi' => R_Input::pos('provinsi'),
-          'kota' => R_Input::pos('kota'),
-          'kecamatan' => R_Input::pos('kecamatan'),
-          'kelurahan' => R_Input::pos('kelurahan'),
-          'alamat' => R_Input::pos('alamat')
-        ]);
+        $pengunjung = $this->pengunjung_save_from_post();
 
         $pengunjung->kunjungan()->create([
           "tanggal_kunjungan" => date('Y-m-d'),
           "status_pengunjung" => R_Input::pos("status_pengunjung"),
-          "tujuan_kunjungan" => R_Input::pos("tujuan_kunjungan")
+          "tujuan_kunjungan" => R_Input::pos("tujuan")
         ]);
 
-        $daftarTujuan = [
-          "PENDAFTARAN" => "A",
-          "ECOURT" => "A",
-          "INFORMASI" => "A",
-          "KASIR" => "B",
-          "POSBAKUM" => "C",
-          "PRODUK" => "A",
-        ];
 
-        if (isset($daftarTujuan[R_Input::pos('tujuan')])) {
-          $this->ambil_antrian_ptsp(
-            $daftarTujuan[R_Input::pos('tujuan')],
+        $pihakPerkara = Pihak::where('nomor_indentitas', $pengunjung->nik)->first();
+
+        $perkara = $pihakPerkara->pihak_satu->perkara;
+
+        if ($perkara) {
+          $this->eloquent->table('perkara_pengunjung')->updateOrInsert(
+            ['perkara_id' => $perkara->perkara_id],
+            ['pengunjung_id' => $pengunjung->id]
+          );
+        }
+
+        if (isset($this->daftarTujuan[R_Input::pos('tujuan')])) {
+
+          $newAntrianPtsp = $this->ambil_antrian_ptsp(
             R_Input::pos('tujuan'),
             $pengunjung->id
           );
+
+          $this->print_antrian_ptsp($newAntrianPtsp);
         } else {
-          if (R_Input::pos('tujuan') == 'SIDANG') {
-            $antrianSidang = $this->ambil_antrian_sidang($pengunjung);
+          if (
+            R_Input::pos('tujuan') == 'SIDANG'
+            &&
+            R_Input::pos('status_pengunjung') == 'Pihak Berperkara'
+          ) {
+
+            if (!$pihakPerkara) {
+              throw new Exception("KTP Tidak Ditemukan DI SIPP", 1);
+            }
+
+            $antrianSidang = $this->ambil_antrian_sidang($perkara);
             $this->eloquent->table('pengunjung_sidang')->insert([
               'pengunjung_id' =>  $pengunjung->id,
               'antrian_sidang_id' => $antrianSidang->id
             ]);
+
+            $this->print_antrian_sidang($antrianSidang);
           }
         }
+
+        $this->update_serial($pengunjung->id);
+
+        $this->move_files();
       });
     } catch (\Throwable $th) {
       Redirect::wfe($th->getMessage())->to("ktp");
     }
 
-    Redirect::wfa(['message' => "Berhasil menyimpan data pengunjung"])->to("/ktp");
+    Redirect::wfa(['message' => "Berhasil menyimpan data pengunjung. Silahkan Ambil Antrian"])->to("/ktp");
   }
 
-
-  private function ambil_antrian_ptsp($kode, $tujuan, $id)
+  public function move_files()
   {
-    $lastNomorAntrianPtsp = AntrianPtsp::where([
-      "kode" => $kode,
-    ])->whereDate("created_at", date("Y-m-d"))->max("nomor_urutan");
+    $tempDir = './uploads/temp/';
+    $targetDir = './uploads/pengunjung/';
 
-    $newAntrianPtsp = AntrianPtsp::create([
-      "tujuan" => $tujuan,
-      "kode" => $kode,
-      "nomor_urutan" => $lastNomorAntrianPtsp ? $lastNomorAntrianPtsp + 1 : 1,
-      "status" => 0,
-      "pengunjung_id" => $id
-    ]);
+    if (file_exists($tempDir . R_Input::pos('temp_photo'))) {
+      rename(
+        $tempDir . R_Input::pos('temp_photo'),
+        $targetDir . R_Input::pos('temp_photo')
+      );
+    }
 
-    $this->print_antrian_ptsp($newAntrianPtsp);
-
-    return $newAntrianPtsp;
+    if (file_exists($tempDir . R_Input::pos('temp_img'))) {
+      rename(
+        $tempDir . R_Input::pos('temp_img'),
+        $targetDir . R_Input::pos('temp_img')
+      );
+    }
   }
 
-  private function print_antrian_ptsp($data, $ip = "192.168.0.188")
+  public function suggest_nik()
   {
-    if ($_ENV["DEBUG_PRINT"] == "false") {
-      return [true, "Antrian tidak akan dicetak jika dalam mode debug print."];
+    if (!$this->input->is_ajax_request()) {
+      show_404();
     }
-    if ($_ENV["DEBUG"] == "true" || isset($_GET["secondary"])) {
-      $ip = "192.168.0.187";
-    }
+    $searchedData = $this->eloquent
+      ->table('pengunjung')
+      ->select('id', 'nik')
+      ->where('nik', 'like',  R_Input::gett('q') . '%')
+      ->limit(10)
+      ->get();
 
-    $connector = new NetworkPrintConnector($ip, 9100, 5);
-    $printer = new Printer($connector);
-    $printer->initialize();
-
-    $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-    $printer->setJustification(Printer::JUSTIFY_CENTER);
-    $printer->setFont(Printer::FONT_A);
-
-    if ($_ENV["DEBUG"] == "true") {
-      $printer->text("TEST UJI COBA\n");
-    }
-
-    $printer->text("Pengadilan Agama\n Jakarta Utara \n");
-    $printer->text("------------------------\n");
-    $printer->text($data->tujuan);
-    $printer->text("\n");
-    $printer->setTextSize(5, 4);
-    $printer->text($data->kode . "-" . $data->nomor_urutan);
-    $printer->text("\n");
-    $printer->setTextSize(1, 1);
-
-    if ($data->pesanan_produk) {
-      $printer->text("Yang Mengambil Antrian : " . $data->pesanan_produk->nama_pengambil ?? "");
-    }
-    $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-    $printer->setJustification(Printer::JUSTIFY_CENTER);
-    $printer->setTextSize(1, 1);
-    $printer->text("Di ambil:" . date('Y-m-d H:i:S') . " \n");
-
-    $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-    $printer->setJustification(Printer::JUSTIFY_CENTER);
-    $printer->setFont(Printer::FONT_A);
-    $printer->text("------------------------\n");
-
-    $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-    $printer->setJustification(Printer::JUSTIFY_CENTER);
-    $printer->qrCode(base_url("/mobile?antrian_ptsp=" . Cypher::urlsafe_encrypt($data->id)), Printer::QR_ECLEVEL_L, 7, Printer::QR_MODEL_2);
-    $printer->text("\n");
-    $printer->setTextSize(1, 1);
-    $printer->text("Scan QR Code di atas untuk mengetahui antrian berjalan secara online\n");
-
-
-
-    $printer->cut();
-    /* Pulse */
-    $printer->pulse();
-
-    $printer->close();
-
-    return [true, "Antrian berhasil dicetak"];
-  }
-
-  private function ambil_antrian_sidang($pengunjung)
-  {
-    $pihakPerkara = Pihak::where('nomor_indentitas', $pengunjung->nik)->first();
-
-    if (!$pihakPerkara) {
-      throw new Exception("KTP Tidak Ditemukan DI SIPP", 1);
-    }
-
-    $perkara = $pihakPerkara->pihak_satu->perkara;
-
-    $lastSidang = $perkara->jadwal_sidang->last();
-
-    if ($lastSidang->tanggal_sidang !== date("Y-m-d")) {
-      throw new Exception("Tidak ada jadwal sidang untuk perkara ini");
-    }
-
-    $data = AntrianPersidangan::firstOrCreate([
-      "nomor_perkara" => $perkara->nomor_perkara,
-      "tanggal_sidang" => date("Y-m-d"),
-    ],  [
-      'status' => 0,
-      'nomor_urutan' =>  floatval($this->nomor_urut_sidang_terakhir(
-        $lastSidang->ruangan_id
-      ))  + 1,
-      'nomor_ruang' => $lastSidang->ruangan_id,
-      'nama_ruang' => $lastSidang->ruangan,
-      'nomor_perkara' => $perkara->nomor_perkara,
-      'tanggal_sidang' => $lastSidang->tanggal_sidang,
-      'majelis_hakim' => $perkara->penetapan->majelis_hakim_nama,
-      'jadwal_sidang_id' => $lastSidang->id,
-    ]);
-
-
-
-    $this->print_antrian_sidang($data);
-
-    return $data;
-  }
-
-  private function nomor_urut_sidang_terakhir($ruang)
-  {
-    $qrcMaxAntrian = AntrianPersidangan::whereDate("created_at", date("Y-m-d"))->where("nomor_ruang", $ruang)->max('nomor_urutan');
-
-    return $qrcMaxAntrian;
-  }
-
-  private function print_antrian_sidang($data, $ip = "192.168.0.188")
-  {
-    if ($_ENV["DEBUG_PRINT"] == "false") {
-      return [true, "Antrian tidak akan dicetak jika dalam mode debug print."];
-    }
-
-    if ($_ENV["DEBUG"] == "true" || isset($_GET["secondary"])) {
-      $ip = "192.168.0.187";
-    }
-
-    $connector = new NetworkPrintConnector($ip, 9100, 5);
-    $printer = new Printer($connector);
-    $printer->initialize();
-
-    $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-    $printer->setJustification(Printer::JUSTIFY_CENTER);
-
-    if ($_ENV["DEBUG"] == "true") {
-      $printer->text("TEST UJI COBA\n");
-    }
-    $printer->text("Pengadilan Agama\n Jakarta Utara \n");
-    $printer->text("------------------------\n");
-    $printer->setTextSize(1, 1);
-    $printer->text("Persidangan di " . $data->nama_ruang);
-    $printer->text("\n");
-    $printer->text("Nomor Antrian");
-    $printer->text("\n");
-    $printer->setTextSize(5, 4);
-    $printer->text($data->nomor_urutan);
-    $printer->text("\n");
-    $printer->setTextSize(1, 1);
-    $printer->text($data->nomor_perkara);
-    $printer->text("\n");
-    $printer->text("Yang Mengambil Antrian : " . R_Input::pos("nama_yang_ambil")) . "(" . R_Input::pos("yang_ambil") . ")\n";
-    $printer->text("\n");
-
-    $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-    $printer->setJustification(Printer::JUSTIFY_CENTER);
-    $printer->setTextSize(1, 1);
-    $printer->text("Di ambil:" . date('Y-m-d H:i:S') . " \n");
-
-    $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-    $printer->setJustification(Printer::JUSTIFY_CENTER);
-    $printer->setFont(Printer::FONT_A);
-    $printer->text("------------------------\n");
-
-    $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-    $printer->setJustification(Printer::JUSTIFY_CENTER);
-    $printer->qrCode(base_url("/mobile?antrian_sidang=" . Cypher::urlsafe_encrypt($data->id)), Printer::QR_ECLEVEL_L, 7, Printer::QR_MODEL_2);
-    $printer->text("\n");
-    $printer->setTextSize(1, 1);
-    $printer->text("Scan QR Code di atas untuk mengetahui antrian berjalan secara online\n");
-
-    $printer->cut();
-    /* Pulse */
-    $printer->pulse();
-
-    $printer->close();
+    header('Content-Type: application/json');
+    echo json_encode($searchedData);
   }
 }
