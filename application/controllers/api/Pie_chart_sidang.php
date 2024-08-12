@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
 
 class Pie_chart_sidang extends R_ApiController
 {

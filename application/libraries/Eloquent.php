@@ -39,6 +39,21 @@ class Eloquent extends Illuminate\Database\Capsule\Manager
       ],
     ], "sipp");
 
+    $this->addConnection([
+      'driver' => 'mysql',
+      'host' => $_ENV["DB_OLD_HOST"],
+      'database' => $_ENV["DB_OLD_NAME"],
+      'username' => $_ENV["DB_OLD_USER"],
+      'password' => $_ENV["DB_OLD_PASS"],
+      'port' => $_ENV["DB_OLD_PORT"],
+      'charset' => 'utf8',
+      'collation' => 'utf8_unicode_ci',
+      'prefix' => '',
+      'options'   => [
+        PDO::ATTR_TIMEOUT => 5,
+      ],
+    ], "old");
+
     $this->setEventDispatcher(new Dispatcher(new Container));
     $this->setAsGlobal();
     $this->bootEloquent();
