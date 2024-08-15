@@ -5,15 +5,17 @@
 
 <div class="section mt-2">
   <?php foreach ($data->items as $k => $d) { ?>
-    <div class="card my-2">
-      <div class="card-body">
-        <div class="card-title">
-          <h4>Biaya <?= $d->nama_perkara ?></h4>
-        </div>
-        <div class="card-text">
-          <a class="btn btn-outline-primary" hx-get="<?= base_url("mobile/biaya/pilih_radius/$d->id") ?>" hx-target="#appCapsule">Selengkapnya</a>
+    <?php if (isset($d->expand)) { ?>
+      <div class="card my-2">
+        <div class="card-body">
+          <div class="card-title">
+            <h4>Biaya <?= $d->nama_perkara ?></h4>
+          </div>
+          <div class="card-text">
+            <a class="btn btn-outline-primary" hx-get="<?= base_url("mobile/biaya/pilih_radius/$d->id") ?>" hx-target="#appCapsule">Selengkapnya</a>
+          </div>
         </div>
       </div>
-    </div>
+    <?php } ?>
   <?php } ?>
 </div>

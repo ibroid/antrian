@@ -12,7 +12,7 @@
   <div class="card">
     <div class="card-body">
       <form hx-post="<?= base_url("mobile/biaya/hasil/$perkara->id") ?>" hx-indicator=".htmx-indicator" hx-target="#appCapsule">
-        <?php for ($i = 0; $i < $perkara->jumlah_p; $i++) { ?>
+        <?php for ($i = 0; $i < $jumlah_p; $i++) { ?>
           <label for="radius_p<?= $i ?>">Alamat Pihak <?= $perkara->nama_p . " " . ($i + 1) ?> :</label>
           <select class="form-control my-3" name="radius_p[]" id="radius_p<?= $i ?>">
             <?php foreach ($radius->items as $n => $r) { ?>
@@ -21,7 +21,7 @@
           </select>
         <?php  } ?>
         <hr>
-        <?php for ($i = 0; $i < $perkara->jumlah_t; $i++) { ?>
+        <?php for ($i = 0; $i < $jumlah_t; $i++) { ?>
           <label for="radius_t<?= $i ?>">Alamat Pihak <?= $perkara->nama_t . " " . ($i + 1) ?> :</label>
           <select class="form-control my-3" name="radius_t[]" id="radius_t<?= $i ?>">
             <?php foreach ($radius->items as $n => $r) { ?>

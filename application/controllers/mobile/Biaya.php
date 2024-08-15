@@ -12,7 +12,7 @@ class Biaya extends R_MobileController
 
   public function page()
   {
-    $infoApi = $this->informasiapi::make("jenis_perkara/records");
+    $infoApi = $this->informasiapi::make("jenis_perkara/records?expand=biaya_perkara_via_jenis_perkara");
 
     $this->pageRender("biaya_page", [
       "data" => $infoApi->response->parseJson()
@@ -28,7 +28,9 @@ class Biaya extends R_MobileController
     $infoPerkara = $this->informasiapi::make("jenis_perkara/records/$id");
 
     if ($infoPerkara->response->parseJson()->jumlah_p == 99) {
-      $this->pageRender("set_jumlah_pihak_page");
+      $this->pageRender("set_jumlah_pihak_page", [
+        "jenis_perkara_id" => $id
+      ]);
       return;
     }
 
@@ -50,10 +52,7 @@ class Biaya extends R_MobileController
 
     $infoPerkaraRequest = $this->informasiapi::make("jenis_perkara/records/$id");
     $infoPerkara = $infoPerkaraRequest->response->parseJson();
-    if ($infoPerkara->jumlah_p == 99) {
-      $this->pageRender("set_jumlah_pihak_page");
-      return;
-    }
+
 
     $infoBiayaRequest = $this->informasiapi::make("biaya_perkara/records?expand=jenis_biaya&filter=(jenis_perkara='$id')");
 
@@ -70,21 +69,41 @@ class Biaya extends R_MobileController
       if (isset($item->expand)) {
         return $item;
       }
-    })->map(fn ($item) => $item->expand->jenis_biaya);
+    })->map(fn($item) => $item->expand->jenis_biaya);
 
     $rincianPanggilan = $items->filter(function ($item) use ($infoPerkara) {
       if (!isset($item->expand)) {
         return $item;
       }
-    })->map(fn ($item) => $item->expand->jenis_biaya);
+    })->map(fn($item) => $item);
 
-    $rincianPanggilanP = collect($_POST['radius_p'])->map(function ($biaya, $index) use ($infoPerkara, $rincianPanggilan) {
+    $rincianPanggilanP = collect($_POST['radius_p'] ?? [])
+      ->map(function ($biaya, $index) use ($infoPerkara, $rincianPanggilan) {
 
-      $namaP = $infoPerkara->nama_p;
+        $namaP = $infoPerkara->nama_p;
+
+        return $rincianPanggilan
+          ->filter(function ($item, $index) use ($namaP) {
+            $checkContainP = Str::contains($item->kebutuhan, $namaP);
+            if ($checkContainP) {
+              return $item;
+            }
+          })
+          ->map(function ($item, $index) use ($biaya) {
+            return [
+              "kebutuhan" => "Biaya $item->kebutuhan $biaya x $item->jumlah",
+              "biaya" => $biaya * $item->jumlah
+            ];
+          });
+      });
+
+    $rincianPanggilanT = collect($_POST['radius_t'] ?? [])->map(function ($biaya, $index) use ($infoPerkara, $rincianPanggilan) {
+
+      $namaT = $infoPerkara->nama_t;
 
       return $rincianPanggilan
-        ->filter(function ($item, $index) use ($namaP) {
-          $checkContainP = Str::contains($item->kebutuhan, $namaP);
+        ->filter(function ($item, $index) use ($namaT) {
+          $checkContainP = Str::contains($item->kebutuhan, $namaT);
           if ($checkContainP) {
             return $item;
           }
@@ -97,20 +116,30 @@ class Biaya extends R_MobileController
         });
     });
 
-    prindie($rincianPanggilanP);
-
-    $rincianPanggilan = $items
-      ->filter(function ($item, $index) {
-        if (!isset($item->expand)) {
-          return $item;
-        }
-      })
-      ->map(function ($item, $index)  use ($infoPerkara) {
-      })->all();
-
     $this->pageRender("hasil_hitung_page", [
       "rincian_utama" => $rincianUtama,
-      "perkara" => $infoPerkara
+      "perkara" => $infoPerkara,
+      "rincian_panggilan_p" => $rincianPanggilanP,
+      "rincian_panggilan_t" => $rincianPanggilanT,
+    ]);
+  }
+
+  public function pilih_multiple_radius($id = null)
+  {
+    if (!$id) {
+      echo "Jenis perkara Tidak Dipilih";
+      return;
+    }
+
+    $infoPerkara = $this->informasiapi::make("jenis_perkara/records/$id");
+
+    $infoRadius = $this->informasiapi::make("radius/records");
+
+    $this->pageRender("pilih_multiple_radius_page", [
+      "radius" => $infoRadius->response->parseJson(),
+      "perkara" => $infoPerkara->response->parseJson(),
+      "jumlah_p" => R_Input::pos('jumlah_p'),
+      "jumlah_t" => R_Input::pos('jumlah_t'),
     ]);
   }
 }

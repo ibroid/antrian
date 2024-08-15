@@ -29,6 +29,12 @@
     body {
       font-family: 'Alata' !important;
     }
+
+    #app-container {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+    }
   </style>
 
   <link rel="stylesheet" href="<?= base_url("assets/mobile/") ?>css/style.css">
@@ -39,74 +45,76 @@
 
 <body>
 
-  <!-- loader -->
-  <div id="loader">
-    <div class="spinner-border text-primary" role="status"></div>
-  </div>
-  <!-- * loader -->
+  <div id="app-container">
+    <!-- loader -->
+    <div id="loader">
+      <div class="spinner-border text-primary" role="status"></div>
+    </div>
+    <!-- * loader -->
 
-  <?= $app_header ?? null ?>
+    <?= $app_header ?? null ?>
 
-  <!-- App Capsule -->
-  <div class="full-height">
-    <!-- <div id="page-indicator" class="text-center htmx-indicator">
+    <!-- App Capsule -->
+    <div class="full-height">
+      <!-- <div id="page-indicator" class="text-center htmx-indicator">
       <h3>Mohon Tunggu...</h3>
     </div> -->
-    <div id="appCapsule" class="full-height">
-      <?= $page ?>
+      <div id="appCapsule" class="full-height">
+        <?= $page ?>
+      </div>
     </div>
-  </div>
 
-  <div id="appFooter" class="appFooter mb-5">
-    <img src="<?= base_url("assets/logo_pa.png?2") ?>" alt="logo pa" class="footer-logo mb-2">
-    <div class="footer-title">
-      Copyright © Pengadilan Agama Jakarta Utara <span class="yearNow"></span>.
+    <div id="appFooter" class="appFooter mb-5">
+      <img src="<?= base_url("assets/logo_pa.png?2") ?>" alt="logo pa" class="footer-logo mb-2">
+      <div class="footer-title">
+        Copyright © Pengadilan Agama Jakarta Utara <span class="yearNow"></span>.
+      </div>
+      <div>Smart Portal Paju Web.</div>
+      Follow kami melalui media sosial dibawah ini.
+
+      <div class="mt-2">
+        <a target="_blank" href="https://www.facebook.com/pa.jakartautara/" class="btn btn-icon btn-sm btn-facebook">
+          <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <a target="_blank" href="https://x.com/pa_jakartautara" class="btn btn-icon btn-sm btn-twitter">
+          <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a target="_blank" href="https://www.instagram.com/pa.jakartautara/" class="btn btn-icon btn-sm btn-instagram">
+          <ion-icon name="logo-instagram"></ion-icon>
+        </a>
+        <a target="_blank" href="https://pa-jakartautara.go.id" class="btn btn-icon btn-sm btn-dark">
+          <ion-icon name="globe"></ion-icon>
+        </a>
+        <a target="_blank" href="#" class="btn btn-icon btn-sm btn-secondary goTop">
+          <ion-icon name="arrow-up-outline"></ion-icon>
+        </a>
+      </div>
     </div>
-    <div>Smart Portal Paju Web.</div>
-    Follow kami melalui media sosial dibawah ini.
+    <!-- * App Capsule -->
 
-    <div class="mt-2">
-      <a target="_blank" href="https://www.facebook.com/pa.jakartautara/" class="btn btn-icon btn-sm btn-facebook">
-        <ion-icon name="logo-facebook"></ion-icon>
-      </a>
-      <a target="_blank" href="https://x.com/pa_jakartautara" class="btn btn-icon btn-sm btn-twitter">
-        <ion-icon name="logo-twitter"></ion-icon>
-      </a>
-      <a target="_blank" href="https://www.instagram.com/pa.jakartautara/" class="btn btn-icon btn-sm btn-instagram">
-        <ion-icon name="logo-instagram"></ion-icon>
-      </a>
-      <a target="_blank" href="https://pa-jakartautara.go.id" class="btn btn-icon btn-sm btn-dark">
-        <ion-icon name="globe"></ion-icon>
-      </a>
-      <a target="_blank" href="#" class="btn btn-icon btn-sm btn-secondary goTop">
-        <ion-icon name="arrow-up-outline"></ion-icon>
-      </a>
-    </div>
-  </div>
-  <!-- * App Capsule -->
+    <!-- App Bottom Menu -->
+    <?= $app_bottom_menu ?? null ?>
+    <!-- * App Bottom Menu -->
 
-  <!-- App Bottom Menu -->
-  <?= $app_bottom_menu ?? null ?>
-  <!-- * App Bottom Menu -->
-
-  <!-- iOS Add to Home Action Sheet -->
-  <div class="offcanvas offcanvas-bottom action-sheet inset ios-add-to-home" tabindex="-1" id="ios-add-to-home-screen">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title">Cara Install Aplikasi di IOS</h5>
-      <a href="#" class="close-button" data-bs-dismiss="offcanvas">
-        <ion-icon name="close"></ion-icon>
-      </a>
-    </div>
-    <div class="offcanvas-body">
-      <div class="action-sheet-content text-center">
-        <div class="mb-1"><img src="<?= base_url("assets/mobile/favicon_io/android-chrome-192x192.png") ?>" alt="icon app install" class="imaged w48">
-        </div>
-        <h4>Smart Portal Paju Web</h4>
-        <div>
-          Dengan menambahkan aplikasi ini ke layar utama. Silahkan ikuti langkah berikut.
-        </div>
-        <div>
-          Tekan <ion-icon name="share-outline"></ion-icon> lalu pilih Tambahkan ke Layar Utama.
+    <!-- iOS Add to Home Action Sheet -->
+    <div class="offcanvas offcanvas-bottom action-sheet inset ios-add-to-home" tabindex="-1" id="ios-add-to-home-screen">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Cara Install Aplikasi di IOS</h5>
+        <a href="#" class="close-button" data-bs-dismiss="offcanvas">
+          <ion-icon name="close"></ion-icon>
+        </a>
+      </div>
+      <div class="offcanvas-body">
+        <div class="action-sheet-content text-center">
+          <div class="mb-1"><img src="<?= base_url("assets/mobile/favicon_io/android-chrome-192x192.png") ?>" alt="icon app install" class="imaged w48">
+          </div>
+          <h4>Smart Portal Paju Web</h4>
+          <div>
+            Dengan menambahkan aplikasi ini ke layar utama. Silahkan ikuti langkah berikut.
+          </div>
+          <div>
+            Tekan <ion-icon name="share-outline"></ion-icon> lalu pilih Tambahkan ke Layar Utama.
+          </div>
         </div>
       </div>
     </div>
