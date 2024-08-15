@@ -7,13 +7,20 @@
   <ion-icon name="return-down-back-outline"></ion-icon>
   Kembali
 </button>
+<?php
+$totalAdmin =  $rincian_utama->sum("biaya");
+$totalPanggilanP = $rincian_panggilan_p->map(fn($item) => $item->sum('biaya'))->sum();
+$totalPanggilanT = $rincian_panggilan_t->map(fn($item) => $item->sum('biaya'))->sum();
 
-<div class="section mt-2">
+?>
+<div class="section mt-2 border">
   <h3>Jenis Perkara : <?= $perkara->nama_perkara ?? "" ?></h3>
-  <table class="table table-border bg-white">
-    <thead>
+  <table class="table table-border bg-white shadow p-3 mb-5 bg-body-tertiary rounded">
+    <thead class="bg-primary">
       <tr>
-        <th colspan="2" class="text-center">Biaya Administrasi</th>
+        <th colspan="2" class="text-center">
+          <h3 class="text-white">Biaya Administrasi</h3>
+        </th>
       </tr>
     </thead>
     <thead>
@@ -29,45 +36,38 @@
           <td><?= rupiah($d->biaya)  ?></td>
         </tr>
       <?php  } ?>
-      <tr>
-        <td class="text-end">Total</td>
-        <td><?= rupiah($rincian_utama->sum("biaya"))  ?></td>
-      </tr>
     </tbody>
+    <thead>
+      <tr>
+        <th class="text-end">Total</th>
+        <th><?= rupiah($rincian_utama->sum("biaya"))  ?></th>
+        <?php $totalAdmin = floatval($rincian_utama->sum("biaya")) ?>
+      </tr>
+    </thead>
   </table>
 </div>
 
-<div class="section mt-2">
-  <table class="table table-border bg-white">
-    <thead>
-      <tr>
-        <th colspan="2" class="text-center">Biaya Panggilan Pihak <?= $perkara->nama_p ?></th>
-      </tr>
-    </thead>
-    <thead>
-      <tr>
-        <th>Rincian</th>
-        <th>Biaya</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
-<div class="section mt-2">
-  <table class="table table-border bg-white">
-    <thead>
-      <tr>
-        <th colspan="2" class="text-center">Biaya Panggilan Pihak <?= $perkara->nama_t ?></th>
-      </tr>
-    </thead>
-    <thead>
-      <tr>
-        <th>Rincian</th>
-        <th>Biaya</th>
-      </tr>
-    </thead>
-    <tbody>
+<?= $this->load->view('mobile/components/table_biaya_panggilan', [
+  'data' => $rincian_panggilan_p,
+  'jenis_pihak' => $perkara->nama_p,
+], TRUE) ?>
 
-    </tbody>
-  </table>
+<?php if ($perkara->jumlah_t !== 0) {
+  echo $this->load->view('mobile/components/table_biaya_panggilan', [
+    'data' => $rincian_panggilan_t,
+    'jenis_pihak' => $perkara->nama_t,
+    'bg_color' => 'bg-info'
+  ], TRUE);
+} ?>
+
+
+<div class="section mt-2">
+  <div class="card">
+    <div class="card-body">
+      <div class="text-center">
+        <h4>Total Panjar Biaya</h4>
+        <h1><?= rupiah($totalAdmin + $totalPanggilanP + $totalPanggilanT) ?> </h1>
+      </div>
+    </div>
+  </div>
 </div>
