@@ -60,7 +60,6 @@ $totalPanggilanT = $rincian_panggilan_t->map(fn($item) => $item->sum('biaya'))->
   ], TRUE);
 } ?>
 
-
 <div class="section mt-2">
   <div class="card">
     <div class="card-body">

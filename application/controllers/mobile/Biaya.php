@@ -10,6 +10,15 @@ class Biaya extends R_MobileController
     $this->load->library("InformasiApi");
   }
 
+  public function index()
+  {
+    $infoApi = $this->informasiapi::make("jenis_perkara/records?expand=biaya_perkara_via_jenis_perkara");
+
+    $this->fullRender("biaya_page", [
+      "data" => $infoApi->response->parseJson()
+    ]);
+  }
+
   public function page()
   {
     $infoApi = $this->informasiapi::make("jenis_perkara/records?expand=biaya_perkara_via_jenis_perkara");
