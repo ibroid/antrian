@@ -7,23 +7,22 @@
 </button>
 
 <div class="section mt-2">
-  <?php foreach ($data->items as $k => $d) { ?>
-    <?php if (isset($d->expand)) { ?>
-      <div class="card my-2">
-        <div class="card-body">
-          <div class="card-title">Persyaratan <?= $d->nama_perkara ?></div>
-          <div class="card-text">
-            <?= $d->expand->persyaratan_via_jenis_perkara[0]->isi ?? null ?>
+  <div class="card my-2">
+    <div class="card-body">
+      <div class="row">
+        <?php foreach ($data->items as $jp) { ?>
+          <div class="col-4">
+            <div class="border border-5 rounded-5 py-4 my-3" hx-get="<?= base_url("mobile/persyaratan/get/$jp->id") ?>" hx-target="#appCapsule" hx-indicator=".htmx-indicator">
+              <div class="text-center">
+                <img width="30" src="<?= base_url("mobile/persyaratan/get_icon/$jp->collectionId/$jp->id/$jp->icon") ?>" alt="icon" class="mb-3">
+              </div>
+              <div class="text-center">
+                <?= $jp->nama_perkara ?>
+              </div>
+            </div>
           </div>
-          <div class="card-text">
-            <?php foreach ($d->expand->persyaratan_via_jenis_perkara as $n => $v) { ?>
-              <?php foreach ($v->contoh as $c) { ?>
-                <img width="300" src="<?= base_url('penyimpanan/infoapi/' . $v->id . '/' . $c) ?>" alt="contoh">
-              <?php } ?>
-            <?php } ?>
-          </div>
-        </div>
+        <?php } ?>
       </div>
-    <?php } ?>
-  <?php } ?>
+    </div>
+  </div>
 </div>

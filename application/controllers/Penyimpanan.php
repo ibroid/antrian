@@ -16,19 +16,4 @@ class Penyimpanan extends R_Controller
       echo "File not found!";
     }
   }
-
-  public function infoapi($id, $file)
-  {
-    $file = file_get_contents("http://192.168.0.202:8897/api/files/mlgubxjp3n8srdo/$id/$file");
-
-    if ($file) {
-      header('Content-Type: image/jpg');
-      // header('Content-Length: ' . filesize($file_path));
-      echo $file;
-      exit;
-    } else {
-      header("HTTP/1.0 404 Not Found");
-      echo "File not found!";
-    }
-  }
 }
