@@ -4,31 +4,65 @@ class Prodeo extends R_MobileController
 {
   public function index()
   {
-    $penggunaProdeo = $this->eloquent->connection('sipp')->table("perkara")
-      ->selectRaw('COUNT(*) as total')->where('prodeo', 1)->whereYear('tanggal_pendaftaran', date("Y"))->first();
+    $data = $this->getPenggunaanKuotaProdeo();
 
     $this->load->library('InformasiApi');
 
     $infoApi = $this->informasiapi::make("kuota_prodeo/records?filter=(tahun='2024')");
 
     $this->fullRender("prodeo_page", [
-      'total_pengguna_prodeo' => $penggunaProdeo->total,
-      'total_kuota_prodeo' => $infoApi->response->parseJson()->items[0]->jumlah,
+      'kuota' => $data,
+      'info' => $infoApi->response->parseJson(),
+      'color' => [
+        'Darat' => 'bg-primary',
+        'Pulau' => 'bg-info',
+      ]
     ]);
   }
 
   public function page()
   {
-    $penggunaProdeo = $this->eloquent->connection('sipp')->table("perkara")
-      ->selectRaw('COUNT(*) as total')->where('prodeo', 1)->whereYear('tanggal_pendaftaran', date("Y"))->first();
+    $data = $this->getPenggunaanKuotaProdeo();
 
     $this->load->library('InformasiApi');
 
     $infoApi = $this->informasiapi::make("kuota_prodeo/records?filter=(tahun='2024')");
 
     $this->pageRender("prodeo_page", [
-      'total_pengguna_prodeo' => $penggunaProdeo->total,
-      'total_kuota_prodeo' => $infoApi->response->parseJson()->items[0]->jumlah,
+      'kuota' => $data,
+      'info' => $infoApi->response->parseJson(),
+      'color' => [
+        'Darat' => 'bg-primary',
+        'Pulau' => 'bg-info',
+      ]
     ]);
+  }
+
+  private function getPenggunaanKuotaProdeo()
+  {
+    $kuotaPulau = $this->eloquent->connection('sipp')
+      ->table('pihak')
+      ->selectRaw("COUNT(DISTINCT perkara.perkara_id) as total")
+      ->leftJoin("perkara_pihak1", "perkara_pihak1.pihak_id", '=', 'pihak.id')
+      ->leftJoin('perkara', 'perkara.perkara_id', '=', 'perkara_pihak1.perkara_id')
+      ->where('pihak.kabupaten', 31.01)
+      ->where('perkara.prodeo', 1)
+      ->whereYear("perkara.tanggal_pendaftaran", date('Y'))
+      ->first();
+
+    $kuotaDarat = $this->eloquent->connection('sipp')
+      ->table('pihak')
+      ->selectRaw("COUNT(DISTINCT perkara.perkara_id) as total")
+      ->leftJoin("perkara_pihak1", "perkara_pihak1.pihak_id", '=', 'pihak.id')
+      ->leftJoin('perkara', 'perkara.perkara_id', '=', 'perkara_pihak1.perkara_id')
+      ->where('pihak.kabupaten', 31.72)
+      ->where('perkara.prodeo', 1)
+      ->whereYear("perkara.tanggal_pendaftaran", date('Y'))
+      ->first();
+
+    return [
+      'Pulau' => $kuotaPulau,
+      'Darat' => $kuotaDarat,
+    ];
   }
 }

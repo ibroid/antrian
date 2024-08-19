@@ -9,36 +9,56 @@
 
 <div class="section mt-2">
   <div class="row">
-    <div class="col-4">
-      <div class="card p-0 bg-primary">
-        <div class="card-body p-2">
-          <div class="text-center">
-            <h5 class="text-white">Total Kuota</h5>
-            <h1 id="total_kuota" class="text-white" style="font-size: 3rem;"><?= $total_kuota_prodeo ?></h1>
+    <?php foreach ($info->items as $i) { ?>
+      <div class="col-6">
+        <div class="card p-0 <?= $color[$i->peruntukan] ?>">
+          <div class="card-body p-2">
+            <div class="text-center">
+              <h4 class="text-white">Kuota <?= $i->peruntukan ?></h4>
+              <h1 id="total_kuota" class="text-white" style="font-size: 3rem;"><?= $i->jumlah ?></h1>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-4">
-      <div class="card p-0 bg-danger">
-        <div class="card-body p-2">
-          <div class="text-center ">
-            <h5 class="text-white">Kuota Terpakai</h5>
-            <h1 class="text-white" style="font-size: 3rem;"><?= $total_pengguna_prodeo ?></h1>
+    <?php } ?>
+  </div>
+</div>
+
+<div class="section mt-2">
+  <div class="row">
+    <?php foreach ($info->items as $i) { ?>
+      <div class="col-6">
+        <div class="card p-0 <?= $color[$i->peruntukan] ?>">
+          <div class="card-body p-2">
+            <div class="text-center">
+              <h4 class="text-white">Kuota <?= $i->peruntukan ?> Terpakai</h4>
+              <h1 id="total_kuota" class="text-white" style="font-size: 3rem;">
+                <?= $kuota[$i->peruntukan]->total  ?>
+              </h1>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-4">
-      <div class="card p-0 bg-success">
-        <div class="card-body p-2">
-          <div class="text-center">
-            <h5 class="text-white">Kuota Tersedia</h5>
-            <h1 class="text-white" style="font-size: 3rem;"><?= $total_kuota_prodeo - $total_pengguna_prodeo ?></h1>
+    <?php } ?>
+  </div>
+</div>
+
+<div class="section mt-2">
+  <div class="row">
+    <?php foreach ($info->items as $i) { ?>
+      <div class="col-6">
+        <div class="card p-0 <?= $color[$i->peruntukan] ?>">
+          <div class="card-body p-2">
+            <div class="text-center">
+              <h4 class="text-white">Kuota <?= $i->peruntukan ?> Sisa</h4>
+              <h1 id="total_kuota" class="text-white" style="font-size: 3rem;">
+                <?= $i->jumlah - $kuota[$i->peruntukan]->total  ?>
+              </h1>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    <?php } ?>
   </div>
 </div>
 
@@ -58,34 +78,34 @@
 </div>
 
 <script>
-  function chartProdeoInit() {
-    const options = {
-      series: [<?= $total_pengguna_prodeo ?>, <?= $total_kuota_prodeo - $total_pengguna_prodeo ?>],
-      chart: {
-        width: 380,
-        type: 'pie',
-      },
-      labels: ['Terpakai', 'Kosong'],
-      legend: {
-        position: 'bottom'
-      },
-      responsive: [{
-        breakpoint: undefined,
-        options: {
-          chart: {
-            width: 120
-          },
-          legend: {
-            position: 'bottom'
-          }
-        }
-      }]
-    };
+  // function chartProdeoInit() {
+  //   const options = {
+  //     series: [<?= $total_pengguna_prodeo ?>, <?= $total_kuota_prodeo - $total_pengguna_prodeo ?>],
+  //     chart: {
+  //       width: 380,
+  //       type: 'pie',
+  //     },
+  //     labels: ['Terpakai', 'Kosong'],
+  //     legend: {
+  //       position: 'bottom'
+  //     },
+  //     responsive: [{
+  //       breakpoint: undefined,
+  //       options: {
+  //         chart: {
+  //           width: 120
+  //         },
+  //         legend: {
+  //           position: 'bottom'
+  //         }
+  //       }
+  //     }]
+  //   };
 
-    const chart = new ApexCharts(document.querySelector("#cartProdeo"), options);
-    chart.render();
-  }
+  //   const chart = new ApexCharts(document.querySelector("#cartProdeo"), options);
+  //   chart.render();
+  // }
 
 
-  chartProdeoInit()
+  // chartProdeoInit()
 </script>
