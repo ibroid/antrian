@@ -45,11 +45,13 @@ class Ktp extends R_Controller
       $data->photo = $temp->temp_photo;
       $data->img = $temp->temp_img;
 
-      $pengunjung = Pengunjung::where('nik', $data->nik)->first();
+      if ($data->nik) {
+        $pengunjung = Pengunjung::where('nik', $data->nik)->first();
 
-      if ($pengunjung) {
-        $pengunjung->photo = $temp->temp_photo;
-        $pengunjung->img = $temp->temp_img;
+        if ($pengunjung) {
+          $pengunjung->photo = $temp->temp_photo;
+          $pengunjung->img = $temp->temp_img;
+        }
       }
 
       echo $this->load->component('pengunjung/form_pengunjung', [
