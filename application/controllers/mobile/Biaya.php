@@ -43,7 +43,7 @@ class Biaya extends R_MobileController
       return;
     }
 
-    $infoRadius = $this->informasiapi::make("radius/records");
+    $infoRadius = $this->informasiapi::make("radius/records?perPage=50");
 
 
     $this->pageRender("pilih_radius_page", [
