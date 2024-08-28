@@ -59,6 +59,14 @@
           <?php } ?>
         </div>
       </div>
+      <div id="appCapsule">
+        <div class="htmx-indicator">
+          <p>Mohon Tunggu</p>
+        </div>
+        <div hx-get="<?= base_url('mobile/biaya/page') ?>" hx-trigger="load">
+
+        </div>
+      </div>
     </div>
     <div class="col-6">
       <div class="card">

@@ -15,11 +15,11 @@ $totalPanggilanT = $rincian_panggilan_t->map(fn($item) => $item->sum('biaya'))->
 ?>
 <div class="section mt-2 border">
   <h3>Jenis Perkara : <?= $perkara->nama_perkara ?? "" ?></h3>
-  <table class="table table-border bg-white shadow p-3 mb-5 bg-body-tertiary rounded">
+  <table class="table table-border shadow p-3 mb-5 rounded">
     <thead class="bg-primary">
       <tr>
         <th colspan="2" class="text-center">
-          <h3 class="text-white">Biaya Administrasi</h3>
+          <h3 class="text-dark">Biaya Administrasi</h3>
         </th>
       </tr>
     </thead>

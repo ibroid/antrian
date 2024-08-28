@@ -6,7 +6,7 @@
 <div class="section mt-2">
   <ol>
     <li>Panjar biaya perkara adalah biaya yang dikeluarkan para pihak untuk mengajukan permohonan/gugatan berdasarkan penetapan Ketua Pengadilan Agama Jakarta Utara.</li>
-    <li> Biaya tersebut merupakan panjar, yang mana apabila biaya yang dibayarkan kurang maka akan diminta penambahan. Sebaliknya, apabila biaya yang dibayarkan lebih, maka sisa uang akan dikembalikan pada saat perkara sudah selesai diputus</li>
+    <li> Biaya tersebut merupakan panjar, yang mana apabila biaya yang dibayarkan kurang maka akan diminta penambahan. Sebaliknya, apabila biaya yang dibayarkan lebih, maka sisa uang akan dikembalikan pada saat perkara sudah selesai diputus</li>
   </ol>
 
   <?php foreach ($data->items as $k => $d) { ?>

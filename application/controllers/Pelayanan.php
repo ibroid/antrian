@@ -6,6 +6,8 @@ class Pelayanan extends R_Controller
   public function __construct()
   {
     parent::__construct();
+    $baseUrl = base_url();
+
     $this->addons->init([
       "js" => [
         "<script src=\"https://js.pusher.com/8.2.0/pusher.min.js\"></script>\n",
@@ -15,7 +17,8 @@ class Pelayanan extends R_Controller
         "<script src='" . base_url() . "assets/js/form-validation-custom.js'></script>",
       ],
       "css" => [
-        "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/toastify-js@1.12.0/src/toastify.css\">\n"
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/toastify-js@1.12.0/src/toastify.css\">\n",
+        "<script type=\"text/javascript\" src=\"$baseUrl/package/htmx/htm.js\"></script>\n"
       ]
     ]);
   }
