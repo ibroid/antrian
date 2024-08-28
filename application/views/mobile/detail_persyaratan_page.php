@@ -16,6 +16,12 @@
   }
 </style>
 
+<button hx-get="<?= base_url('mobile/persyaratan/page') ?>" class="btn btn-outline-primary ms-2 mt-2" hx-target="#appCapsule" hx-indicator=".htmx-indicator">
+  <ion-icon name="return-down-back-outline"></ion-icon>
+  Kembali
+</button>
+
+
 <div class="section mt-2">
   <div class="card">
     <div class="card-body">

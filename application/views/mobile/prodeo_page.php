@@ -68,9 +68,21 @@
       <div class="card-title">Persyaratan Pengajuan Prodeo</div>
       <div class="card-text mt-3">
         <ol>
-          <li>Ber KTP di Jakarta Utara</li>
-          <li>Masyarakat tidak mampu</li>
-          <li>Membawa Surat Keterangan Tidak Mampu (SKTM) dari kelurahan.</li>
+          <li>
+            Surat Keterangan Tidak Mampu dan KTP sebanyak 5 rangkap
+          </li>
+          <li>
+            Keterangan dalam keperluan SKTM harus ada kalimat “untuk mengurus pembebasan biaya di Kantor Pengadilan Agama Jakarta Utara”.
+          </li>
+          <li>
+            Pemohon dan Termohon harus berdomisili di wilayah Jakarta Utara
+          </li>
+          <li>
+            Termohon tidak boleh ghoib (tidak diketahui keberadaannya)
+          </li>
+          <li>
+            Apabila alamat domisili dengan KTP berbeda, harus dibuktikan dengan surat pengantar domisili dari RT dan RW
+          </li>
         </ol>
       </div>
     </div>

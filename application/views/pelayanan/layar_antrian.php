@@ -440,7 +440,7 @@
    */
   function fetchTableLoketPelayanan() {
     $.ajax({
-      url: "<?= base_url("loket/fetch_table_loket_pelayanan") ?>",
+      url: "<?= base_url("layar/fetch_table_loket_pelayanan") ?>",
       method: "POST",
       success: function(html) {
         $("#container-table-loket-pelayanan").html(html)

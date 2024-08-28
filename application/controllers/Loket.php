@@ -62,24 +62,6 @@ class Loket extends R_Controller
   }
 
   /**
-   * Fetches the table of loket pelayanan and echoes the component for the table.
-   *
-   * @throws \Throwable If there is an error fetching the data or rendering the component.
-   * @return void
-   */
-  public function fetch_table_loket_pelayanan()
-  {
-    R_Input::mustPost();
-    try {
-      $data = LoketPelayanan::where('status', '!=', 2)->orderBy('urutan')->get();
-      echo $this->load->component("table/loket_layar_pelayanan", ["data" => $data]);
-    } catch (\Throwable $th) {
-      set_status_header(400);
-      echo json_encode(["status" => false, "message" => $th->getMessage()]);
-    }
-  }
-
-  /**
    * Edit a specific loket.
    * Url : /loket/edit. Method : GET.
    * @param string $id The ID of the item to edit
