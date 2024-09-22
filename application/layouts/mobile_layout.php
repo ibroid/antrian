@@ -59,7 +59,7 @@
       <!-- <div id="page-indicator" class="text-center htmx-indicator">
       <h3>Mohon Tunggu...</h3>
     </div> -->
-      <div id="appCapsule" class="full-height">
+      <div id="appCapsule" class="full-height" style="background-color: #fff !important;">
         <?= $page ?>
       </div>
     </div>

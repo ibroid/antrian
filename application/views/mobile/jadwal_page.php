@@ -11,7 +11,7 @@
         <ion-icon size="large" color="danger" name="warning-outline"></ion-icon>
       </h4>
     </div>
-    <h4>Silahkan periksa kembali surat panggilan sidang yang anda terima. Apabila nama anda tidak ada di bawah ini silahkan hubungi petugas sidang.</h4>
+    <h4>Silahkan periksa kembali surat panggilan sidang yang anda terima. Apabila nama anda tidak ada di bawah ini silahkan hubungi petugas sidang, Atau periksa proses perkara anda pada menu Informasi > Proses Perkara</h4>
   </div>
 </div>
 

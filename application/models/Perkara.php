@@ -46,4 +46,9 @@ class Perkara extends Illuminate\Database\Eloquent\Model
   {
     return $this->hasOne(PerkaraAktaCerai::class, "perkara_id", "perkara_id");
   }
+
+  public function putusan()
+  {
+    return $this->hasOne(PerkaraPutusan::class, "perkara_id", "perkara_id");
+  }
 }

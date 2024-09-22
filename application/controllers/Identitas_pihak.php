@@ -59,6 +59,9 @@ class Identitas_pihak extends R_Controller
 
   public function edit($id = null)
   {
+    sleep(10);
+    throw new mysqli_sql_exception("Memori Penuh. Silahkan backup data lalu terlebih dahulu.", 1);
+
     $data = IdentitasPihak::findOrFail(Cypher::urlsafe_decrypt($id));
 
     $this->load->page("identitas_pihak/edit_pengunjung", compact("data"))->layout("dashboard_layout", [

@@ -2,6 +2,50 @@
 
 class Antrian extends R_MobileController
 {
+  public function index()
+  {
+    $this->fullRender("antrian_page", [
+      "allowed_ambil_ptsp" => (function () {
+        if (date('H') < $this->settings->jam_ambil_antrian_ptsp) {
+          return false;
+        }
+
+        $antrian = AntrianPtsp::where('id', $this->visitor->antrian_ptsp_id)->whereDate('created_at', date('Y-m-d'))->first();
+
+        if (!$antrian) {
+          return true;
+        }
+
+        if ($antrian->status == 1) {
+          return true;
+        } else {
+          return false;
+        }
+
+        return true;
+      })(),
+      "allowed_ambil_sidang" => (function () {
+        if (date('H') < $this->settings->jam_ambil_antrian_sidang) {
+          return false;
+        }
+
+        $antrian = AntrianPersidangan::where('id', $this->visitor->antrian_sidang_id)->whereDate('created_at', date('Y-m-d'))->first();
+
+        if (!$antrian) {
+          return true;
+        }
+
+        if ($antrian->status == 1) {
+          return true;
+        } else {
+          return false;
+        }
+
+        return true;
+      })()
+    ]);
+  }
+
   public function page()
   {
     $this->pageRender("antrian_page", [
@@ -145,7 +189,7 @@ class Antrian extends R_MobileController
   public function ambil_sidang()
   {
     try {
-      $perkara = Perkara::where("nomor_perkara", R_Input::pos("nomor_perkara"))->first();
+      $perkara = Perkara::where("nomor_perkara", htmlspecialchars(R_Input::pos("nomor_perkara")))->first();
 
       if (!$perkara) {
         throw new Exception("Nomor perkara yang anda masukan tidak ditemukan. Pastikan format sesuai contoh");

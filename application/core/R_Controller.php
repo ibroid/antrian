@@ -41,11 +41,11 @@ class R_Controller extends CI_Controller
                 die();
             }
 
-            $remoteIp = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'];
-            if ($remoteIp !== $_ENV['ALLOWED_REMOTE_IP']) {
-                http_response_code(403);
-                die();
-            }
+            // $remoteIp = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'];
+            // if ($remoteIp !== $_ENV['ALLOWED_REMOTE_IP']) {
+            //     http_response_code(403);
+            //     die();
+            // }
         }
 
         parent::__construct();
@@ -92,11 +92,11 @@ class R_ApiController extends CI_Controller
                 die();
             }
 
-            $remoteIp = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'];
-            if ($remoteIp !== $_ENV['ALLOWED_REMOTE_IP']) {
-                http_response_code(403);
-                die();
-            }
+            // $remoteIp = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'];
+            // if ($remoteIp !== $_ENV['ALLOWED_REMOTE_IP']) {
+            //     http_response_code(403);
+            //     die();
+            // }
         }
 
         try {

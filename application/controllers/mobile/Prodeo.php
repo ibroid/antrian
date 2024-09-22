@@ -32,8 +32,8 @@ class Prodeo extends R_MobileController
       'kuota' => $data,
       'info' => $infoApi->response->parseJson(),
       'color' => [
-        'Darat' => 'bg-primary',
-        'Pulau' => 'bg-info',
+        'Darat' => 'bg-warning',
+        'Pulau' => 'bg-success',
       ]
     ]);
   }
