@@ -36,6 +36,10 @@
             Ambil Menggunakan KTP
             <i class="fa fa-arrow-right"></i>
           </a>
+          <a class="btn btn-secondary btn-sm mb-4" href="<?= base_url('ktp/ambil_manual') ?>">
+            Ambil Manual
+            <i class="fa fa-arrow-right"></i>
+          </a>
           <h3>Menu Pengambilan Antrian PTSP.</h3>
 
         </div>
@@ -247,12 +251,13 @@
     <select name="tahun-perkara" id="swal-select-tahun-perkara" class="form-control form-control-lg">
       <option value="" selected disabled>--- Tekan Disini Untuk Pilih ---</option>
       <?php foreach ((function () {
-        $years = [];
-        for ($i = date("Y"); $i >= 2015; $i--) {
-          array_push($years, $i);
-        }
-        return $years;
-      })() as $tahun) { ?>
+          $years = [];
+          for ($i = date("Y"); $i >= 2015; $i--) {
+            array_push($years, $i);
+          }
+          return $years;
+        })() as $tahun
+      ) { ?>
         <option value="<?= $tahun ?>"><?= $tahun ?></option>
       <?php } ?>
     </select>
@@ -270,12 +275,13 @@
     <div class="form-check radio radio-primary ps-0">
       <ol class="radio-wrapper">
         <?php foreach ((function () {
-          $years = [];
-          for ($i = date("Y"); $i >= 2019; $i--) {
-            array_push($years, $i);
-          }
-          return $years;
-        })() as $tahun) { ?>
+            $years = [];
+            for ($i = date("Y"); $i >= 2019; $i--) {
+              array_push($years, $i);
+            }
+            return $years;
+          })() as $tahun
+        ) { ?>
           <li>
             <div class="text-center">
               <input class="form-check-input form-control-lg radio-button-tahun-perkara" id="radio-icon-<?= $tahun ?>" type="radio" name="radio_tahun_perkara" value="<?= $tahun ?>">

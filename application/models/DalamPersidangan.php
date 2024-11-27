@@ -29,4 +29,9 @@ class DalamPersidangan extends Model
   {
     return $this->belongsTo(AntrianPersidangan::class, "nomor_antrian_id", "id");
   }
+
+  public function kehadiran_pihak()
+  {
+    return $this->hasMany(KehadiranPihak::class, "antrian_persidangan_id", "nomor_antrian_id");
+  }
 }

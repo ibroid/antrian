@@ -21,7 +21,8 @@ class Admin extends R_Controller
     $this->addons->init([
       "js" => [
         "<script src=\"$baseUrl/assets/js/chart/apex-chart/apex-chart.js\"></script>
-        <script src=\"$baseUrl/assets/js/chart/apex-chart/stock-prices.js\"></script>"
+        <script src=\"$baseUrl/assets/js/chart/apex-chart/stock-prices.js\"></script>",
+        "<script src=\"$baseUrl/package/htmx/htm.js\"></script>"
       ]
     ]);
 

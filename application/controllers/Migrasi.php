@@ -7,9 +7,9 @@ class Migrasi extends R_Controller
 {
   public function index()
   {
-    echo "disable";
-    die;
-    $data = $this->getDataPihakProduk(8, 2024);
+    // echo "disable";
+    // die;
+    $data = $this->getDataPihakProduk(9, 2024);
     $this->execPihakProduk($data);
   }
 

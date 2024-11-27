@@ -31,14 +31,34 @@
   </div>
 </div>
 
+<div class="modal fade" id="modal-pengunjung" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Daftar Kunjungan</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h3>Mohon Tunggu</h3>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <!-- <button type="button" class="btn btn-primary">Understood</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   (function() {
     "use script"
     var chartoverview, chartorder, chart;
+    var pengunjungModal;
 
     window.addEventListener('load', function() {
-      $("#select-tahun-t8wy").change((e) => {
+      pengunjungModal = new bootstrap.Modal(document.getElementById('modal-pengunjung'), {})
 
+      $("#select-tahun-t8wy").change((e) => {
         requestData($(e.target).val(), (res) => {
 
           const {
@@ -82,6 +102,18 @@
           type: 'bar',
           height: 400,
           stacked: true,
+          events: {
+            dataPointSelection: (event, chartContext, opts) => {
+              pengunjungModal.show()
+              $.ajax({
+                url: "<?= base_url("api/statistic_kunjungan/statistic_pointed") ?>",
+                method: "POST",
+                data: {
+
+                }
+              })
+            }
+          }
         },
         responsive: [{
           breakpoint: 480,
@@ -121,7 +153,7 @@
         },
         fill: {
           opacity: 1
-        }
+        },
       };
 
       chart = new ApexCharts(document.querySelector("#chart-t8wy"), options);
