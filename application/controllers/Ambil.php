@@ -12,6 +12,10 @@ class Ambil extends R_Controller
   {
     $base_url = base_url();
 
+    if (floatval(date("H")) < 7) {
+      die("Belum bisa ambil antrian");
+    }
+
     $this->addons->init([
       'css' => [
         "<link rel='stylesheet' type='text/css' href='$base_url/assets/css/vendors/flatpickr/flatpickr.min.css'>\n",
@@ -89,7 +93,7 @@ class Ambil extends R_Controller
     return $qrcMaxAntrian;
   }
 
-  public function print_antrian_sidang($data, $ip = "192.168.0.188")
+  public function print_antrian_sidang($data, $ip = "192.168.0.187")
   {
     if ($_ENV["DEBUG_PRINT"] == "false") {
       return [true, "Antrian tidak akan dicetak jika dalam mode debug print."];
@@ -155,7 +159,7 @@ class Ambil extends R_Controller
     }
   }
 
-  public function print_antrian_ptsp($data, $ip = "192.168.0.188")
+  public function print_antrian_ptsp($data, $ip = "192.168.0.187")
   {
     if ($_ENV["DEBUG_PRINT"] == "false") {
       return [true, "Antrian tidak akan dicetak jika dalam mode debug print."];

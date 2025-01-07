@@ -55,11 +55,6 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-12">
-      <?= $this->load->component("admin/statistic_kunjungan_pertahun") ?>
-    </div>
-  </div>
 </div>
 
 <script>
