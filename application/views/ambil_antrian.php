@@ -32,16 +32,7 @@
         <?= $this->session->flashdata('flash_error') ?>
         <?= $this->session->flashdata('flash_alert') ?>
         <div class="text-center mb-3">
-          <a class="btn btn-primary btn-sm mb-4" href="<?= base_url('ktp') ?>">
-            Ambil Menggunakan KTP
-            <i class="fa fa-arrow-right"></i>
-          </a>
-          <a class="btn btn-secondary btn-sm mb-4" href="<?= base_url('ktp/ambil_manual') ?>">
-            Ambil Manual
-            <i class="fa fa-arrow-right"></i>
-          </a>
           <h3>Menu Pengambilan Antrian PTSP.</h3>
-
         </div>
 
         <div class="row">

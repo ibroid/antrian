@@ -52,6 +52,25 @@
 
               </select>
             </div>
+            <div class="form-group mb-4">
+              <label for="loket_id" class="form-label">Jenis Layanan</label>
+              <div class="overflow-auto" style="height: 250px;">
+                <ol>
+                  <li>asdasdas</li>
+                  <li>asdasdas</li>
+                  <li>asdasdas</li>
+                  <li>asdasdas</li>
+                  <li>asdasdas</li>
+                  <li>asdasdas</li>
+                  <li>asdasdas</li>
+                  <li>asdasdas</li>
+                  <li>asdasdas</li>
+                  <li>asdasdas</li>
+                </ol>
+              </div>
+              <small>Jenis layanan antrian yang bisa dipanggil oleh Petugas</small>
+
+            </div>
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Update Petugas</button>
             </div>
