@@ -71,7 +71,7 @@
     </div>
     <div class="flex-grow-1">
       <div class="text-center">
-        <h1 class="text-white">PENGADILAN AGAMA JAKARTA UTARA</h1>
+        <h1 class="text-white"><?= $this->sysconf->NamaPN ?></h1>
         <h6>Jl. Plumpang Semper No.5, Tugu Sel., Kec. Koja, Jkt Utara, Daerah Khusus Ibukota Jakarta 14260 <br>
           <text id="pelayanan-info"> Buka Senin s/d Jumat Pukul 08.00 - 16.00</text>
         </h6>

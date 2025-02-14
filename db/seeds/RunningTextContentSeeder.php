@@ -18,7 +18,7 @@ class RunningTextContentSeeder extends AbstractSeed
         $table = $this->table('running_text_content');
         $table->insert([
             [
-                "content" => "Selamat Datang di Web Antrian Online Pengadilan Agama Jakarta Utara. Hari kerja dari senin sampai jumat pukul 08.00 - 17.00 WIB."
+                "content" => "Selamat Datang di Web Antrian Online Pengadilan XXXX XXXX XXXX. Hari kerja dari senin sampai jumat pukul 08.00 - 17.00 WIB."
             ],
             [
                 "content" => "Pastikan anda melihat antrian yang sedang berjalan. Silahkan baca informasi terkait antrian pada tiket antrian anda."

@@ -1,9 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-final class CreateAudioInformasiTable extends AbstractMigration
+final class CreateJenisPetugasTable extends AbstractMigration
 {
     /**
      * Change Method.
@@ -18,6 +19,10 @@ final class CreateAudioInformasiTable extends AbstractMigration
      */
     public function change(): void
     {
-
+        $table = $this->table("jenis_petugas");
+        $table->addColumn("nama_jenis", "string")
+            ->addColumn('created_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP'])
+            ->addColumn('updated_at', 'timestamp')
+            ->create();
     }
 }

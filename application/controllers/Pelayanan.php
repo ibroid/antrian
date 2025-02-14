@@ -1,6 +1,6 @@
 <?php
 
-class Pelayanan extends R_Controller
+class Pelayanan extends ControlPetugasPelayanan
 {
 
   public function __construct()
@@ -47,7 +47,8 @@ class Pelayanan extends R_Controller
         $this->user['petugas']['jenis_petugas'] ?? 'admin'
       ),
       "currentLoket" => $currentLoket,
-      "loket" => LoketPelayanan::where("status", "!=", 2)->get()
+      "loket" => LoketPelayanan::where("status", "!=", 2)->get(),
+      "jenis_pelayanan" => JenisPelayanan::all()
     ])->layout("dashboard_layout", [
       "title" => "Antrian Pelayanan",
       "nav" => $this->load->component("layout/nav_pelayanan")
@@ -92,10 +93,13 @@ class Pelayanan extends R_Controller
     $antrianPtspDatatable = new AntrianPtspDatatable();
 
     if (!$this->is_admin) {
-      $antrianPtspDatatable->condition = collect([
-        "kode" => $this->getAntrianByJenisPetugas($this->user['petugas']['jenis_petugas'] ?? "*"),
-        "status" => 0
-      ]);
+      // $antrianPtspDatatable->condition = collect([
+      //   "kode" => $this->getAntrianByJenisPetugas($this->user['petugas']['jenis_petugas'] ?? "*"),
+      //   "status" => 0
+      // ]);
+      $antrianPtspDatatable->allowedServiceCode = array_map(function ($i) {
+        return $i["id"];
+      }, $this->user["petugas"]["jenis_pelayanan"]);
     }
 
     $lists = $antrianPtspDatatable->getData();
@@ -108,7 +112,7 @@ class Pelayanan extends R_Controller
       $row[] = $no;
       $row[] = $list->kode . "-" . $list->nomor_urutan;
       $row[] = $list->tujuan;
-      $row[] = $this->load->component("table/pilihan_antrian_pelayanan", ["data" => $list]);
+      $row[] = $this->load->component("table/wait_counter_antrian_pelayanan", ["data" => $list]);
       $data[] = $row;
     }
     $output = array(
@@ -123,34 +127,49 @@ class Pelayanan extends R_Controller
 
   public function panggil()
   {
-    // prindie($_POST);
     R_Input::mustPost();
     try {
+      $this->eloquent->connection("default")->beginTransaction();
+      $callableId = array_map(function ($i) {
+        return $i["id"];
+      }, $this->user["petugas"]["jenis_pelayanan"]);
+
       if (R_Input::pos('panggil') == "baru") {
+
         $lastNomorAntrianPtsp = AntrianPtsp::where("status", 0)->where(
-          function ($q) {
-            if ($this->user['petugas']['jenis_petugas'] == 'Petugas PTSP') {
-              $q->where("kode", 'A')->orWhere('kode', 'D');
-            } else {
-              $q->where("kode", R_Input::pos("kode"));
-            }
+          function ($q) use ($callableId) {
+            $q->whereIn("jenis_pelayanan_id", $callableId);
           }
         )->whereDate("created_at", date("Y-m-d"))->first();
+
 
         if (!$lastNomorAntrianPtsp) {
           throw new Error("Antrian Sudah Habis");
         }
 
-        $lastNomorAntrianPtsp->update(['status' => 1, 'petugas_id' => $this->user['petugas']['id']]);
+        $waktuDiAmbil = new DateTime($lastNomorAntrianPtsp->created_at);
+        $waktuDiPanggil = new DateTime(date("Y-m-d H:i:s"));
+        $diff = $waktuDiAmbil->diff($waktuDiPanggil);
+        $formattedTime = sprintf(
+          '%02d:%02d:%02d',
+          ($diff->days * 24) + $diff->h,
+          $diff->i,
+          $diff->s
+        );
+
+        $lastNomorAntrianPtsp->update([
+          'status' => 1,
+          'petugas_id' => $this->user['petugas']['id'],
+          'waktu_tunggu' => $formattedTime,
+          'mulai_panggil' => date("Y-m-d H:i:s")
+        ]);
 
         $loket = LoketPelayanan::where("id", $this->user['petugas']['loket_id'])->first();
         $loket->update(['antrian_pelayanan_id' => $lastNomorAntrianPtsp->id, 'status' => 1]);
 
         $loket->antrian;
         $loket->petugas;
-      }
-
-      if (R_Input::pos('panggil') == "kembali") {
+      } else {
         $loket = LoketPelayanan::where("id", $this->user['petugas']['loket_id'])->first();
         if (!$loket->antrian) {
           throw new Exception("Anda Belum Memanggil Antrian");
@@ -160,6 +179,13 @@ class Pelayanan extends R_Controller
       }
 
       Broadcast::pusher()->trigger("antrian-channel", "panggil-antrian-ptsp", $loket ?? null);
+
+      $this->eloquent->connection("default")->commit();
+
+      if (isset($this->input->request_headers()["Hx-Request"])) {
+        echo $this->load->component('card/antrian_ptsp_saat_ini', ['data' => $loket->antrian]);
+        return;
+      }
 
       if (R_Input::ci()->request_headers()["Accept"] == "application/json") {
         echo  json_encode(["status" => true, 'messsage' => 'Berhasil memanggil']);
@@ -172,6 +198,12 @@ class Pelayanan extends R_Controller
         "text" => "Berhasil memanggil"
       ])->go($_SERVER['HTTP_REFERER']);
     } catch (\Throwable $th) {
+
+      $this->eloquent->connection("default")->rollback();
+      if (isset($this->input->request_headers()["Hx-Request"])) {
+        echo "Terjadi kesalahan : " . $th->getMessage();
+        return;
+      }
 
       if (R_Input::ci()->request_headers()["Accept"] == "application/json") {
         echo  json_encode(["status" => false, 'messsage' => $th->getMessage()]);
@@ -220,41 +252,27 @@ class Pelayanan extends R_Controller
   public function pindahkan()
   {
     R_Input::mustPost();
+    if ($this->input->request_headers()) {
+      # code...
+    }
     try {
+      $selected_pelayanan = JenisPelayanan::findOrFail(Cypher::urlsafe_decrypt(R_Input::pos("id_pelayanan")));
+
       $lastNomorAntrianPtsp = AntrianPtsp::where([
-        "kode" => $this->tujuanToKode(R_Input::pos("tujuan")),
+        "kode" => $selected_pelayanan->kode_layanan,
       ])->whereDate("created_at", date("Y-m-d"))->max("nomor_urutan");
 
       $newAntrianPtsp = AntrianPtsp::create([
-        "tujuan" => R_Input::pos("tujuan"),
-        "kode" => $this->tujuanToKode(R_Input::pos("tujuan")),
+        "tujuan" => $selected_pelayanan->nama_layanan,
+        "kode" => $selected_pelayanan->kode_layanan,
         "nomor_urutan" => $lastNomorAntrianPtsp ? $lastNomorAntrianPtsp + 1 : 1,
         "status" => 0,
+        "jenis_pelayanan_id" => $selected_pelayanan->id
       ]);
 
-      if (R_Input::ci()->request_headers()["Accept"] == "application/json") {
-        echo json_encode([
-          "message" => "Berhasil memindahkan ke antrian : " . $newAntrianPtsp->nomor_antrian,
-          "data" => $newAntrianPtsp
-        ]);
-
-        return set_status_header(200);
-      }
-
-      $this->session->set_flashdata("nomor_antrian", " -> " . $newAntrianPtsp->nomor_antrian);
-
-      return Redirect::wfa(["message" => "Berhasil memindahkan ke antrian : " . $newAntrianPtsp->nomor_antrian])->go($_SERVER['HTTP_REFERER']);
+      echo "Nomor antrian baru : " . $newAntrianPtsp->nomor_antrian;
     } catch (\Throwable $th) {
-      if (R_Input::ci()->request_headers(true)['Accept'] == 'application/json') {
-        echo json_encode([
-          'message' => $th->getMessage(),
-          'data' => null
-        ]);
-
-        return set_status_header(400);
-      }
-
-      return Redirect::wfe($th->getMessage())->go($_SERVER['HTTP_REFERER']);
+      echo $th->getMessage();
     }
   }
 
@@ -270,6 +288,20 @@ class Pelayanan extends R_Controller
     ];
 
     return $daftarTujuan[$tujuan] ?? null;
+  }
+
+  private function kodeToTujuan($kode)
+  {
+    $daftarTujuan = [
+      "A" => "PENDAFTARAN",
+      "A" => "E-COURT",
+      "A" => "INFORMASI",
+      "B" => "KASIR",
+      "C" => "POSBAKUM",
+      "D" => "PRODUK",
+    ];
+
+    return $daftarTujuan[$kode] ?? null;
   }
 
   public function ganti_loket($id)
@@ -323,5 +355,43 @@ class Pelayanan extends R_Controller
       "title" => "Pengguna",
       "nav" => $this->user["petugas"]["jenis_petugas"] == "Petugas Sidang" ?  $this->load->component("layout/nav_persidangan") : $this->load->component("layout/nav_pelayanan")
     ]);
+  }
+
+  public function akhiri()
+  {
+    R_Input::mustPost();
+    try {
+      $this->eloquent->connection("default")->beginTransaction();
+      $antrianId = Cypher::urlsafe_decrypt(R_Input::pos("id_antrian"));
+      $antrian = AntrianPtsp::findOrFail(
+        $antrianId
+      );
+
+      $waktuDiPanggil = new DateTime($antrian->mulai_panggil);
+      $waktuSelesai = new DateTime(date("Y-m-d H:i:s"));
+      $diff = $waktuDiPanggil->diff($waktuSelesai);
+      $formattedTime = sprintf(
+        '%02d:%02d:%02d',
+        ($diff->days * 24) + $diff->h,
+        $diff->i,
+        $diff->s
+      );
+
+      $antrian->update([
+        'selesai_panggil' => date("Y-m-d H:i:s"),
+        'durasi_pelayanan' => $formattedTime
+      ]);
+
+      $loket = LoketPelayanan::where("antrian_pelayanan_id", $antrianId)->first();
+      $loket->update(['antrian_pelayanan_id' => null, 'status' => 0]);
+
+      $this->eloquent->connection("default")->commit();
+
+      header("HX-Refresh: true");
+      set_status_header(201);
+    } catch (\Throwable $th) {
+      $this->eloquent->connection("default")->rollBack();
+      echo "Terjadi kesalahan : " . $th->getMessage();
+    }
   }
 }

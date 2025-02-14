@@ -23,6 +23,7 @@ class Pengguna extends R_Controller
         "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css\">\n"
       ]
     ]);
+    $this->load->library("form_validation");
   }
 
   /**
@@ -80,18 +81,29 @@ class Pengguna extends R_Controller
         throw new Exception("Pengguna sudah ada");
       }
 
-      if (R_Input::pos("jenis_petugas") == "-" && (R_Input::pos("level") == 3 or R_Input::pos("level") == 2)) {
-        throw new Exception("Jenis petugas harus diisi");
+      $this->form_validation->set_rules('nama_lengkap', 'Nama Lengkap', 'required|min_length[5]|max_length[16]');
+      $this->form_validation->set_rules('identifier', 'Identifikasi', 'trim|required|min_length[5]|max_length[16]');
+      $this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[5]|max_length[191]');
+      $this->form_validation->set_rules('avatar', 'Avatar', 'trim|required|max_length[24]');
+
+      if ($this->form_validation->run() == false) {
+        throw new Exception(validation_errors("Kesalahan pengisian form"), 1);
       }
 
-      $user = Users::create([
+      $salt = bin2hex(random_bytes(4));
+
+      $dto = [
         "identifier" => R_Input::pos("identifier"),
-        "salt" => bin2hex(random_bytes(4)),
+        "salt" => $salt,
         "name" => R_Input::pos("nama_lengkap"),
         "role_id" => R_Input::pos("level"),
+        // Password hashed from model.
         "password" => R_Input::pos("password"),
-        "avatar" => R_Input::pos("avatar")
-      ]);
+        "avatar" => R_Input::pos("avatar"),
+        "status" => R_Input::pos("status")
+      ];
+
+      $user = Users::create($dto);
 
       if (R_Input::ci()->request_headers()["Accept"] == "application/json") {
         echo json_encode([

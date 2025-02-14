@@ -21,7 +21,7 @@ class Time_line extends R_MobileController
                         "Pendaftaran Perkara",
                         tanggal_indo($perkara->tanggal_pendaftaran),
                         "Diinput Oleh Admin",
-                        "Perkara berhasil didaftarkan di Pengadilan Agama Jakarta Utara",
+                        "Perkara berhasil didaftarkan di <?= $this->sysconf->NamaPN ?>",
                     )
                 ]);
 

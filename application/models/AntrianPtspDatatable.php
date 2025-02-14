@@ -12,6 +12,7 @@ class AntrianPtspDatatable extends Model
   protected $defaultOrder = ['id' => 'asc'];
 
   public $condition = null;
+  public $allowedServiceCode = [];
 
   public function getData()
   {
@@ -32,16 +33,10 @@ class AntrianPtspDatatable extends Model
       $query->skip($start)->take($length);
     }
 
-    if ($this->condition) {
-      if ($this->condition['kode'] == 'A') {
-        $query->where(function ($q) {
-          $q->where('kode', 'A')->orWhere('kode', 'D');
-        })->where($this->condition->except('kode')->toArray());
-      } else {
-
-        $query->where($this->condition->toArray());
-      }
+    if (count($this->allowedServiceCode) > 0) {
+      $query->whereIn('jenis_pelayanan_id', $this->allowedServiceCode)->where("status", 0);
     }
+
     $query->whereDate('created_at', date('Y-m-d'));
 
     return $query->get();
@@ -50,15 +45,8 @@ class AntrianPtspDatatable extends Model
   public function countData()
   {
     $query = $this->query();
-    if ($this->condition) {
-      if ($this->condition['kode'] == 'A') {
-        $query->where(function ($q) {
-          $q->where('kode', 'A')->orWhere('kode', 'D');
-        })->where($this->condition->except('kode')->toArray());
-      } else {
-
-        $query->where($this->condition->toArray());
-      }
+    if (count($this->allowedServiceCode) > 0) {
+      $query->whereIn('jenis_pelayanan_id', $this->allowedServiceCode)->where("status", 0);
     }
     $query->whereDate('created_at', date('Y-m-d'));
 
@@ -68,15 +56,8 @@ class AntrianPtspDatatable extends Model
 
   private function applyFilters($query, $searchValue)
   {
-    if ($this->condition) {
-      if ($this->condition['kode'] == 'A') {
-        $query->where(function ($q) {
-          $q->where('kode', 'A')->orWhere('kode', 'D');
-        })->where($this->condition->except('kode')->toArray());
-      } else {
-
-        $query->where($this->condition->toArray());
-      }
+    if (count($this->allowedServiceCode) > 0) {
+      $query->whereIn('jenis_pelayanan_id', $this->allowedServiceCode)->where("status", 0);
     }
     $query->whereDate('created_at', date('Y-m-d'));
 

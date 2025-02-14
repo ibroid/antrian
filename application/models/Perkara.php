@@ -1,6 +1,5 @@
 <?php
 
-
 class Perkara extends Illuminate\Database\Eloquent\Model
 {
   protected $connection = "sipp";

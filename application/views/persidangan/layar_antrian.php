@@ -6,7 +6,7 @@
         <?= $this->session->flashdata('flash_notif') ?>
         <div class="text-center">
           <h1>LAYAR ANTRIAN PERSIDANGAN</h1>
-          <h4>Aplikasi Antrian Persidangan dan Pelayanan Pengadilan Agama Jakarta Utara</h4>
+          <h4>Aplikasi Antrian Persidangan dan Pelayanan <?= $this->sysconf->NamaPN ?></h4>
         </div>
         <div class="d-flex justify-content-center">
           <ul class="tg-list common-flex">

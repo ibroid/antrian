@@ -5,7 +5,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Antrian Pelayanan dan Persidangan Pengadilan Agama Jakarta Utara.">
+	<meta name="description" content="Antrian Pelayanan dan Persidangan <?= $this->sysconf->NamaPN ?>.">
 	<link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('assets/favicon/') ?>/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('assets/favicon/') ?>/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('assets/favicon/') ?>/favicon-16x16.png">
@@ -77,7 +77,7 @@
 					<div class="notification-slider">
 						<a class="logo text-start" href="javascript:void(0)">
 							<h4>Aplikasi Persidangan dan Pelayanan</h4>
-							<p>Pengadilan Agama Jakarta Utara</p>
+							<p><?= $this->sysconf->NamaPN ?></p>
 						</a>
 					</div>
 				</div>

@@ -1,6 +1,6 @@
 <div class="header-large-title">
   <h1 class="title">Pusat Informasi</h1>
-  <h4 class="subtitle">Memenuhi segala kebutuhan informasi di Pengadilan Agama Jakarata Utara</h4>
+  <h4 class="subtitle">Memenuhi segala kebutuhan informasi di <?= $this->sysconf->NamaPN ?>rata Utara</h4>
 </div>
 
 <div class="section full mt-5">

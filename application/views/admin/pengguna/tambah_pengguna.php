@@ -11,15 +11,26 @@
           <form class="needs-validation" action="<?= base_url('pengguna/save') ?>" method="post" novalidate autocomplete="off">
             <div class="form-group">
               <label for="nama_lengkap">Nama lengkap</label>
-              <input type="text" name="nama_lengkap" id="nama_lengkap" class="form-control" style="margin-bottom:10px;" required>
+              <input
+                type="text"
+                name="nama_lengkap"
+                id="nama_lengkap"
+                class="form-control"
+                style="margin-bottom:10px;"
+                required
+                value="<?= set_value("nama_lengkap") ?>">
             </div>
             <div class="form-group">
-              <label for="identifier">Identifier</label>
-              <input type="text" name="identifier" id="identifier" class="form-control" minlength="5" style="margin-bottom:10px;" required>
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" name="password" id="password" class="form-control" minlength="5" style="margin-bottom:10px;" required>
+              <label for="identifier_user">Username</label>
+              <input
+                type="text"
+                name="identifier"
+                id="identifier_user"
+                class="form-control"
+                minlength="5"
+                style="margin-bottom:10px;"
+                required
+                value="<?= set_value("identifier_user") ?>">
             </div>
             <div class="form-group">
               <label for="level">Level</label>
@@ -30,24 +41,37 @@
               </select>
             </div>
             <div class="form-group">
+              <label for="password_user">Password</label>
+              <input
+                type="text"
+                name="password"
+                id="password_user"
+                class="form-control"
+                minlength="5"
+                style="margin-bottom:10px;"
+                required
+                value="<?= set_value("password_user") ?>">
+            </div>
+            <!-- <div class="form-group">
               <label for="jenis_petugas">Jenis Petugas</label>
               <select name="jenis_petugas" id="jenis_petugas" class="form-control" style="margin-bottom:10px;" required>
                 <option value="-">--- Pilih hanya jika level adalah petugas ---</option>
                 <?php foreach ((function () {
-                  return [
-                    'Petugas PTSP',
-                    'Petugas Sidang',
-                    'Petugas Produk',
-                    'Kasir',
-                    'Petugas Antrian',
-                    'Petugas Akta',
-                    'Petugas Posbakum',
-                  ];
-                })() as $p) : ?>
+                    return [
+                      'Petugas PTSP',
+                      'Petugas Sidang',
+                      'Petugas Produk',
+                      'Kasir',
+                      'Petugas Antrian',
+                      'Petugas Akta',
+                      'Petugas Posbakum',
+                    ];
+                  })() as $p
+                ) : ?>
                   <option><?= $p ?></option>
                 <?php endforeach; ?>
               </select>
-            </div>
+            </div> -->
             <div class="form-group">
               <label for="status">Status</label>
               <select name="status" id="status" class="form-control" style="margin-bottom:10px;" required>
@@ -57,7 +81,7 @@
             </div>
             <div class="form-group">
               <label for="avatar">Avatar</label>
-              <input placeholder="Tulis nickname user" type="text" name="avatar" id="avatar" class="form-control" style="margin-bottom:10px;" required>
+              <input placeholder="Tulis nickname user" type="text" name="avatar" id="avatar" value="<?= set_value("avatar") ?>" class="form-control" style="margin-bottom:10px;" required>
               <img width="200" src="https://api.dicebear.com/8.x/adventurer/svg?seed=Grin" alt="avatar" />
               <script>
                 window.addEventListener('load', function() {

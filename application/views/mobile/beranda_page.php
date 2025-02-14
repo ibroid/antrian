@@ -1,6 +1,6 @@
 <div class="header-large-title">
   <h1 class="title">Beranda</h1>
-  <h4 class="subtitle">Selamat Datang di Pelayanan mobile Pengadilan Agama Jakarta Utara</h4>
+  <h4 class="subtitle">Selamat Datang di Pelayanan mobile <?= $this->sysconf->NamaPN ?></h4>
 </div>
 
 <div class="section my-3">
@@ -60,7 +60,7 @@
   <div class="card bg-dark text-light">
     <img src="<?= base_url('static/img/free_wifi.png') ?>" class="card-img overlay-img" alt="image">
     <div class="card-img-overlay text-center d-flex flex-column justify-content-center">
-      <h4 class="text-light">Password Wifi Pengadilan Agama Jakarta Utara</h4>
+      <h4 class="text-light">Password Wifi <?= $this->sysconf->NamaPN ?></h4>
       <p>Nama Wifi : SMARTPAJU_PUBLIK <br> Password : wbbmpasti</p>
       <button onclick="copyPassWifi()" class="btn btn-light">
         <ion-icon name="copy-outline"></ion-icon>

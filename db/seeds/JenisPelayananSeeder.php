@@ -20,26 +20,32 @@ class JenisPelayananSeeder extends AbstractSeed
             [
                 "nama_layanan" => "Pendaftaran",
                 "kode_layanan" => "A",
+                "support_picker" => 0,
             ],
             [
                 "nama_layanan" => "Informasi",
                 "kode_layanan" => "A",
+                "support_picker" => 0,
             ],
             [
                 "nama_layanan" => "E-Court",
                 "kode_layanan" => "A",
+                "support_picker" => 0,
             ],
             [
-                "nama_layanan" => "Pembayaran",
+                "nama_layanan" => "Kasir",
                 "kode_layanan" => "B",
+                "support_picker" => 0,
             ],
             [
                 "nama_layanan" => "Posbakum",
                 "kode_layanan" => "C",
+                "support_picker" => 0,
             ],
             [
                 "nama_layanan" => "Produk",
                 "kode_layanan" => "D",
+                "support_picker" => 1,
             ],
         ])
             ->save();

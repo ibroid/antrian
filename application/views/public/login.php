@@ -11,7 +11,7 @@
 				<form class="theme-form" autocomplete="off" method="POST" action="<?= base_url('auth/login') ?>">
 					<input type="hidden" value="<?= $_ENV['IP_VALIDATOR'] == "0" ? "192.168.0.111" : null ?>" id="input-hidden-ip" name="remote_addr">
 					<h4>Masuk Sebelum melanjutkan</h4>
-					<p>Aplikasi Antrian Persidangan dan Pelayanan Pengadilan Agama Jakarta Utara</p>
+					<p>Aplikasi Antrian Persidangan dan Pelayanan <?= $this->sysconf->NamaPN ?></p>
 					<div class="form-group">
 						<label class="col-form-label">Identifier</label>
 						<input class="form-control" name="login[identifier]" type="text" required="Harap Isi Bidang ini" placeholder="username">

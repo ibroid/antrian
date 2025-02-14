@@ -6,7 +6,7 @@
 
 <div class="section mt-2">
   <ol>
-    <li>Panjar biaya perkara merupakan biaya yang dikeluarkan para pihak untuk mengajukan permohonan/gugatan berdasarkan penetapan Ketua Pengadilan Agama Jakarta Utara.</li>
+    <li>Panjar biaya perkara merupakan biaya yang dikeluarkan para pihak untuk mengajukan permohonan/gugatan berdasarkan penetapan Ketua <?= $this->sysconf->NamaPN ?>.</li>
     <li> Apabila biaya yang dibayarkan kurang, maka akan diminta penambahan. Sebaliknya, apabila biaya yang dibayarkan lebih, maka sisa uang akan dikembalikan setelah perkara selesai diputus.</li>
     <li>
       Untuk menggunakan layanan, silakan pilih jenis perkara dan masukkan domisili para pihak.

@@ -36,6 +36,45 @@
         </div>
 
         <div class="row">
+          <?php foreach ($jenis_pelayanan as $jp) { ?>
+            <div class="col-3">
+              <?php
+              if ($jp->support_picker == 1) { ?>
+                <div
+                  class="card small-widget mb-sm-0 bg-warning mt-4"
+                  onclick="openModalPerkaraProduk('<?= $jp->nama_layanan ?>', '<?= $jp->id ?>')">
+                  <div class="card-body primary"> <span class="f-light text-light">Antrian Sekarang : 0</span>
+                    <div class="d-flex align-items-end gap-1">
+                      <h4><?= $jp->nama_layanan ?></h4>
+                    </div>
+                    <div class="bg-gradient">
+                      <svg class="stroke-icon svg-fill">
+                        <use href="../assets/svg/icon-sprite.svg#user-visitor"></use>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              <?php } else { ?>
+                <div
+                  class="card small-widget mb-sm-0 bg-warning card-ambil-antrian-ptsp mt-4" data-antrian-tujuan="<?= $jp->nama_layanan ?>"
+                  data-antrian-id="<?= $jp->id ?>">
+                  <div class="card-body primary"> <span class="f-light text-light">Antrian Sekarang : 0</span>
+                    <div class="d-flex align-items-end gap-1">
+                      <h4><?= $jp->nama_layanan ?></h4>
+                    </div>
+                    <div class="bg-gradient">
+                      <svg class="stroke-icon svg-fill">
+                        <use href="../assets/svg/icon-sprite.svg#user-visitor"></use>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              <?php } ?>
+            </div>
+          <?php } ?>
+        </div>
+
+        <!-- <div class="row">
           <div class="col-3">
             <div class="card small-widget mb-sm-0 bg-warning card-ambil-antrian-ptsp" data-antrian-tujuan="POSBAKUM">
               <div class="card-body primary"> <span class="f-light text-light">Antrian Sekarang : 0</span>
@@ -121,7 +160,7 @@
           </div>
 
 
-        </div>
+        </div> -->
 
 
         <hr>
@@ -202,12 +241,12 @@
   }
 </style>
 
-<button type="button" data-bs-toggle="modal" data-bs-target="#bantuan-modal" class="btn btn-success btn-floating btn-lg">
+<!-- <button type="button" data-bs-toggle="modal" data-bs-target="#bantuan-modal" class="btn btn-success btn-floating btn-lg">
   <i class="fa fa-volume-up"></i>
   <h5>Pusat Bantuan</h5>
-</button>
+</button> -->
 
-<div style="position: fixed; top: 0; left: 0;" class="p-2 bg-white m-2 shadow">
+<!-- <div style="position: fixed; top: 0; left: 0;" class="p-2 bg-white m-2 shadow">
 
   <ul id="camera-control" hidden class="tg-list common-flex">
     <li class="tg-list-item">
@@ -231,7 +270,7 @@
   <div class="text-center" id="text-log">
 
   </div>
-</div>
+</div> -->
 
 <template id="swal-produk-antrian-step-2">
   <swal-title>
@@ -528,13 +567,13 @@
     $(".card-ambil-antrian-ptsp").click(function() {
 
       const tujuan = $(this).data("antrian-tujuan")
+      const id = $(this).data("antrian-id")
 
-      ambilAntrianPelayanan(tujuan);
-
+      ambilAntrianPelayanan(tujuan, id);
     })
   })
 
-  function ambilAntrianPelayanan(tujuan, callback = null) {
+  function ambilAntrianPelayanan(tujuan, id, callback = null) {
     swalLoading();
     $.ajax({
       url: "<?= base_url("ambil/ambil_antrian_ptsp") ?>",
@@ -543,7 +582,8 @@
         "Accept": "application/json",
       },
       data: {
-        tujuan: tujuan
+        tujuan: tujuan,
+        id: id,
       },
       success(data) {
         const {
@@ -652,7 +692,7 @@
     changeGlobalAudio("/audio/audio-penjelasan-antrian-sidang.mp3")
   }
 
-  async function openModalPerkaraProduk() {
+  async function openModalPerkaraProduk(tujuan, id) {
     changeGlobalAudio("<?= base_url("/audio/intruction-antrian-produk-1.mp3") ?>")
 
     const decissionNomorPerkara = await Swal.fire({
@@ -842,7 +882,8 @@
           const body = new FormData()
           body.append('nomor_perkara', nomor_perkara)
           body.append('pihak_id', radioPihak)
-          body.append('tujuan', "PRODUK")
+          body.append('tujuan', tujuan)
+          body.append('id', id)
 
           const response = await fetch("<?= base_url('ambil/ambil_antrian_ptsp') ?>", {
             method: "POST",

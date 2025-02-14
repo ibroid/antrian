@@ -17,6 +17,7 @@ class Tv extends CI_Controller
         "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/toastify-js/src/toastify.min.css\">\n"
       ]
     ]);
+    $this->load->library("Sysconf", ["ed" => $this->eloquent]);
   }
 
   /**

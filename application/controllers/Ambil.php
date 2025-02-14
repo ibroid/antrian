@@ -12,8 +12,10 @@ class Ambil extends R_Controller
   {
     $base_url = base_url();
 
-    if (floatval(date("H")) < 7) {
-      die("Belum bisa ambil antrian");
+    if (!$this->is_admin) {
+      if (floatval(date("H")) < 7) {
+        die("Khusus Jumat, Antrian Dibuka Pukul 8");
+      }
     }
 
     $this->addons->init([
@@ -23,6 +25,7 @@ class Ambil extends R_Controller
         "<link rel=\"stylesheet\" type=\"text/css\" href=\"$base_url/assets/css/vendors/sweetalert2.css\">"
       ],
       'js' => [
+        "<script src=\"$base_url/package/htmx/htm.js\"></script>\n",
         "<script src=\"$base_url/assets/js/flat-pickr/flatpickr.js\"></script>\n",
         "<script src=\"$base_url/assets/js/datatable/datatables/jquery.dataTables.min.js\"></script>\n",
         "<script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script>",
@@ -30,6 +33,7 @@ class Ambil extends R_Controller
     ]);
 
     $data["daftar_sidang"] = PerkaraJadwalSidang::where("tanggal_sidang", isset($_POST["tanggal_sidang"]) ? $_POST["tanggal_sidang"] : date("Y-m-d"))->get();
+    $data["jenis_pelayanan"] = JenisPelayanan::all();
     $this->load->page("ambil_antrian", $data)->layout("auth_layout");
   }
 
@@ -229,15 +233,19 @@ class Ambil extends R_Controller
   {
     R_Input::mustPost();
     try {
+      $id = R_Input::pos("id");
+      $this->eloquent->connection("default")->beginTransaction();
+      $selectedLayanan = JenisPelayanan::find($id);
       $lastNomorAntrianPtsp = AntrianPtsp::where([
-        "kode" => $this->tujuanToKode(R_Input::pos("tujuan")),
+        "kode" => $selectedLayanan->kode_layanan
       ])->whereDate("created_at", date("Y-m-d"))->max("nomor_urutan");
 
       $newAntrianPtsp = AntrianPtsp::create([
-        "tujuan" => R_Input::pos("tujuan"),
-        "kode" => $this->tujuanToKode(R_Input::pos("tujuan")),
+        "tujuan" => $selectedLayanan->nama_layanan,
+        "kode" => $selectedLayanan->kode_layanan,
         "nomor_urutan" => $lastNomorAntrianPtsp ? $lastNomorAntrianPtsp + 1 : 1,
         "status" => 0,
+        "jenis_pelayanan_id" => $id
       ]);
 
       if (isset($_POST["nomor_perkara"])) {
@@ -249,6 +257,7 @@ class Ambil extends R_Controller
       }
 
       $cetak = $this->print_antrian_ptsp($newAntrianPtsp);
+      $this->eloquent->connection("default")->commit();
 
       if ($this->input->request_headers()["Accept"] == "application/json") {
         echo json_encode(["message" => $cetak[1], "antrian" => $newAntrianPtsp]);
@@ -260,6 +269,7 @@ class Ambil extends R_Controller
         ])->go($_SERVER["HTTP_REFERER"]);
       }
     } catch (\Throwable $th) {
+      $this->eloquent->connection("default")->rollBack();
       if ($this->input->request_headers()["Accept"] == "application/json") {
         set_status_header(400);
         echo json_encode(["message" => $th->getMessage(), "stack" => $th->getTrace()]);

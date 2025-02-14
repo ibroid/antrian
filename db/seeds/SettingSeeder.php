@@ -18,12 +18,6 @@ class SettingSeeder extends AbstractSeed
         $table = $this->table('settings');
         $table->insert([
             [
-                "key" => "satker_name",
-                "value" => "PENGADILAN AGAMA JAKARTA UTARA",
-                "level" => "Admin",
-                "description" => "Nama satuan kerja yang menggunakan aplikasi ini."
-            ],
-            [
                 "key" => "jam_ambil_antrian_ptsp",
                 "value" => 8,
                 "level" => "Admin",

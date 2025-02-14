@@ -1,3 +1,10 @@
+<?php
+
+/**
+ * Used by Petugas_pelayanan.php Controller
+ */
+?>
+
 <div class="contrainer-fluid py-3">
   <div class="row justify-content-center">
     <div class="col-md-6">
@@ -32,47 +39,36 @@
             </div>
             <div class="form-group mb-4">
               <label for="jenis_petugas" class="form-label">Jenis Petugas</label>
-              <select class="form-select" name="jenis_petugas" id="jenis_petugas" required>
-                <option selected><?= $data->jenis_petugas ?></option>
-                <option value="Petugas PTSP">Petugas PTSP</option>
-                <option value="Petugas Sidang">Petugas Sidang</option>
-                <option value="Petugas Produk">Petugas Produk</option>
-                <option value="Kasir">Kasir</option>
-                <option value="Petugas Antrian">Petugas Antrian</option>
-                <option value="Petugas Akta">Petugas Akta</option>
-                <option value="Petugas Posbakum">Petugas Posbakum</option>
-              </select>
-            </div>
-            <div class="form-group mb-4">
-              <label for="loket_id" class="form-label">Penempatan Loket</label>
-              <select class="form-select" name="loket_id" id="loket_id">
-                <?php foreach ($loket as $l) { ?>
-                  <option value="<?= $l->id  ?>" <?= $l->id == $data->loket_id ? "selected" : null ?>> <?= $l->nama_loket ?></option>
+              <select
+                hx-post="<?= base_url("petugas_pelayanan/extend_form/" . Cypher::urlsafe_encrypt($data->id)) ?>"
+                hx-trigger="load, change"
+                hx-target="#form-extend"
+                hx-indicator="#form-extend-indicator"
+                hx-on::before-request="$('#submit-button').attr('disabled', true)"
+                hx-on::after-request="$('#submit-button').attr('disabled', false)"
+                class="form-select"
+                name="jenis_petugas"
+                id="jenis_petugas"
+                required>
+                <?php foreach ($jenis_petugas as $jp) { ?>
+                  <option
+                    <?php
+                    if ($data->jenis_petugas == $jp->nama_jenis) {
+                      echo "selected";
+                    }
+                    ?>>
+                    <?= $jp->nama_jenis ?>
+                  </option>
+
                 <?php } ?>
-
               </select>
             </div>
-            <div class="form-group mb-4">
-              <label for="loket_id" class="form-label">Jenis Layanan</label>
-              <div class="overflow-auto" style="height: 250px;">
-                <ol>
-                  <li>asdasdas</li>
-                  <li>asdasdas</li>
-                  <li>asdasdas</li>
-                  <li>asdasdas</li>
-                  <li>asdasdas</li>
-                  <li>asdasdas</li>
-                  <li>asdasdas</li>
-                  <li>asdasdas</li>
-                  <li>asdasdas</li>
-                  <li>asdasdas</li>
-                </ol>
-              </div>
-              <small>Jenis layanan antrian yang bisa dipanggil oleh Petugas</small>
-
+            <div id="form-extend-indicator" class="text-center htmx-indicator">
+              <p>Mohon Tunggu ...</p>
             </div>
+            <div id="form-extend"></div>
             <div class="text-center">
-              <button type="submit" class="btn btn-primary">Update Petugas</button>
+              <button id="submit-button" type="submit" class="btn btn-primary">Update Petugas</button>
             </div>
           </form>
         </div>

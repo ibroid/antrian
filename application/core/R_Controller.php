@@ -35,6 +35,21 @@ class R_Controller extends CI_Controller
      */
     public function __construct()
     {
+        parent::__construct();
+        $this->load->library("Sysconf", ["ed" => $this->eloquent]);
+        $this->load->library("Addons");
+        $this->secureForeignIP();
+        $this->loginLimiter();
+
+        $this->user = $this->session->userdata('user_login');
+
+        if ($this->user["role_id"] == 1) {
+            $this->is_admin = TRUE;
+        }
+    }
+
+    private function secureForeignIP()
+    {
         if ($_SERVER['HTTP_HOST'] !== 'antrian.test') {
             if ($_SERVER['HTTP_CF_IPCOUNTRY'] !== 'ID') {
                 http_response_code(403);
@@ -47,9 +62,10 @@ class R_Controller extends CI_Controller
                 //die();
             }
         }
+    }
 
-        parent::__construct();
-
+    private function loginLimiter()
+    {
         $this->eloquent->table('user_session')->where('expiration_time', '<', date('Y-m-d H:i:s'))->delete();
 
         if (empty($this->session->userdata('user_login'))) {
@@ -65,14 +81,6 @@ class R_Controller extends CI_Controller
 
             redirect(base_url('auth'));
         }
-
-        $this->user = $this->session->userdata('user_login');
-
-        if ($this->user["role_id"] == 1) {
-            $this->is_admin = TRUE;
-        }
-
-        $this->load->library("Addons");
     }
 }
 
@@ -112,6 +120,7 @@ class R_ApiController extends CI_Controller
                 die;
             }
         }
+        $this->load->library("Sysconf", ["ed" => $this->eloquent]);
     }
 
     private function handleCors()
@@ -217,6 +226,7 @@ class R_MobileController extends CI_Controller
         }
 
         parent::__construct();
+        $this->load->library("Sysconf", ["ed" => $this->eloquent]);
         $this->headerMenu = [
             "app_header" => $this->load->view("mobile/components/app_header", null, true),
             "app_bottom_menu" => $this->load->view("mobile/components/app_bottom_menu", null, true),
@@ -286,6 +296,30 @@ class R_MobileController extends CI_Controller
 
             set_status_header(400);
             echo "Terjadi kesalahan. " . $th->getMessage();
+        }
+    }
+}
+
+class ControlPetugasPelayanan extends R_Controller
+{
+    public function __construct()
+    {
+        parent::__construct();
+        if (isset($this->input->request_headers()["X-Requested-With"])) {
+            return;
+        }
+
+        if ($this->input->request_headers()["Accept"] == "application/json") {
+            return;
+        }
+
+        if ($this->user["role_id"] != 3) {
+            if ($this->input->request_headers()["Accept"] == "application/json") {
+                set_status_header(401);
+                echo json_encode(["message" => "Tidak bisa melanjutkan dengan role anda."]);
+                die;
+            }
+            return Redirect::wfe("Tidak bisa melanjutkan dengan role anda.")->go("menu");
         }
     }
 }

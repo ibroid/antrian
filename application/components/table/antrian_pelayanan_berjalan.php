@@ -4,7 +4,7 @@
       <th>No.</th>
       <th>Antrian</th>
       <th>Tujuan</th>
-      <th>Aksi</th>
+      <th>Waktu Tunggu</th>
     </tr>
   </thead>
   <tbody>

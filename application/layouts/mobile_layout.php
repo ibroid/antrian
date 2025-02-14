@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#000000">
   <title>Pelayanan Mobile PAJU | <?= $title ?? "Beranda" ?></title>
   <meta name="description" content="Pelayanan Mobile PAJU">
-  <meta name="keywords" content="paju, pajakut, pengadilan agama jakarta utara" />
+  <meta name="keywords" content="paju, pajakut, <?= $this->sysconf->NamaPN ?>" />
 
   <meta http-equiv='cache-control' content='no-cache'>
   <meta http-equiv='expires' content='0'>
@@ -67,7 +67,7 @@
     <div id="appFooter" class="appFooter mb-5">
       <img src="<?= base_url("assets/logo_pa.png?2") ?>" alt="logo pa" class="footer-logo mb-2">
       <div class="footer-title">
-        Copyright © Pengadilan Agama Jakarta Utara <span class="yearNow"></span>.
+        Copyright © <?= $this->sysconf->NamaPN ?> <span class="yearNow"></span>.
       </div>
       <div>Smart Portal Paju Web.</div>
       Follow kami melalui media sosial dibawah ini.

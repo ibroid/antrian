@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Phinx\Db\Adapter\MysqlAdapter;
 use Phinx\Migration\AbstractMigration;
 
 final class CreateJenisPelayananTable extends AbstractMigration
@@ -22,6 +23,10 @@ final class CreateJenisPelayananTable extends AbstractMigration
         $table = $this->table("jenis_pelayanan");
         $table->addColumn("nama_layanan", "string", ["length" => 32]);
         $table->addColumn("kode_layanan", "string", ["length" => 2]);
+        $table->addColumn("support_picker", "integer", [
+            'limit' => MysqlAdapter::INT_TINY,
+            'length' => 1
+        ]);
         $table
             ->addColumn('created_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('updated_at', 'timestamp')

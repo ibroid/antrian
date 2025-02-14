@@ -7,7 +7,7 @@
         <div class="d-flex">
           <div class="flex-grow-1">
             <h4>Halaman Utama. Silahkan Pilih Menu</h4>
-            <p>Aplikasi Antrian Persidangan dan Pelayanan Pengadilan Agama Jakarta Utara</p>
+            <p>Aplikasi Antrian Persidangan dan Pelayanan <?= $this->sysconf->NamaPN ?></p>
           </div>
           <?php if ($is_admin) : ?>
             <div class="text-end">

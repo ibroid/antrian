@@ -17,7 +17,7 @@
           </div>
         </div>
         <div class="card-body">
-          <form class="needs-validation" novalidate action="<?= base_url('/petugas_pelayanan/simpan') ?>" method="post">
+          <form autocomplete="off" class="needs-validation" novalidate action="<?= base_url('/petugas_pelayanan/simpan') ?>" method="post">
             <div class="form-group mb-4">
               <label for="nama_petugas" class="form-label">Nama Petugas</label>
               <input type="text" class="form-control" name="nama_petugas" id="nama_petugas" required maxlength="92">
@@ -33,29 +33,31 @@
             </div>
             <div class="form-group mb-4">
               <label for="jenis_petugas" class="form-label">Jenis Petugas</label>
-              <select class="form-select" name="jenis_petugas" id="jenis_petugas" required>
-                <option value="" selected disabled>-- Pilih Jenis Petugas --</option>
-                <option value="Petugas PTSP">Petugas PTSP</option>
-                <option value="Petugas Sidang">Petugas Sidang</option>
-                <option value="Petugas Produk">Petugas Produk</option>
-                <option value="Kasir">Kasir</option>
-                <option value="Petugas Antrian">Petugas Antrian</option>
-                <option value="Petugas Akta">Petugas Akta</option>
-                <option value="Petugas Posbakum">Petugas Posbakum</option>
-              </select>
-            </div>
-            <div class="form-group mb-4">
-              <label for="loket_id" class="form-label">Penempatan Loket</label>
-              <select class="form-select" name="loket_id" id="loket_id">
-                <option value="" selected disabled>-- Pilih Loket Jika Petugas PTSP --</option>
-                <?php foreach ($loket as $l) { ?>
-                  <option value="<?= $l->id  ?>"> <?= $l->nama_loket ?></option>
-                <?php } ?>
+              <select
+                hx-post="<?= base_url("petugas_pelayanan/extend_form") ?>"
+                hx-trigger="load, change"
+                hx-target="#form-extend"
+                hx-indicator="#form-extend-indicator"
+                hx-on::before-request="$('#submit-button').attr('disabled', true)"
+                hx-on::after-request="$('#submit-button').attr('disabled', false)"
+                class="form-select"
+                name="jenis_petugas"
+                id="jenis_petugas"
+                required>
+                <?php foreach ($jenis_petugas as $jp) { ?>
+                  <option>
+                    <?= $jp->nama_jenis ?>
+                  </option>
 
+                <?php } ?>
               </select>
             </div>
+            <div id="form-extend-indicator" class="text-center htmx-indicator">
+              <p>Mohon Tunggu ...</p>
+            </div>
+            <div id="form-extend"></div>
             <div class="text-center">
-              <button type="submit" class="btn btn-primary">Tambah Petugas</button>
+              <button id="submit-button" type="submit" class="btn btn-primary">Simpan Petugas</button>
             </div>
           </form>
         </div>

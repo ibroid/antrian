@@ -15,6 +15,7 @@ class Layar extends CI_Controller
   {
     parent::__construct();
     $this->load->library("addons");
+    $this->load->library("Sysconf", ["ed" => $this->eloquent]);
     $this->addons->init([
       "js" => [
         "<script src=\"https://js.pusher.com/8.2.0/pusher.min.js\"></script>\n",

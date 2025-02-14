@@ -26,7 +26,7 @@
       <?= $this->load->component("admin/online_user") ?>
     </div>
   </div>
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-4">
       <div class="card">
         <div class="card-header">
@@ -54,7 +54,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
 
 <script>

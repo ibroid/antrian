@@ -39,7 +39,7 @@ final class CreateLoketPelayananTable extends AbstractMigration
                 ]
             )
             ->addColumn('warna_loket', 'string', ['limit' => 34, 'default' => 'secondary'])
-            ->addColumn('kode_loket', 'string', ['limit' => 1, 'null' => false])
+            ->addColumn('kode_loket', 'string', ['limit' => 1])
             ->addColumn('file_audio', 'string', ['limit' => 64, 'null' => false])
             ->addColumn('created_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('updated_at', 'timestamp', ['default' => null, 'null' => true])

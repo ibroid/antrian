@@ -13,6 +13,7 @@ class Request_voice extends CI_Controller
 
     R_Input::mustPost();
     $this->load->library("tts");
+    $this->load->library("Sysconf", ["ed" => $this->eloquent]);
   }
 
   public function index()

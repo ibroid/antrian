@@ -72,7 +72,7 @@
             Surat Keterangan Tidak Mampu dan KTP sebanyak 5 rangkap
           </li>
           <li>
-            Keterangan dalam keperluan SKTM harus ada kalimat “untuk mengurus pembebasan biaya di Kantor Pengadilan Agama Jakarta Utara”.
+            Keterangan dalam keperluan SKTM harus ada kalimat “untuk mengurus pembebasan biaya di Kantor <?= $this->sysconf->NamaPN ?>”.
           </li>
           <li>
             Pemohon dan Termohon harus berdomisili di wilayah Jakarta Utara

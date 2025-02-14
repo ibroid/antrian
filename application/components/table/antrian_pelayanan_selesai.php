@@ -4,7 +4,8 @@
       <th>No.</th>
       <th>Antrian</th>
       <th>Tujuan</th>
-      <th>Aksi</th>
+      <th>Durasi Layanan</th>
+      <th>Waktu Tunggu</th>
     </tr>
   </thead>
   <tbody>
@@ -13,9 +14,8 @@
         <td><?= ++$n ?></td>
         <td><?= $d->nomor_antrian ?></td>
         <td><?= $d->tujuan ?></td>
-        <td>
-          <?= $this->load->component('table/pilihan_antrian_pelayanan') ?>
-        </td>
+        <td><?= $d->durasi_pelayanan ?></td>
+        <td><?= $d->waktu_tunggu ?></td>
       </tr>
     <?php } ?>
   </tbody>

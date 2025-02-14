@@ -1,4 +1,4 @@
-<div class="p-4 mb-3 bg-primary" id="card-antrian-saat-ini">
+<div class="p-4 mb-3 bg-primary">
   <div class="card-body">
     <h4 class="card-title">Nomor Saat Ini</h4>
     <h1 class="card-text"><?= $data->nomor_antrian ?> <?= $this->session->flashdata('nomor_antrian') ?></h1>
@@ -6,7 +6,7 @@
     <div class="text-center">
       <p>Durasi Pelayanan : <a class="text-light" href="javascript:void(0)" data-bs-title="Menghitung durasi pelayanan." data-bs-toggle="tooltip" data-bs-placement="bottom" id="timer">00:00:00</a></p>
       <script>
-        let startTime = new Date().getTime();
+        let startTime = new Date('<?= $data->mulai_panggil ?>').getTime();
         let x = setInterval(function() {
           let now = new Date().getTime();
           let distance = now - startTime;
@@ -24,25 +24,33 @@
     </div>
 
     <div class="d-flex gap-2">
-      <button class="btn btn-warning flex-grow-1" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" data-bs-title="<strong>Memindahkan antrian ini ke antrian lain seperti ke antrian posbakum atau ke antrian produk.</strong>">Pindahkan <i class="fa fa-share"></i></button>
-      <div data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" data-bs-title="<strong>Mengisi data pelayanan dari nomor antrian.</strong>">
-        <button data-bs-target="#modalPihak" data-bs-toggle="modal" class="btn btn-success">Isi Data <i class="fa fa-plus"></i></button>
-      </div>
+      <!-- <button class="btn btn-warning flex-grow-1" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" data-bs-title="<strong>Memindahkan antrian ini ke antrian lain seperti ke antrian posbakum atau ke antrian produk.</strong>">Pindahkan <i class="fa fa-share"></i></button> -->
+      <button
+        data-bs-toggle="tooltip"
+        data-bs-placement="bottom"
+        data-bs-html="true"
+        data-bs-title="<strong>Mengisi data pelayanan dari nomor antrian.</strong>"
+        data-bs-target="#modalPihak"
+        data-bs-toggle="modal"
+        class="btn btn-success btn-block flex-fill">
+        Isi Data
+        <i class="fa fa-plus"></i>
+      </button>
+      <button
+        data-bs-toggle="tooltip"
+        data-bs-placement="bottom"
+        data-bs-html="true"
+        data-bs-title="<strong>Mengakhiri layanan ptsp.</strong>"
+        class="btn btn-secondary btn-block flex-fill"
+        hx-post="<?= base_url("pelayanan/akhiri") ?>"
+        hx-indicator="#call-indicator"
+        hx-on::before-request="$(this).attr('disabled', true)"
+        name="id_antrian"
+        value="<?= Cypher::urlsafe_encrypt($data->id) ?>">
+        Akhiri
+        <i class="fa fa-ban"></i>
+      </button>
     </div>
-
-    <form hidden action="<?= base_url('/pelayanan/pindahkan') ?>" method="POST" class="my-3 bg-warning p-2 rounded">
-      <select required name="tujuan" id="select-tujuan" class="form-control form-control-sm form-select">
-        <option value="" selected disabled>-- Pindahkan Ke --</option>
-        <option>POSBAKUM</option>
-        <option>PENDAFTARAN</option>
-        <option>INFORMASI</option>
-        <option>PRODUK</option>
-        <option>KASIR</option>
-      </select>
-      <div class="text-end">
-        <button class="btn btn-white mt-3">Kirim</button>
-      </div>
-    </form>
   </div>
 </div>
 

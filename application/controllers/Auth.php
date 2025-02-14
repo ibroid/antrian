@@ -21,6 +21,7 @@ class Auth extends CI_Controller
       // "css" => ["<meta http-equiv=\"Content-Security-Policy\" content=\"upgrade-insecure-requests\">"]
     ]);
     $this->eloquent->table('user_session')->where('expiration_time', '<', date('Y-m-d H:i:s'))->delete();
+    $this->load->library("Sysconf", ["ed" => $this->eloquent]);
   }
 
   /**
@@ -150,7 +151,7 @@ class Auth extends CI_Controller
    */
   private function mathcIdentifier()
   {
-    $u = Users::with("role", "petugas")->where('identifier', R_Input::pos('login')['identifier'])->first();
+    $u = Users::with("role", "petugas.jenis_pelayanan")->where('identifier', R_Input::pos('login')['identifier'])->first();
     if (!$u) {
       throw new Exception("User tidak ditemukan", 1);
     }

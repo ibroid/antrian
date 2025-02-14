@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Petugas extends Model
 {
@@ -35,5 +36,15 @@ class Petugas extends Model
   public function loket()
   {
     return $this->belongsTo(LoketPelayanan::class, 'loket_id', 'id');
+  }
+
+  /**
+   * Define the relationship with the LoketPelayanan model.
+   *
+   * @return \Illuminate\Database\Eloquent\Relations\HasMany
+   */
+  public function jenis_pelayanan()
+  {
+    return $this->belongsToMany(JenisPelayanan::class, "petugas_jenis_pelayanan");
   }
 }

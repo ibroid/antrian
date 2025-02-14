@@ -12,19 +12,21 @@
     <?= $this->session->flashdata('flash_alert') ?>
     <?= $this->session->flashdata('flash_error') ?>
     <div class="col-3">
-      <?php if (!$is_admin && $currentLoket) :
-        if ($currentLoket->status == 0 || !$currentLoket->antrian) { ?>
-          <div class="p-4 mb-3 bg-primary">
-            <div class="card-body">
-              <h4 class="card-title">Nomor Saat Ini</h4>
-              <h1 class="card-text">0000</h1>
-              <p>--------</p>
+      <div id="antrian-saat-ini">
+        <?php if (!$is_admin && $currentLoket) :
+          if ($currentLoket->status == 0 || !$currentLoket->antrian) { ?>
+            <div class="p-4 mb-3 bg-primary">
+              <div class="card-body">
+                <h4 class="card-title">Nomor Saat Ini</h4>
+                <h1 class="card-text">0000</h1>
+                <p>--------</p>
+              </div>
             </div>
-          </div>
-        <?php } else { ?>
-          <?= $this->load->component('card/antrian_ptsp_saat_ini', ['data' => $currentLoket->antrian]) ?>
-      <?php }
-      endif; ?>
+          <?php } else { ?>
+            <?= $this->load->component('card/antrian_ptsp_saat_ini', ['data' => $currentLoket->antrian]) ?>
+        <?php }
+        endif; ?>
+      </div>
       <div class="card">
         <div class="card-body">
           <h6 class="card-title text-center">Control Center</h6>
@@ -36,17 +38,38 @@
               </div>
             </div>
           <?php } else { ?>
-            <form action="<?= base_url('/pelayanan/panggil') ?>" method="POST">
-              <input type="hidden" name="kode" value="<?= $kode ?>">
+            <form
+              hx-post="<?= base_url('/pelayanan/panggil') ?>"
+              method="POST"
+              hx-target="#antrian-saat-ini"
+              hx-on::before-request="availCallButton()"
+              hx-on::after-request="availCallButton(false)"
+              hx-indicator="#call-indicator">
               <div class="d-grid gap-2">
-                <button name="panggil" value="baru" class="btn btn-primary btn-lg btn-block" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-title="<b>Memanggil antrian  baru dari antrian yang berjalan</b>">
+                <button
+                  id="panggil-baru"
+                  name="panggil"
+                  value="baru"
+                  class="btn btn-primary btn-lg btn-block"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="right"
+                  data-bs-html="true"
+                  data-bs-title="<b>Memanggil antrian  baru dari antrian yang berjalan</b>">
                   Panggil Antrian Baru <i class="fa fa-volume-up"></i>
                 </button>
-                <button name="panggil" value="kembali" class="btn btn-secondary btn-lg" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Memanggil antrian kembali yang sebelum nya tidak menjawab.">
+                <button
+                  id="panggil-kembali"
+                  name="panggil"
+                  value="kembali"
+                  class="btn btn-secondary btn-lg"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="right"
+                  data-bs-title="Memanggil antrian kembali yang sebelum nya tidak menjawab.">
                   Panggil Antrian Kembali <i class="fa fa-volume-up"></i>
                 </button>
               </div>
             </form>
+            <p class="text-center htmx-indicator" id="call-indicator">Sedang memanggil ...</p>
             <hr>
             <form action="<?= base_url('/pelayanan/stop') ?>" method="POST">
               <input type="hidden" name="kode" value="<?= $kode ?>">
@@ -59,12 +82,84 @@
           <?php } ?>
         </div>
       </div>
-      <div id="appCapsule">
-        <div class="htmx-indicator">
-          <p>Mohon Tunggu</p>
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title text-center">Help Center</h6>
+          <div class="d-grid gap-2">
+            <button
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop"
+              class="btn btn-outline-success btn-lg btn-block">
+              Info Biaya
+              <i class="fa fa-dollar"></i>
+            </button>
+            <button
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop-ambil-antrian"
+              class="btn btn-outline-primary btn-lg btn-block">
+              Ambil Antrian Baru
+              <i class="fa fa-ticket"></i>
+            </button>
+          </div>
         </div>
-        <div hx-get="<?= base_url('mobile/biaya/page') ?>" hx-trigger="load">
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div id="appCapsule">
+                  <div class="htmx-indicator">
+                    <p>Mohon Tunggu</p>
+                  </div>
+                  <div hx-get="<?= base_url('mobile/biaya/page') ?>" hx-trigger="intersect">
 
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Understood</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="staticBackdrop-ambil-antrian" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Ambil Antrian Baru</h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close">
+                </button>
+              </div>
+              <div class="modal-body">
+                <form
+                  hx-post="<?= base_url('/pelayanan/pindahkan') ?>"
+                  class="my-3 bg-warning p-2 rounded">
+                  <select required name="id_pelayanan" id="select-tujuan" class="form-control form-control-sm form-select">
+                    <option value="" selected disabled>-- Pilih Tujuan --</option>
+                    <?php foreach ($jenis_pelayanan as $jp) { ?>
+                      <option value="<?= Cypher::urlsafe_encrypt($jp->id)  ?>">
+                        <?= $jp->kode_layanan . "-" . $jp->nama_layanan ?>
+                      </option>
+                    <?php } ?>
+                  </select>
+                  <div class="text-end">
+                    <button class="btn btn-white mt-3">Kirim</button>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -131,7 +226,7 @@
           </div>
         </div>
       </div>
-      <div class="card bg-primary">
+      <!-- <div class="card bg-primary">
         <div class="card-body">
           <div class="text-center">
             <i class="fa fa-warning" style="font-size: xx-large;"></i>
@@ -169,7 +264,7 @@
             </form>
           <?php } ?>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
@@ -188,5 +283,10 @@
         e.classList.add(cls);
       }, 500);
     })
+  }
+
+  function availCallButton(c = true) {
+    $("#panggil-baru").attr("disabled", c)
+    $("#panggil-kembali").attr("disabled", c)
   }
 </script>
