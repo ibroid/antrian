@@ -7,9 +7,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#000000">
-  <title>Pelayanan Mobile PAJU | <?= $title ?? "Beranda" ?></title>
-  <meta name="description" content="Pelayanan Mobile PAJU">
-  <meta name="keywords" content="paju, pajakut, <?= $this->sysconf->NamaPN ?>" />
+  <title>Pelayanan Mobile Pengadilan | <?= $title ?? "Beranda" ?></title>
+  <meta name="description" content="Pelayanan Mobile Pengadilan">
+  <meta name="keywords" content="Pengadilan, pajakut, <?= $this->sysconf->NamaPN ?>" />
 
   <meta http-equiv='cache-control' content='no-cache'>
   <meta http-equiv='expires' content='0'>
@@ -69,7 +69,7 @@
       <div class="footer-title">
         Copyright © <?= $this->sysconf->NamaPN ?> <span class="yearNow"></span>.
       </div>
-      <div>Smart Portal Paju Web.</div>
+      <div>Smart Portal Pengadilan Web.</div>
       Follow kami melalui media sosial dibawah ini.
 
       <div class="mt-2">
@@ -108,7 +108,7 @@
         <div class="action-sheet-content text-center">
           <div class="mb-1"><img src="<?= base_url("assets/mobile/favicon_io/android-chrome-192x192.png") ?>" alt="icon app install" class="imaged w48">
           </div>
-          <h4>Smart Portal Paju Web</h4>
+          <h4>Smart Portal Pengadilan Web</h4>
           <div>
             Dengan menambahkan aplikasi ini ke layar utama. Silahkan ikuti langkah berikut.
           </div>
@@ -135,7 +135,7 @@
         <div class="mb-1">
           <img src="<?= base_url("assets/mobile/favicon_io/android-chrome-192x192.png") ?>" alt="icon app install" class="imaged w48">
         </div>
-        <h4>Smart Portal Paju Web</h4>
+        <h4>Smart Portal Pengadilan Web</h4>
         <div>
           Dengan menambahkan aplikasi ini ke layar utama. Silahkan ikuti langkah berikut.
         </div>

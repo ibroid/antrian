@@ -60,4 +60,14 @@ class AntrianPtsp extends Model
   {
     return $this->hasOne(LoketPelayanan::class, 'antrian_pelayanan_id', 'id');
   }
+
+  /**
+   * Retrieve the associated JenisPelayanan for the AntrianPtsp.
+   *
+   * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+   */
+  public function jenis_pelayanan()
+  {
+    return $this->belongsTo(JenisPelayanan::class);
+  }
 }

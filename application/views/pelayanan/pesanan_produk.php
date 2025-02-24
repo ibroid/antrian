@@ -2,6 +2,9 @@
   <div class="row">
     <?= $this->session->flashdata('flash_alert') ?>
     <?= $this->session->flashdata('flash_error') ?>
+    <div class="alert alert-info">
+      <h6>Data pesanan produk sudah otomatis terisi oleh sistem. Silahkan <strong> lengkapi data saja tanpa membuat data baru</strong>. Apabila data pesanan tidak ada, silahkan buat data baru.</h6>
+    </div>
     <div class="col-12">
       <div class="card">
         <div class="card-body">
@@ -54,6 +57,17 @@
 
     produkChannel.bind("saved-produk", (data) => {
       datatable.ajax.reload()
+    })
+
+
+    Swal.fire({
+      icon: "warning",
+      title: "Perhatian",
+      text: "Data pesanan produk sudah otomatis terisi. Silahkan lengkapi data tanpa membuat data baru. Apabila pesanan tidak ada, silahkan tambah baru.",
+      allowOutsideClick: false,
+      timer: 10000,
+      showConfirmButton: false,
+      timerProgressBar: true
     })
 
   })

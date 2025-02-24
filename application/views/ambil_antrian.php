@@ -42,7 +42,7 @@
               if ($jp->support_picker == 1) { ?>
                 <div
                   class="card small-widget mb-sm-0 bg-warning mt-4"
-                  onclick="openModalPerkaraProduk('<?= $jp->nama_layanan ?>', '<?= $jp->id ?>')">
+                  onclick="openModalPerkaraProduk('<?= $jp->nama_layanan ?>', '<?= Cypher::urlsafe_encrypt($jp->id)  ?>')">
                   <div class="card-body primary"> <span class="f-light text-light">Antrian Sekarang : 0</span>
                     <div class="d-flex align-items-end gap-1">
                       <h4><?= $jp->nama_layanan ?></h4>
@@ -57,7 +57,7 @@
               <?php } else { ?>
                 <div
                   class="card small-widget mb-sm-0 bg-warning card-ambil-antrian-ptsp mt-4" data-antrian-tujuan="<?= $jp->nama_layanan ?>"
-                  data-antrian-id="<?= $jp->id ?>">
+                  data-antrian-id="<?= Cypher::urlsafe_encrypt($jp->id)  ?>">
                   <div class="card-body primary"> <span class="f-light text-light">Antrian Sekarang : 0</span>
                     <div class="d-flex align-items-end gap-1">
                       <h4><?= $jp->nama_layanan ?></h4>
@@ -588,7 +588,8 @@
       success(data) {
         const {
           antrian,
-          message
+          message,
+          print_status
         } = JSON.parse(data);
 
         (async function() {
@@ -600,20 +601,34 @@
         })()
 
         const nomor_antrian = antrian.kode + "-" + antrian.nomor_urutan;
-
-        Swal.fire({
+        const swal_response = {
           title: "Nomor Antrian Anda : " + nomor_antrian,
           icon: "success",
           html: message + "<br/><b></b>",
-          timer: 6000,
-          timerProgressBar: true,
-          didOpen: () => {
+        };
+
+        if (print_status) {
+          swal_response["timer"] = 5000;
+          swal_response["timerProgressBar"] = true;
+          swal_response["didOpen"] = () => {
+            Swal.showLoading();
             const timer = Swal.getPopup().querySelector("b");
-            let sec = 5;
             timerInterval = setInterval(() => {
-              timer.textContent = sec--;
-            }, 1000);
-          },
+              timer.textContent = `${Swal.getTimerLeft()}`;
+            }, 100);
+          };
+          swal_response["willClose"] = () => {
+            clearInterval(timerInterval);
+          }
+        } else {
+          swal_response['confirmButtonText'] = "Cetak melalui USB";
+          swal_response['showCancelButton'] = true;
+        }
+
+        Swal.fire(swal_response).then((result) => {
+          if (result.isConfirmed) {
+            window.open(`<?= base_url('ambil/cetak_antrian') ?>?type=ptsp&id=${antrian.id}`, '_blank', 'location=yes,height=320,width=520,scrollbars=yes,status=yes')
+          }
         })
       },
       error(err) {
@@ -768,7 +783,7 @@
         stopGlobalAudio()
         return false
       }
-      return ambilAntrianPelayanan("PRODUK")
+      return ambilAntrianPelayanan(tujuan, id)
     }
 
     changeGlobalAudio("<?= base_url("/audio/intruction-antrian-produk-3.mp3") ?>")
@@ -1004,3 +1019,5 @@
     return audioPath
   }
 </script>
+
+<?= $this->session->flashdata('print_error') ?>

@@ -153,7 +153,7 @@
     </div>
     <!-- Total Sidang Hari Ini -->
     <?= $this->load->component("card/widget_total_sidang") ?>
-    <!-- Lahan Kosong -->
+    <!-- Antrian Prioritas -->
     <div class="col-xl-3 col-md-6 col-sm-12">
       <div class="card widget-1">
         <div class="card-body ">
@@ -202,7 +202,7 @@
             <tbody>
               <?php foreach ($antrian as $a) { ?>
                 <tr>
-                  <td> <?= badge_nama_ruang_sidang($a->nomor_ruang) ?></td>
+                  <td> <?= $a->nama_ruang ?></td>
                   <td>
 
                     <h6> <strong>No. <?= $a->nomor_urutan ?> </strong></h6>

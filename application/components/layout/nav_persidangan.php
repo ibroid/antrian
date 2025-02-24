@@ -21,42 +21,17 @@
           </svg><span>Antrian Sidang</span>
         </a>
       </li>
-      <li class="sidebar-list">
-        <i class="fa fa-thumb-tack"></i>
-        <a class="sidebar-link sidebar-title" href="<?= base_url('/ruangsidang/umar') ?>">
-          <svg class="stroke-icon">
-            <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-home"></use>
-          </svg>
-          <span>Rudang Sidang Umar</span>
-        </a>
-      </li>
-      <li class="sidebar-list">
-        <i class="fa fa-thumb-tack"></i>
-        <a class="sidebar-link sidebar-title" href="<?= base_url('/ruangsidang/abumusa') ?>">
-          <svg class="stroke-icon">
-            <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-home"></use>
-          </svg>
-          <span>Rudang Sidang Musa</span>
-        </a>
-      </li>
-      <li class="sidebar-list">
-        <i class="fa fa-thumb-tack"></i>
-        <a class="sidebar-link sidebar-title" href="<?= base_url('/ruangsidang/syuraih') ?>">
-          <svg class="stroke-icon">
-            <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-home"></use>
-          </svg>
-          <span>Rudang Sidang Syuraih</span>
-        </a>
-      </li>
-      <li class="sidebar-list">
-        <i class="fa fa-thumb-tack"></i>
-        <a class="sidebar-link sidebar-title" href="<?= base_url('/kasir') ?>">
-          <svg class="stroke-icon">
-            <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-to-do"></use>
-          </svg>
-          <span>Kasir</span>
-        </a>
-      </li>
+      <?php if (isset($ruang_sidangs)) foreach ($ruang_sidangs as $ruang_sidang) { ?>
+        <li class="sidebar-list">
+          <i class="fa fa-thumb-tack"></i>
+          <a class="sidebar-link sidebar-title" href="<?= base_url('/ruangsidang/kontrol_sidang/' . Cypher::urlsafe_encrypt($ruang_sidang->kode)) ?>">
+            <svg class="stroke-icon">
+              <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-home"></use>
+            </svg>
+            <span>Kontrol Ruang <?= $ruang_sidang->nama ?></span>
+          </a>
+        </li>
+      <?php } ?>
     </ul>
   </div>
   <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>

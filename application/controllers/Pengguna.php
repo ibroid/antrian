@@ -216,14 +216,19 @@ class Pengguna extends R_Controller
 
     R_Input::mustPost();
     try {
+      Eloquent::connection("default")->beginTransaction();
       $user = Users::findOrFail(Cypher::urlsafe_decrypt($user_id));
 
       if (!password_verify(R_Input::pos("password_hapus") . $user->salt, $user->password)) {
         throw new Exception("Password Tidak Sama", 1);
       }
 
+      $user->petugas->jenis_pelayanan()->detach();
+      $user->petugas()->delete();
+
       $user->delete();
 
+      Eloquent::connection("default")->commit();
       if (R_Input::ci()->request_headers()["Accept"] == "application/json") {
         echo json_encode([
           "status" => true,
@@ -238,6 +243,7 @@ class Pengguna extends R_Controller
         "type" => "success",
       ])->go("/pengguna");
     } catch (\Throwable $th) {
+      Eloquent::connection("default")->rollBack();
       if (R_Input::ci()->request_headers()["Accept"] == "application/json") {
         echo json_encode([
           "status" => false,

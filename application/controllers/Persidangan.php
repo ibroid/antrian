@@ -1,11 +1,11 @@
 <?php
 
-class Persidangan extends R_Controller
+class Persidangan extends ControlPetugasSidang
 {
   public function index()
   {
-    $this->antrian_sidang();
     $this->load->library("addons");
+    $this->antrian_sidang();
   }
 
   public function antrian_sidang()
@@ -21,13 +21,16 @@ class Persidangan extends R_Controller
       ]
     ]);
 
+    $daftarRuangSidang =  Eloquent::connection("sipp")->table("ruangan_sidang")->where("aktif", "Y")->get();
+
     $this->load->page("persidangan/antrian_sidang", [
       "pagename" => "Monitor Petugas Sidang",
       "antrian" => AntrianPersidangan::whereDate("created_at", date("Y-m-d"))->get(),
       "jadwal_sidang" => PerkaraJadwalSidang::where("tanggal_sidang", date("Y-m-d"))->get(),
-      "dalam_sidang" => DalamPersidangan::whereDate("tanggal_panggil", date("Y-m-d"))->get()
+      "dalam_sidang" => DalamPersidangan::whereDate("tanggal_panggil", date("Y-m-d"))->get(),
+      "ruang_sidangs" => $daftarRuangSidang
     ])->layout("dashboard_layout", [
-      "nav" => $this->load->component("layout/nav_persidangan"),
+      "nav" => $this->load->view("layout/nav_persidangan", ["ruang_sidangs" => $daftarRuangSidang], TRUE),
       "title" => "Monitor Petugas Sidang",
     ]);
   }

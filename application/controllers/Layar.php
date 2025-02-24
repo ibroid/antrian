@@ -36,7 +36,10 @@ class Layar extends CI_Controller
    */
   public function sidang()
   {
-    $this->load->page("persidangan/layar_antrian")->layout("auth_layout");
+    $daftar_ruang_sidang = Eloquent::connection('sipp')->table("ruangan_sidang")->where("aktif", "Y")->get();
+    $this->load->page("persidangan/layar_antrian",  [
+      "daftar_ruang_sidang" => $daftar_ruang_sidang
+    ])->layout("auth_layout");
   }
 
   /**

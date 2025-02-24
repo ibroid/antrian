@@ -26,7 +26,6 @@
     <div class="d-flex gap-2">
       <!-- <button class="btn btn-warning flex-grow-1" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" data-bs-title="<strong>Memindahkan antrian ini ke antrian lain seperti ke antrian posbakum atau ke antrian produk.</strong>">Pindahkan <i class="fa fa-share"></i></button> -->
       <button
-        data-bs-toggle="tooltip"
         data-bs-placement="bottom"
         data-bs-html="true"
         data-bs-title="<strong>Mengisi data pelayanan dari nomor antrian.</strong>"

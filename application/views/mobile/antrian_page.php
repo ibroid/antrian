@@ -3,8 +3,11 @@
   <h4 class="subtitle">Silahkan Ambil Antrian Sesuai Kebutuhan Anda</h4>
 </div>
 
-<div class="section">
-  <div class="card bg-dark text-white mt-3">
+<div class="section mt-5">
+  <div class="text-center">
+    <h4 class="text-danger">Mohon maaf untuk sementara pengambilan secara online belum bisa dilakukan.</h4>
+  </div>
+  <!-- <div class="card bg-dark text-white mt-3">
     <img src="<?= base_url('static/img/m_img_sidang.png') ?>" class="card-img overlay-img" alt="image">
     <div id="card-body-antrian-sidang" class="card-img-overlay d-flex flex-column justify-content-between">
       <div>
@@ -115,5 +118,5 @@
         <p>Anda belum bisa mengambil antrian pelayanan</p>
       <?php } ?>
     </div>
-  </div>
+  </div> -->
 </div>

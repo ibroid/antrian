@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Date;
+
 class Pelayanan extends ControlPetugasPelayanan
 {
 
@@ -97,9 +99,15 @@ class Pelayanan extends ControlPetugasPelayanan
       //   "kode" => $this->getAntrianByJenisPetugas($this->user['petugas']['jenis_petugas'] ?? "*"),
       //   "status" => 0
       // ]);
-      $antrianPtspDatatable->allowedServiceCode = array_map(function ($i) {
-        return $i["id"];
-      }, $this->user["petugas"]["jenis_pelayanan"]);
+      $inCond = [];
+      if (count($this->user["petugas"]["jenis_pelayanan"]) > 0) {
+        $inCond = array_map(function ($i) {
+          return $i["id"];
+        }, $this->user["petugas"]["jenis_pelayanan"]);
+      } else {
+        $inCond = ["none"];
+      }
+      $antrianPtspDatatable->allowedServiceCode = $inCond;
     }
 
     $lists = $antrianPtspDatatable->getData();
@@ -112,7 +120,12 @@ class Pelayanan extends ControlPetugasPelayanan
       $row[] = $no;
       $row[] = $list->kode . "-" . $list->nomor_urutan;
       $row[] = $list->tujuan;
-      $row[] = $this->load->component("table/wait_counter_antrian_pelayanan", ["data" => $list]);
+      $row[] = (function ($list) {
+        if ($this->is_admin) {
+          return $this->load->component("table/pilihan_antrian_pelayanan", ["data" => $list]);
+        }
+        return $this->load->component("table/wait_counter_antrian_pelayanan", ["data" => $list]);
+      })($list);
       $data[] = $row;
     }
     $output = array(
@@ -130,11 +143,45 @@ class Pelayanan extends ControlPetugasPelayanan
     R_Input::mustPost();
     try {
       $this->eloquent->connection("default")->beginTransaction();
-      $callableId = array_map(function ($i) {
-        return $i["id"];
-      }, $this->user["petugas"]["jenis_pelayanan"]);
+
+      $inCond = [];
+      if (count($this->user["petugas"]["jenis_pelayanan"]) > 0) {
+        $inCond = array_map(function ($i) {
+          return $i["id"];
+        }, $this->user["petugas"]["jenis_pelayanan"]);
+      } else {
+        $inCond = ["none"];
+      }
+
+      $callableId = $inCond;
 
       if (R_Input::pos('panggil') == "baru") {
+        $currentLoket = LoketPelayanan::find($this->user["petugas"]['loket_id']);
+        if ($currentLoket->antrian_pelayanan_id) {
+          if ($currentLoket->antrian->jenis_pelayanan->need_identity == 1) {
+            if (!$currentLoket->antrian->identitas_pihak_id) {
+              $red = Redirect::wfe("Identitas pihak harus diisi sebelum melanjutkan antrian");
+              if (isset($this->input->request_headers()["Hx-Request"])) {
+                header("HX-Refresh: true");
+                exit;
+              }
+              $red->go("/pelayanan");
+            }
+          }
+
+          $waktuTadiDipanggil = new DateTime($currentLoket->antrian->mulai_panggil);
+          $waktuPanggilSelanjutnya = new Date(date("Y-m-d H:i:s"));
+          $durasiPelayanan = $waktuTadiDipanggil->diff($waktuPanggilSelanjutnya);
+          $currentLoket->antrian()->update([
+            "durasi_pelayanan" => sprintf(
+              '%02d:%02d:%02d',
+              ($durasiPelayanan->days * 24) + $durasiPelayanan->h,
+              $durasiPelayanan->i,
+              $durasiPelayanan->s
+            ),
+            "selesai_panggil" => date("Y-m-d H:i:s")
+          ]);
+        }
 
         $lastNomorAntrianPtsp = AntrianPtsp::where("status", 0)->where(
           function ($q) use ($callableId) {
@@ -366,6 +413,14 @@ class Pelayanan extends ControlPetugasPelayanan
       $antrian = AntrianPtsp::findOrFail(
         $antrianId
       );
+
+      if ($antrian->jenis_pelayanan->need_identity == 1) {
+        if (!$antrian->identitas_pihak_id) {
+          Redirect::wfe("Silahkan isi identitas pihak sebelum melanjutkan antrian");
+          header("HX-Refresh: true");
+          exit;
+        }
+      }
 
       $waktuDiPanggil = new DateTime($antrian->mulai_panggil);
       $waktuSelesai = new DateTime(date("Y-m-d H:i:s"));

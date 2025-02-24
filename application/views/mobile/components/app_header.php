@@ -42,7 +42,7 @@
          <h5 class="modal-title">Deskripsi</h5>
        </div>
        <div class="modal-body">
-         Aplikasi Smart Portal Paju versi Web PWA
+         Aplikasi Smart Portal Pengadilan versi Web PWA
          <p hx-get="<?= base_url("mobile/visitor") ?>" hx-trigger="intersect">Visitor hari ini : 0</p>
          Nomor Pengunjung : <p id="visitor_number"></p>
        </div>

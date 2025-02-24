@@ -151,7 +151,7 @@ class Auth extends CI_Controller
    */
   private function mathcIdentifier()
   {
-    $u = Users::with("role", "petugas.jenis_pelayanan")->where('identifier', R_Input::pos('login')['identifier'])->first();
+    $u = Users::with("role", "petugas.jenis_pelayanan", "petugas.loket")->where('identifier', R_Input::pos('login')['identifier'])->first();
     if (!$u) {
       throw new Exception("User tidak ditemukan", 1);
     }

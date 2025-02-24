@@ -305,6 +305,10 @@ class ControlPetugasPelayanan extends R_Controller
     public function __construct()
     {
         parent::__construct();
+        if ($this->is_admin) {
+            return;
+        }
+
         if (isset($this->input->request_headers()["X-Requested-With"])) {
             return;
         }
@@ -314,6 +318,49 @@ class ControlPetugasPelayanan extends R_Controller
         }
 
         if ($this->user["role_id"] != 3) {
+            if ($this->input->request_headers()["Accept"] == "application/json") {
+                set_status_header(401);
+                echo json_encode(["message" => "Tidak bisa melanjutkan dengan role anda."]);
+                die;
+            }
+            return Redirect::wfe("Tidak bisa melanjutkan dengan role anda.")->go("menu");
+        }
+    }
+}
+
+class ControlAdmin extends R_Controller
+{
+    public $nav;
+    public function __construct()
+    {
+        parent::__construct();
+        if (!$this->is_admin) {
+            return Redirect::wfe("Tidak bisa melanjutkan dengan role anda.")->go("menu");
+        }
+        $this->nav = $this->load->component("layout/nav_pelayanan");
+    }
+}
+
+class ControlPetugasSidang extends R_Controller
+{
+    public $daftar_ruang_sidang;
+
+    public function __construct()
+    {
+        parent::__construct();
+        if ($this->is_admin) {
+            return;
+        }
+
+        if (isset($this->input->request_headers()["X-Requested-With"])) {
+            return;
+        }
+
+        if ($this->input->request_headers()["Accept"] == "application/json") {
+            return;
+        }
+
+        if ($this->user["role_id"] != 2) {
             if ($this->input->request_headers()["Accept"] == "application/json") {
                 set_status_header(401);
                 echo json_encode(["message" => "Tidak bisa melanjutkan dengan role anda."]);

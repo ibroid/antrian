@@ -61,7 +61,7 @@
     <img src="<?= base_url('static/img/free_wifi.png') ?>" class="card-img overlay-img" alt="image">
     <div class="card-img-overlay text-center d-flex flex-column justify-content-center">
       <h4 class="text-light">Password Wifi <?= $this->sysconf->NamaPN ?></h4>
-      <p>Nama Wifi : SMARTPAJU_PUBLIK <br> Password : wbbmpasti</p>
+      <p>Nama Wifi : SMARTPengadilan_PUBLIK <br> Password : wbbmpasti</p>
       <button onclick="copyPassWifi()" class="btn btn-light">
         <ion-icon name="copy-outline"></ion-icon>
         Salin Password

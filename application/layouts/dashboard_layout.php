@@ -10,7 +10,7 @@
 	<link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('assets/favicon/') ?>/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('assets/favicon/') ?>/favicon-16x16.png">
 	<link rel="manifest" href="<?= base_url('assets/favicon/') ?>/site.webmanifest">
-	<title><?= isset($title) ? $title : "Dashboard" ?> | APDP - PAJU</title>
+	<title><?= isset($title) ? $title : "Dashboard" ?> | APDP - Pengadilan</title>
 	<!-- Google font-->
 	<link href="https://fonts.googleapis.com/css?family=Rubik:400,400i,500,500i,700,700i&amp;display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900&amp;display=swap" rel="stylesheet">

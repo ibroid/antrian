@@ -232,4 +232,32 @@ class Petugas_pelayanan extends R_Controller
     $data["jenis_pelayanan"] = JenisPelayanan::all();
     $this->load->view("admin/petugas/form_extend", $data);
   }
+
+  public function delete($eid)
+  {
+    if ($this->input->method() != "delete") {
+      show_404();
+      return;
+    }
+
+    if (!isset($this->input->request_headers()["Hx-Request"])) {
+      show_404();
+      return;
+    }
+
+    $id = Cypher::urlsafe_decrypt($eid);
+    try {
+      $this->eloquent->connection("default")->beginTransaction();
+      $petugas = Petugas::findOrFail($id);
+      $petugas->jenis_pelayanan()->detach();
+      $petugas->delete();
+      $this->eloquent->connection("default")->commit();
+      Redirect::wfa(["message" => "Petugas telah dihapus"]);
+      header("HX-Rediret: /petugas_pelayanan");
+      set_status_header(200);
+    } catch (\Throwable $th) {
+      $this->eloquent->connection("default")->rollback();
+      echo "Terjadi kesalahan : " . $th->getMessage();
+    }
+  }
 }

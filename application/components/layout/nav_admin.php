@@ -67,13 +67,43 @@
           <span>Produk</span>
         </a>
       </li>
-      <li class="sidebar-list">
+      <!-- <li class="sidebar-list">
         <i class="fa fa-thumb-tack"></i>
         <a class="sidebar-link sidebar-title" href="<?= base_url('/identitas_pihak') ?>">
           <svg class="stroke-icon">
             <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-user"></use>
           </svg>
           <span>Pihak</span>
+        </a>
+      </li> -->
+      <li class="sidebar-list">
+        <i class="fa fa-thumb-tack"></i>
+        <a class="sidebar-link sidebar-title" href="<?= base_url('/banner') ?>">
+          <svg class="stroke-icon">
+            <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-landing-page"></use>
+          </svg>
+          <span>Banner</span>
+        </a>
+      </li>
+      <li class="sidebar-list">
+        <i class="fa fa-thumb-tack"></i>
+        <a class="sidebar-link sidebar-title" href="<?= base_url('/running_text') ?>">
+          <svg class="stroke-icon">
+            <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-landing-page"></use>
+          </svg>
+          <span>Running Text</span>
+        </a>
+      </li>
+      <li class="sidebar-list">
+        <i class="fa fa-thumb-tack"></i>
+        <a
+          class="sidebar-link sidebar-title"
+          aria-expanded="false"
+          href="<?= base_url('printer') ?>">
+          <svg class="stroke-icon">
+            <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-learning"></use>
+          </svg>
+          <span>Printer Cetak</span>
         </a>
       </li>
     </ul>

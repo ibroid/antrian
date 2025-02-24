@@ -59,3 +59,9 @@
     </div>
   </div>
 </div>
+
+<script>
+  window.addEventListener("load", function() {
+    $("#dataTable").DataTable()
+  })
+</script>

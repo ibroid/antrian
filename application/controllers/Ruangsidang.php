@@ -5,21 +5,28 @@ class RuangSidang extends R_Controller
   public function __construct()
   {
     parent::__construct();
+    $baseUrl = base_url();
+
+    $this->addons->init([
+      "js" => [
+        "<script type=\"text/javascript\" src=\"https://unpkg.com/toastify-js\"></script>\n",
+        "<script src=\"https://unpkg.com/sweetalert2@11\"></script>",
+        "<script src='" . base_url() . "assets/js/form-validation-custom.js'></script>",
+      ],
+      "css" => [
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/toastify-js@1.12.0/src/toastify.css\">\n",
+        "<script type=\"text/javascript\" src=\"$baseUrl/package/htmx/htm.js\"></script>\n"
+      ]
+    ]);
   }
 
-  public function umar()
+  public function kontrol_sidang($enid = null)
   {
-    $this->dashboard_ruang_sidang(1);
-  }
+    if (!$enid) {
+      return show_404();
+    }
 
-  public function abumusa()
-  {
-    $this->dashboard_ruang_sidang(2);
-  }
-
-  public function syuraih()
-  {
-    $this->dashboard_ruang_sidang(3);
+    $this->dashboard_ruang_sidang(Cypher::urlsafe_decrypt($enid));
   }
 
   private function dashboard_ruang_sidang($id)
@@ -32,17 +39,7 @@ class RuangSidang extends R_Controller
         "<script src=\"https://unpkg.com/sweetalert2@11.10.8/dist/sweetalert2.all.min.js\"></script>\n"
       ]
     ]);
-
-    $nama_ruang = [
-      "Ruang Sidang Umar",
-      "Ruang Sidang Abumusa",
-      "Ruang Sidang Syuraih",
-    ];
-
-    if (!isset($nama_ruang[$id - 1])) {
-      show_404();
-      die;
-    }
+    $ruang_sidang = Eloquent::connection("sipp")->table("ruangan_sidang")->where("aktif", "Y")->where("kode", $id)->first();
 
     $dalamPanggilan = DalamPersidangan::where("nomor_ruang", $id)->whereDate("created_at", date("Y-m-d"))->first();
 
@@ -50,7 +47,7 @@ class RuangSidang extends R_Controller
       "pagename" => "Dashboard Ruang Sidang",
       "antrian" => AntrianPersidangan::where("nomor_ruang", $id)->whereDate("created_at", date("Y-m-d"))->get(),
       "dalam_panggilan" => $dalamPanggilan,
-      "nama_ruang" => $nama_ruang[$id - 1],
+      "nama_ruang" => $ruang_sidang->nama,
       "nomor_ruang" => $id,
       "dalam_persidangan" => $dalamPanggilan,
     ])->layout("dashboard_layout", [

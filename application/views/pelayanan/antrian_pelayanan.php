@@ -176,11 +176,17 @@
               <?= $this->load->component("table/antrian_pelayanan_berjalan") ?>
             </div>
             <div class="tab-pane fade py-5" id="profile" role="tabpanel" aria-labelledby="profile-tabs">
-              <?= $this->load->component("table/antrian_pelayanan_selesai", ['data' => $antrian_berjalan->filter(
-                function ($value, $key) {
-                  return $value->petugas_id == $this->user["petugas"]["id"];
-                }
-              )->all()]) ?>
+              <?php
+              if ($this->is_admin) {
+                echo $this->load->component("table/antrian_pelayanan_selesai", ['data' => $antrian_berjalan]);
+              } else {
+                echo $this->load->component("table/antrian_pelayanan_selesai", ['data' => $antrian_berjalan->filter(
+                  function ($value, $key) {
+                    return $value->petugas_id == $this->user["petugas"]["id"];
+                  }
+                )->all()]);
+              }
+              ?>
             </div>
           </div>
         </div>
@@ -198,7 +204,17 @@
             </div>
           </div>
           <div class="social-details">
-            <h5 class="mb-1"><a href="social-app.html"><?= $this->user["petugas"]['nama_petugas'] ?? $this->user["name"]  ?></a></h5><span class="f-light"><?= $this->user["petugas"]['jenis_petugas'] ?? $this->user['role']['role_name'] ?></span>
+            <h5 class="mb-1">
+              <a href="social-app.html">
+                <?= $this->user["petugas"]['nama_petugas'] ?? $this->user["name"]  ?>
+              </a>
+            </h5>
+            <h6 class="f-light">
+              <?= $this->user["petugas"]['loket']['nama_loket'] ?? null ?>
+            </h6>
+            <span class="f-light">
+              <?= $this->user["petugas"]['jenis_petugas'] ?? $this->user['role']['role_name'] ?>
+            </span>
             <ul class="card-social">
               <li><a href="https://www.facebook.com/" target="_blank"><i class="fa fa-facebook"></i></a></li>
               <li><a href="https://accounts.google.com/" target="_blank"><i class="fa fa-google-plus"></i></a></li>

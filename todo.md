@@ -12,4 +12,21 @@ Sabtu 08-02-2025
 - [&check;] Sesuaikan pengambilan antrian dengan jenis layanan
 --------------
 Kamis 03-02-2025
-- [] Update pemanggilan petugas berdasarkan jenis layanan
+- [&check;] Update pemanggilan petugas berdasarkan jenis layanan
+--------------
+Jumat 14-02-2025
+- [&check;] Update manage petugas (Unlink)
+- [&check;] Update manage banner
+- [  ] Update manage audio
+- [&check;] Notif antrian informasi belum isi data identitas
+- [&check;] Set Waktu selesai pelayanan
+--------------
+Senin 17-02-2025
+- [&check;] Update manage running text
+--------------
+Senin 19-02-2025
+- [&check;] Direct print from page
+- [&check;] Manage Printer
+- [&check;] Manage Ruang Sidang
+- [&check;] Hubungkan ruang sidang dengan antrian
+- [&check;] Fix admin pelayanan ptsp

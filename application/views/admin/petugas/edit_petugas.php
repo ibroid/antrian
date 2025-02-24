@@ -14,7 +14,7 @@
         <div class="card-header">
           <div class="d-flex justify-content-between align-items-center">
             <div class="text-header">
-              <h5>Tambah Petugas Baru</h5>
+              <h5>Form Update Data Petugas</h5>
             </div>
             <div class="text-end">
               <a href="<?= base_url('/petugas_pelayanan') ?>" class="btn btn-secondary">
@@ -68,7 +68,24 @@
             </div>
             <div id="form-extend"></div>
             <div class="text-center">
-              <button id="submit-button" type="submit" class="btn btn-primary">Update Petugas</button>
+              <button id="submit-button" type="submit" class="btn btn-primary">
+                Update Petugas
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                hx-delete="<?= base_url('petugas_pelayanan/delete/' . Cypher::urlsafe_encrypt($data->id)) ?>"
+                hx-on::before-request="$(this).attr('disabled', true)"
+                hx-trigger='confirmed'
+                onClick="Swal.fire({
+                title: 'Data akan dihapus', 
+                text:'Apa anda yakin ?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yakin'
+                }).then((result) => { if(result.isConfirmed) { htmx.trigger(this,'confirmed') } })">
+                Hapus Petugas
+              </button>
             </div>
           </form>
         </div>

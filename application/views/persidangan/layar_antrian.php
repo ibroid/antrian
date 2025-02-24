@@ -19,43 +19,21 @@
             </li>
           </ul>
         </div>
-        <div class="row">
-          <div class="col-lg-4 col-md-4 col-sm-12">
-            <div class="card crypto-main-card">
-              <div class="card-body">
+        <div class="d-flex gap-5">
+          <?php foreach ($daftar_ruang_sidang as $ruang_sidang) { ?>
+            <div class="card crypto-main-card" style="width: 400px;">
+              <div class="card-body mb-auto">
+                <div class="text-center">
+                  <h1><?= strtoupper($ruang_sidang->nama) ?></h1>
+                </div>A
                 <div class=" text-center">
                   <div>
-                    <h1>RUANG SIDANG 1 : UMAR BK</h1>
-                    <span class="nomor-antrian" data-nomor="1" style=" font-size: 15rem;">0</span>
+                    <span class="nomor-antrian" data-nomor="<?= $ruang_sidang->kode ?>" style=" font-size: 15rem;">0</span>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="col-lg-4 col-md-4 col-sm-12">
-            <div class="card crypto-main-card" style="background-image: linear-gradient(to bottom right, #F73164, #ED7AAF);">
-              <div class="card-body">
-                <div class=" text-center">
-                  <div>
-                    <h1>RUANG SIDANG 2 : ABUMUSA</h1>
-                    <span class="nomor-antrian" data-nomor="2" style=" font-size: 15rem;">0</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-4 col-sm-12">
-            <div class="card crypto-main-card" style="background-image: linear-gradient(to bottom right, #FFAA05, #FDE682);">
-              <div class="card-body">
-                <div class=" text-center">
-                  <div>
-                    <h1>RUANG SIDANG 3 : SYURAIH</h1>
-                    <span class="nomor-antrian" data-nomor="3" style=" font-size: 15rem;">0</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <?php } ?>
         </div>
       </div>
     </div>
