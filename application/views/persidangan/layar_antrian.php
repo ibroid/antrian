@@ -21,18 +21,18 @@
         </div>
         <div class="d-flex gap-5">
           <?php foreach ($daftar_ruang_sidang as $ruang_sidang) { ?>
-            <div class="card crypto-main-card" style="width: 400px;">
+            <a href="<?= base_url('layar/ruangan/' . Cypher::urlsafe_encrypt($ruang_sidang->id)) ?>" class="card crypto-main-card" style="width: 400px;">
               <div class="card-body mb-auto">
                 <div class="text-center">
                   <h1><?= strtoupper($ruang_sidang->nama) ?></h1>
-                </div>A
+                </div>
                 <div class=" text-center">
                   <div>
                     <span class="nomor-antrian" data-nomor="<?= $ruang_sidang->kode ?>" style=" font-size: 15rem;">0</span>
                   </div>
                 </div>
               </div>
-            </div>
+            </a>
           <?php } ?>
         </div>
       </div>

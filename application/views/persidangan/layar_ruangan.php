@@ -120,7 +120,7 @@
       </div>
     </div>
     <div class="col-6">
-      <div id="loket-container"></div>
+      <div id="ruangan-container"></div>
     </div>
   </div>
 
@@ -160,47 +160,17 @@
       cluster: 'ap1'
     });
 
-    const loketChannel = pusher.subscribe('loket-channel');
-
-    const antrianChannel = pusher.subscribe('antrian-channel');
-
-    antrianChannel.bind('panggil-antrian-ptsp', function(data) {
-      audioMemanggil(data)
-      // fetchTableLoketPelayanan()
-    });
-
-    antrianChannel.bind('stop-antrian-ptsp', function(data) {
-      const audio = new Audio("<?= base_url() ?>/audio/nomor_antrian/" + loketNametoAudioName[data.nama_loket])
-      const audio2 = new Audio("<?= base_url() ?>/audio/nomor_antrian/sedang_istirahat.mp3");
-      audio.currentTime = 0.3;
-      audio.play()
-      audio.addEventListener("ended", function() {
-        audio2.play()
-      })
-    });
-
-    const produkChannel = pusher.subscribe('produk-channel');
-    produkChannel.bind('panggil-pihak', (data) => {
-      fetch("<?= $_ENV["TTS_URL_API"] ?>/request_voice", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            key: "<?= $_ENV["TTS_API_KEY"] ?>",
-            text: data
-          })
+    const channel = pusher.subscribe('antrian-channel');
+    channel.bind("update-persidangan", function(data) {
+      if (data.nomor_ruang == parseInt("<?= $ruang_sidang->kode ?>")) {
+        fetchTablePersidangan({
+          nomor_ruang: data.nomor_ruang,
+          nama_ruang: data.ruang_sidang.nama,
+          nomor_perkara: data.antrian_persidangan.nomor_perkara,
+          nomor_urutan: data.antrian_persidangan.nomor_urutan,
+          majelis_hakim: data.antrian_persidangan.majelis_hakim
         })
-        .then(res => res.json())
-        .then(res => {
-          const audio = new Audio(`data:audio/wav;base64,${res.data}`)
-          audio.playbackRate = 1.2;
-          audio.play();
-        })
-        .catch(err => {
-          console.log("Gagal meminta audio. Silahkan refresh halaman ini")
-        })
-
+      }
     })
   })
 
@@ -245,8 +215,6 @@
 
       data.forEach(renderBannerContent)
     })
-
-    fetchTableLoketPelayanan()
   }
 
   /**
@@ -348,149 +316,17 @@
   /**
    * Fungsi untuk memuat tabel loket pelayanan
    */
-  function fetchTableLoketPelayanan() {
+  function fetchTablePersidangan(data) {
     $.ajax({
-      url: "<?= base_url("tv/fetch_loket_antrian") ?>",
+      url: "<?= base_url("layar/current_ruangan") ?>",
       method: "POST",
+      data: data,
       success: function(html) {
-        $("#loket-container").html(html)
+        $("#ruangan-container").html(html)
       },
       error: function(err) {
-        $("#loket-container").html(`<div class="text-center"><h3>Terjadi kesalahaan saat memproses informasi tabel loket pelayanan. ${err.statusText ?? err.responseJSON }</h3></div>`)
+        $("#ruangan-container").html(`<div class="text-center"><h3>Terjadi kesalahaan saat memproses informasi tabel loket pelayanan. ${err.statusText ?? err.responseJSON }</h3></div>`)
       }
     })
-  }
-
-  var audioQueue = []
-  var isPlaying = false
-
-
-  function audioMemanggil(loket) {
-
-    const susunanAudio = [];
-
-    const huruf = {
-      'Satu': new Audio('<?= base_url('/audio/nomor_antrian/1.mp3') ?>'),
-      'Dua': new Audio('<?= base_url('/audio/nomor_antrian/2.mp3') ?>'),
-      'Tiga': new Audio('<?= base_url('/audio/nomor_antrian/3.mp3') ?>'),
-      'Empat': new Audio('<?= base_url('/audio/nomor_antrian/4.mp3') ?>'),
-      'Lima': new Audio('<?= base_url('/audio/nomor_antrian/5.mp3') ?>'),
-      'Enam': new Audio('<?= base_url('/audio/nomor_antrian/6.mp3') ?>'),
-      'Tujuh': new Audio('<?= base_url('/audio/nomor_antrian/7.mp3') ?>'),
-      'Delapan': new Audio('<?= base_url('/audio/nomor_antrian/8.mp3') ?>'),
-      'Sembilan': new Audio('<?= base_url('/audio/nomor_antrian/9.mp3') ?>'),
-      'Sepuluh': new Audio('<?= base_url('/audio/nomor_antrian/10.mp3') ?>'),
-      'Sebelas': new Audio('<?= base_url('/audio/nomor_antrian/11.mp3') ?>'),
-      'Belas': new Audio('<?= base_url('/audio/nomor_antrian/BELAS.mp3') ?>'),
-      'Puluh': new Audio('<?= base_url('/audio/nomor_antrian/PULUH.mp3') ?>'),
-      'Ratus': new Audio('<?= base_url('/audio/nomor_antrian/RATUS.mp3') ?>'),
-      'Seratus': new Audio('<?= base_url('/audio/nomor_antrian/SERATUS.mp3') ?>'),
-    };
-
-    susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/nomor_antrian_${String(loket.antrian.kode).toLowerCase()}.mp3`));
-
-    terbilang(loket.antrian.nomor_urutan).split(" ").forEach((char) => {
-      susunanAudio.push(huruf[char])
-    })
-
-    console.log(terbilang(loket.antrian.nomor_urutan))
-
-    susunanAudio.push(new Audio("<?= base_url() ?>/audio/nomor_antrian/" + loketNametoAudioName[loket.nama_loket]));
-
-    audioQueue.push(susunanAudio);
-    if (!isPlaying) {
-      playAudioQueue()
-    }
-  }
-
-  /**
-   * @params {Audio[]} audios
-   */
-  function playSusunanAudio(audios, callback) {
-    if (!audios) {
-      return;
-    }
-    let current = 0;
-    const playNext = () => {
-      if (current < audios.length) {
-        const audio = audios[current];
-        current++;
-        audio.addEventListener("ended", playNext);
-        audio.play();
-      } else {
-        callback();
-      }
-    }
-    playNext();
-  }
-
-  function playAudioQueue() {
-    isPlaying = true
-
-    if (audioQueue.length == 0) {
-      isPlaying = false
-      return true;
-
-    }
-    playSusunanAudio(audioQueue.shift(), () => {
-      playAudioQueue();
-    });
-  }
-
-  /**
-   * @param {number} nilai
-   * @returns {string}
-   */
-  function terbilang(nilai) {
-    nilai = Math.floor(Math.abs(nilai));
-    var huruf = [
-      '',
-      'Satu',
-      'Dua',
-      'Tiga',
-      'Empat',
-      'Lima',
-      'Enam',
-      'Tujuh',
-      'Delapan',
-      'Sembilan',
-      'Sepuluh',
-      'Sebelas',
-    ];
-
-    var bagi = 0;
-    var penyimpanan = '';
-
-    if (nilai < 12) {
-      penyimpanan = '' + huruf[nilai];
-    } else if (nilai < 20) {
-      penyimpanan = terbilang(Math.floor(nilai - 10)) + ' Belas';
-    } else if (nilai < 100) {
-      bagi = Math.floor(nilai / 10);
-      penyimpanan = terbilang(bagi) + `${nilai.toString()[1] == '0' ? ' Puluh' : ' Puluh '}` + terbilang(nilai % 10);
-    } else if (nilai < 200) {
-      penyimpanan = nilai == 100 ? 'Seratus' : 'Seratus ' + terbilang(nilai - 100);
-    } else if (nilai < 1000) {
-      bagi = Math.floor(nilai / 100);
-      penyimpanan = terbilang(bagi) + ' Ratus ' + terbilang(nilai % 100);
-    } else if (nilai < 2000) {
-      penyimpanan = ' Seribu' + terbilang(nilai - 1000);
-    } else if (nilai < 1000000) {
-      bagi = Math.floor(nilai / 1000);
-      penyimpanan = terbilang(bagi) + ' Ribu ' + terbilang(nilai % 1000);
-    } else if (nilai < 1000000000) {
-      bagi = Math.floor(nilai / 1000000);
-      penyimpanan = terbilang(bagi) + ' Juta ' + terbilang(nilai % 1000000);
-    } else if (nilai < 1000000000000) {
-      bagi = Math.floor(nilai / 1000000000);
-      penyimpanan = terbilang(bagi) + ' Miliar ' + terbilang(nilai % 1000000000);
-    } else if (nilai < 1000000000000000) {
-      bagi = Math.floor(nilai / 1000000000000);
-      penyimpanan = terbilang(nilai / 1000000000000) + ' Triliun ' + terbilang(nilai % 1000000000000);
-    } else {
-      throw new Error('Terlalu Besar');
-    }
-
-    return penyimpanan;
   }
 </script>

@@ -16,6 +16,7 @@ class Layar extends CI_Controller
     parent::__construct();
     $this->load->library("addons");
     $this->load->library("Sysconf", ["ed" => $this->eloquent]);
+    $baseUrl = base_url();
     $this->addons->init([
       "js" => [
         "<script src=\"https://js.pusher.com/8.2.0/pusher.min.js\"></script>\n",
@@ -24,7 +25,7 @@ class Layar extends CI_Controller
         "<script src=\"https://js.pusher.com/8.2.0/pusher.min.js\"></script>"
       ],
       "css" => [
-        "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/toastify-js@1.12.0/src/toastify.css\">\n"
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/toastify-js@1.12.0/src/toastify.css\">\n",
       ]
     ]);
   }
@@ -210,5 +211,22 @@ class Layar extends CI_Controller
       set_status_header(400);
       echo json_encode(["status" => false, "message" => $th->getMessage()]);
     }
+  }
+
+  public function ruangan($id = null)
+  {
+    $ruang_sidang = Eloquent::connection("sipp")->table("ruangan_sidang")->where("id", Cypher::urlsafe_decrypt($id))->first();
+    if (!$ruang_sidang) {
+      show_404();
+    }
+
+    $this->load->page("persidangan/layar_ruangan",  [
+      "ruang_sidang" => $ruang_sidang
+    ])->layout("auth_layout");
+  }
+
+  public function current_ruangan()
+  {
+    echo $this->load->component("card/current_antrian_ruangan");
   }
 }

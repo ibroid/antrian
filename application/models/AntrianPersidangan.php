@@ -34,8 +34,6 @@ class AntrianPersidangan extends Model
 
   private static function broadcast_new_antrian(AntrianPersidangan $antrianPersidangan)
   {
-
-    $data['message'] = 'hello world';
     Broadcast::pusher()->trigger('antrian-channel', 'new-antrian', $antrianPersidangan);
   }
 

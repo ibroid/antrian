@@ -75,8 +75,11 @@ class RuangSidang extends R_Controller
       $dalamPanggilan->nomor_antrian_id = R_Input::pos("antrian_sidang_id");
 
       $dalamPanggilan->save();
+      $dalamPanggilan->antrian_persidangan;
 
-      Broadcast::pusher()->trigger("antrian-channel", "update-persidangan", null);
+      $dalamPanggilan->ruang_sidang = Eloquent::connection("sipp")->table("ruangan_sidang")->where("kode", $dalamPanggilan->nomor_ruang)->first();
+
+      Broadcast::pusher()->trigger("antrian-channel", "update-persidangan", $dalamPanggilan);
 
       $this->session->set_flashdata("flash_alert", $this->load->component(
         Constanta::ALERT_SUCCESS,

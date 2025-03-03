@@ -108,7 +108,7 @@ class Persidangan extends ControlPetugasSidang
         $textPengumuman = str_replace("{condition_pihak_dua}", "", $textPengumuman);
       }
 
-      $textPengumuman = str_replace("{ruang_sidang}", R_Input::pos("nama_ruang"), $textPengumuman);
+      $textPengumuman = str_replace("{ruang_sidang}",  R_Input::pos("nama_ruang"), $textPengumuman);
       $textPengumuman = str_replace("{nama_pihak}", R_Input::pos("nama_pihak"), $textPengumuman);
       Broadcast::pusher()->trigger("antrian-channel", "panggil-pihak", $textPengumuman);
 

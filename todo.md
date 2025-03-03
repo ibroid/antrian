@@ -30,3 +30,6 @@ Senin 19-02-2025
 - [&check;] Manage Ruang Sidang
 - [&check;] Hubungkan ruang sidang dengan antrian
 - [&check;] Fix admin pelayanan ptsp
+Senin 03-03-2025
+- [&check;] Fix bug alamat PN
+- [&check;] Alayar antrian per ruangan sidang
