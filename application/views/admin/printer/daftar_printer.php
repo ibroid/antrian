@@ -13,14 +13,14 @@
             data-bs-toggle="modal"
             data-bs-target="#staticBackdrop">
             <i class="fa fa-plus"></i>
-            Tambah Banner
+            Tambah Printer
           </button>
 
           <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="staticBackdropLabel">Tambah Banner Baru</h5>
+                  <h5 class="modal-title" id="staticBackdropLabel">Tambah Printer Baru</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -57,6 +57,15 @@
                         required
                         aria-describedby="input2"
                         name="port" />
+                    </div>
+                    <div class="input-group mb-3">
+                      <span class="input-group-text" id="input2">
+                        Type
+                      </span>
+                      <select name="type" class="form-select" aria-label="Default select printer">
+                        <option selected>native</option>
+                        <option>bridge</option>
+                      </select>
                     </div>
                     <div class="input-group mb-3">
                       <span class="input-group-text" id="input2">
@@ -105,6 +114,7 @@
             <th>Port</th>
             <th>Desc</th>
             <th>Status</th>
+            <th>Type</th>
             <th>Aksi</th>
           </tr>
         </thead>
@@ -135,6 +145,7 @@
                   </li>
                 </ul>
               </th>
+              <th><?= $printer->type  ?></th>
               <th>
                 <button
                   class="btn btn-sm btn-secondary"

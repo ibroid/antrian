@@ -33,3 +33,6 @@ Senin 19-02-2025
 Senin 03-03-2025
 - [&check;] Fix bug alamat PN
 - [&check;] Alayar antrian per ruangan sidang
+Senin 03-14-2025
+- [&check;] Fix bug audio pemanggilan jenis loket
+- [&check;] Add bridge thermal print API

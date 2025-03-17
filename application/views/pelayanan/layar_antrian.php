@@ -477,8 +477,8 @@
       'Seratus': new Audio('<?= base_url('/audio/nomor_antrian/SERATUS.mp3') ?>'),
     };
 
-    susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/nomor_antrian.mp3`));
-    susunanAudio.push(new Audio("<?= base_url('/audio/nomor_antrian/abjad/') ?>" + loket.antrian.kode + ".mp3"))
+    susunanAudio.push(new Audio("<?= base_url() ?>" + `audio/nomor_antrian/nomor_antrian.mp3`));
+    susunanAudio.push(new Audio("<?= base_url('audio/nomor_antrian/abjad/') ?>" + loket.antrian.kode + ".mp3"))
 
     terbilang(loket.antrian.nomor_urutan).split(" ").forEach((char) => {
       susunanAudio.push(huruf[char])
@@ -486,7 +486,7 @@
 
     console.log(terbilang(loket.antrian.nomor_urutan))
 
-    susunanAudio.push(new Audio("<?= base_url() ?>/audio/nomor_antrian/" + loketNametoAudioName[loket.nama_loket]));
+    susunanAudio.push(new Audio("<?= base_url() ?>audio/nomor_antrian/" + loket.file_audio));
 
     audioQueue.push(susunanAudio);
     if (!isPlaying) {

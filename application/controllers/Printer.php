@@ -44,12 +44,13 @@ class Printer extends ControlAdmin
         "ip_address" => R_Input::pos('ip_address'),
         "port" => R_Input::pos('port'),
         "desc" => R_Input::pos("desc"),
+        "type" => R_Input::pos("type"),
         "active" => 0
       ]);
 
       Redirect::wfa(["message" => "Printer berhasil ditambahkan"])->go("/printer");
     } catch (\Throwable $th) {
-      Redirect::wfa($th->getMessage())->go("/printer");
+      Redirect::wfe($th->getMessage())->go("/printer");
     }
   }
 
