@@ -11,20 +11,15 @@ class Ambil extends R_Controller
   use CetakThermalHelper;
   public Addons $addons;
 
-  public function index()
+  public function __construct()
   {
+    parent::__construct();
     $base_url = base_url();
-
-    if (!$this->is_admin) {
-      if (floatval(date("H")) < 7) {
-        die("Khusus Jumat, Antrian Dibuka Pukul 8");
-      }
-    }
 
     $this->addons->init([
       'css' => [
         "<link rel='stylesheet' type='text/css' href='$base_url/assets/css/vendors/flatpickr/flatpickr.min.css'>\n",
-        " <link rel=\"stylesheet\" type=\"text/css\" href=\"$base_url/assets/css/vendors/datatables.css\">",
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"$base_url/assets/css/vendors/datatables.css\">",
         "<link rel=\"stylesheet\" type=\"text/css\" href=\"$base_url/assets/css/vendors/sweetalert2.css\">"
       ],
       'js' => [
@@ -34,9 +29,13 @@ class Ambil extends R_Controller
         "<script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script>",
       ]
     ]);
+  }
 
+  public function index()
+  {
     $data["daftar_sidang"] = PerkaraJadwalSidang::where("tanggal_sidang", isset($_POST["tanggal_sidang"]) ? $_POST["tanggal_sidang"] : date("Y-m-d"))->get();
     $data["jenis_pelayanan"] = JenisPelayanan::all();
+
     $this->load->page("ambil_antrian", $data)->layout("auth_layout");
   }
 
@@ -84,14 +83,29 @@ class Ambil extends R_Controller
 
       $this->session->set_flashdata("flash_alert", $this->load->component(Constanta::ALERT_SUCCESS, ["message" => "Nomor Antrian Anda : $data->nomor_urutan. Di ruangan : $data->nama_ruang. Silahkan Ambil Tiket Antrian nya"]));
 
-      $printer = Eloquent::table('thermal_printer_list')->where("active", 1)->first();
+
+      if (isset($_GET["secondary"])) {
+        $printer = Eloquent::table('thermal_printer_list')->where("desc", "Mesin Antrian Belakang")->first();
+      } else {
+        $printer = Eloquent::table('thermal_printer_list')->where("active", 1)->first();
+      }
+
       $res = $this->print_antrian_sidang($data, $printer->ip_address, $printer->port);
       if ($res[0] == false) {
         $this->session->set_flashdata("print_error", $this->load->component("print_sidang_error", ["data" => $data]));
       }
-    } catch (\Throwable $th) {
 
+      if (isset($this->input->request_headers()["Hx-Request"])) {
+        header("HX-Trigger: after_print");
+        echo  $this->load->component(Constanta::ALERT_SUCCESS, ["message" => "Berhasil Mencetak Antrian"]);
+        exit;
+      }
+    } catch (\Throwable $th) {
       $this->session->set_flashdata("flash_error", $this->load->component(Constanta::ALERT_ERROR, ["message" => $th->getMessage()]));
+      if (isset($this->input->request_headers()["Hx-Request"])) {
+        echo $this->load->component(Constanta::ALERT_ERROR, ["message" => $th->getMessage()]);
+        exit;
+      }
     }
 
     redirect($_SERVER["HTTP_REFERER"]);
@@ -190,5 +204,29 @@ class Ambil extends R_Controller
         'data' => $antrian
       ], true)
     ]);
+  }
+
+  /**
+   * Show ambil antrian pelayanan page
+   * @return void
+   */
+  public function pelayanan()
+  {
+    if (!empty($_GET)) {
+      return show_404();
+    }
+    $data["jenis_pelayanan"] = JenisPelayanan::all();
+
+    $this->load->page("ambil/ambil_pelayanan", $data)->layout("auth_layout");
+  }
+
+  public function sidang()
+  {
+    if (!empty($_GET)) {
+      return show_404();
+    }
+    $data["daftar_sidang"] = PerkaraJadwalSidang::where("tanggal_sidang", isset($_POST["tanggal_sidang"]) ? $_POST["tanggal_sidang"] : date("Y-m-d"))->get();
+    $data["link_youtube_inovasi"] = $this->settings->link_youtube_inovasi;
+    $this->load->page("ambil/ambil_sidang", $data)->layout("auth_layout");
   }
 }

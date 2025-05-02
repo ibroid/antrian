@@ -42,17 +42,17 @@ trait CetakThermalHelper
       $printer->setTextSize(1, 1);
       $printer->text("Di ambil:" . date('Y-m-d H:i:S') . " \n");
 
-      // $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-      // $printer->setJustification(Printer::JUSTIFY_CENTER);
-      // $printer->setFont(Printer::FONT_A);
-      // $printer->text("------------------------\n");
+      $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+      $printer->setJustification(Printer::JUSTIFY_CENTER);
+      $printer->setFont(Printer::FONT_A);
+      $printer->text("------------------------\n");
 
-      // $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-      // $printer->setJustification(Printer::JUSTIFY_CENTER);
-      // $printer->qrCode(base_url("/mobile?antrian_ptsp=" . Cypher::urlsafe_encrypt($data->id)), Printer::QR_ECLEVEL_L, 7, Printer::QR_MODEL_2);
-      // $printer->text("\n");
-      // $printer->setTextSize(1, 1);
-      // $printer->text("Scan QR Code di atas untuk mengetahui antrian berjalan secara online\n");
+      $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+      $printer->setJustification(Printer::JUSTIFY_CENTER);
+      $printer->qrCode(base_url("/mobile?antrian_ptsp=" . Cypher::urlsafe_encrypt($data->id)), Printer::QR_ECLEVEL_L, 7, Printer::QR_MODEL_2);
+      $printer->text("\n");
+      $printer->setTextSize(1, 1);
+      $printer->text("Scan QR Code di atas untuk mengetahui antrian berjalan secara online\n");
 
       $printer->cut();
       $printer->pulse();
@@ -102,17 +102,17 @@ trait CetakThermalHelper
       $printer->setTextSize(1, 1);
       $printer->text("Di ambil:" . date('Y-m-d H:i:S') . " \n");
 
-      // $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-      // $printer->setJustification(Printer::JUSTIFY_CENTER);
-      // $printer->setFont(Printer::FONT_A);
-      // $printer->text("------------------------\n");
+      $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+      $printer->setJustification(Printer::JUSTIFY_CENTER);
+      $printer->setFont(Printer::FONT_A);
+      $printer->text("------------------------\n");
 
-      // $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-      // $printer->setJustification(Printer::JUSTIFY_CENTER);
-      // $printer->qrCode(base_url("/mobile?antrian_sidang=" . Cypher::urlsafe_encrypt($data->id)), Printer::QR_ECLEVEL_L, 7, Printer::QR_MODEL_2);
-      // $printer->text("\n");
-      // $printer->setTextSize(1, 1);
-      // $printer->text("Scan QR Code di atas untuk mengetahui antrian berjalan secara online\n");
+      $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+      $printer->setJustification(Printer::JUSTIFY_CENTER);
+      $printer->qrCode(base_url("/mobile?antrian_sidang=" . Cypher::urlsafe_encrypt($data->id)), Printer::QR_ECLEVEL_L, 7, Printer::QR_MODEL_2);
+      $printer->text("\n");
+      $printer->setTextSize(1, 1);
+      $printer->text("Scan QR Code di atas untuk mengetahui antrian berjalan secara online\n");
 
       $printer->cut();
       /* Pulse */

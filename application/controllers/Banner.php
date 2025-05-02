@@ -65,7 +65,7 @@ class Banner extends ControlAdmin
       Redirect::wfa(["message" => "Banner berhasil ditambahkan"])->go("/banner");
     } catch (\Throwable $th) {
       Eloquent::connection("default")->rollBack();
-      Redirect::wfa($th->getMessage())->go("/banner");
+      Redirect::wfe($th->getMessage())->go("/banner");
     }
   }
 

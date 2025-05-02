@@ -13,7 +13,7 @@ if (!function_exists("form_ambil_antrian_sidang")) {
     <input type="hidden" name="jadwal_sidang_id" value="' . $ds->id . '">
     <input type="hidden" name="nama_yang_ambil" value="' . $nama_pihak . '">
     <input type="hidden" name="majelis_hakim" value="' . $ds->perkara->penetapan->majelis_hakim_nama . '">
-    <button type="submit" name="yang_ambil" value="' . $yang_ambil . '" class="btn btn-success">' . $nama_pihak . '</button></form>';
+    <button type="submit" name="yang_ambil" value="' . $yang_ambil . '" class="btn btn-success"><h3>' . $nama_pihak . '</h3></button></form>';
   }
 }
 
@@ -30,7 +30,7 @@ if (!function_exists("form_ambil_antrian_sidang_secondary")) {
     <input type="hidden" name="jadwal_sidang_id" value="' . $ds->id . '">
     <input type="hidden" name="nama_yang_ambil" value="' . $nama_pihak . '">
     <input type="hidden" name="majelis_hakim" value="' . $ds->perkara->penetapan->majelis_hakim_nama . '">
-    <button type="submit" name="yang_ambil" value="' . $yang_ambil . '" class="btn btn-success">' . $nama_pihak . '</button></form>';
+    <button type="submit" name="yang_ambil" value="' . $yang_ambil . '" class="btn btn-success"><h3>' . $nama_pihak . '</h3></button></form>';
   }
 }
 
@@ -66,7 +66,9 @@ if (!function_exists("warna_ruang_sidang")) {
   function warna_ruang_sidang($no)
   {
     $typeAndName = [
-      "primary", "danger", "warning",
+      "primary",
+      "danger",
+      "warning",
     ];
     return  $typeAndName[$no - 1];
   }

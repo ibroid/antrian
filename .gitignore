@@ -67,3 +67,6 @@ uploads/pihak/*
 
 hasil/*
 !hasil/index.html
+
+audio/pengumuman/*.mp3
+audio/loket/*.mp3

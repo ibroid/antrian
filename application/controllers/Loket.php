@@ -183,7 +183,7 @@ class Loket extends R_Controller
       throw new Exception("File harus berupa audio", 1);
     }
 
-    $config['upload_path'] = './audio/nomor_antrian/';
+    $config['upload_path'] = './audio/loket/';
     $config['allowed_types'] = '*';
     $config['max_size']  = '1024';
     $config['encrypt_name']  = true;

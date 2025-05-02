@@ -21,7 +21,7 @@ class Time_line extends R_MobileController
                         "Pendaftaran Perkara",
                         tanggal_indo($perkara->tanggal_pendaftaran),
                         "Diinput Oleh Admin",
-                        "Perkara berhasil didaftarkan di <?= $this->sysconf->NamaPN ?>",
+                        "Perkara berhasil didaftarkan di " . $this->sysconf->NamaPN,
                     )
                 ]);
 
@@ -156,9 +156,14 @@ class Time_line extends R_MobileController
     public function search()
     {
         if (R_Input::ci()->method() == "post") {
-            return $this->pageRender("timeline_found_page", [
-                "timeline" => $this->data
-            ]);
+            try {
+                return $this->pageRender("timeline_found_page", [
+                    "timeline" => $this->data
+                ]);
+            } catch (\Throwable $th) {
+                echo "Terjadi kesalahan: " . $th->getMessage();
+                exit;
+            }
         }
         return show_404();
     }

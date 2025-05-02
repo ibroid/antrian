@@ -36,3 +36,6 @@ Senin 03-03-2025
 Senin 03-14-2025
 - [&check;] Fix bug audio pemanggilan jenis loket
 - [&check;] Add bridge thermal print API
+Jumat 02-05-2025
+- [&check;] Buat halaman pengambilan pelayanan
+- [&check;] Buat halaman pengambilan sidang

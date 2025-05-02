@@ -5,6 +5,7 @@ class Pelayanan_produk extends R_Controller
   public function __construct()
   {
     parent::__construct();
+    Carbon\Carbon::setLocale('id');
     $this->addons->init([
       "js" => [
         "<script src=\"https://js.pusher.com/8.2.0/pusher.min.js\"></script>\n",
@@ -43,11 +44,12 @@ class Pelayanan_produk extends R_Controller
       $no++;
       $row = array();
       $row[] = $no;
-      $row[] = $list->nomor_perkara;
+      $row[] = $list->nomor_perkara . "<br>" . $list->jenis_perkara;
       $row[] = $list->nomor_akta_cerai;
       $row[] = $list->nama_pengambil . "<br>(" . $list->jenis_pihak . ")";
       $row[] = $list->jenis_produk;
-      $row[] = $list->jenis_perkara;
+      $row[] = $list->created_at->translatedFormat("D d F Y H:i:s");
+      $row[] = "";
       $row[] = $this->load->component("table/pilihan_pesanan_produk", ["data" => $list]);
       $data[] = $row;
     }

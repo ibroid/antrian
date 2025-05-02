@@ -387,15 +387,16 @@
       'Seratus': new Audio('<?= base_url('/audio/nomor_antrian/SERATUS.mp3') ?>'),
     };
 
-    susunanAudio.push(new Audio("<?= base_url() ?>" + `/audio/nomor_antrian/nomor_antrian_${String(loket.antrian.kode).toLowerCase()}.mp3`));
+    susunanAudio.push(new Audio("<?= base_url() ?>" + `audio/nomor_antrian/nomor_antrian.mp3`));
+    susunanAudio.push(new Audio("<?= base_url('audio/nomor_antrian/abjad/') ?>" + loket.antrian.kode + ".mp3"))
 
+    // Push audio nomor antrian
     terbilang(loket.antrian.nomor_urutan).split(" ").forEach((char) => {
       susunanAudio.push(huruf[char])
     })
 
-    console.log(terbilang(loket.antrian.nomor_urutan))
-
-    susunanAudio.push(new Audio("<?= base_url() ?>/audio/nomor_antrian/" + loketNametoAudioName[loket.nama_loket]));
+    // Push audio nama loket
+    susunanAudio.push(new Audio("<?= base_url() ?>/audio/loket/" + loketNametoAudioName[loket.nama_loket]));
 
     audioQueue.push(susunanAudio);
     if (!isPlaying) {

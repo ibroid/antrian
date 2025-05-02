@@ -23,7 +23,7 @@ trait BridgeThermalHelper
       }
 
       curl_setopt_array($curl, [
-        CURLOPT_PORT => "8080",
+        // CURLOPT_PORT => "8080",
         CURLOPT_URL => "http://$ip:$port/",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => "",
@@ -67,7 +67,7 @@ trait BridgeThermalHelper
       ];
 
       curl_setopt_array($curl, [
-        CURLOPT_PORT => "8080",
+        // CURLOPT_PORT => "8080",
         CURLOPT_URL => "http://$ip:$port/",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => "",

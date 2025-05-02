@@ -276,30 +276,6 @@
   <swal-title>
     Pilih Tahun dan Jenis Perkara
   </swal-title>
-  <!-- <swal-html>
-    <label for="swal-select-tahun-perkara">Pilih Tahun Perkara</label>
-    <select name="tahun-perkara" id="swal-select-tahun-perkara" class="form-control form-control-lg">
-      <option value="" selected disabled>--- Tekan Disini Untuk Pilih ---</option>
-      <?php foreach ((function () {
-          $years = [];
-          for ($i = date("Y"); $i >= 2015; $i--) {
-            array_push($years, $i);
-          }
-          return $years;
-        })() as $tahun
-      ) { ?>
-        <option value="<?= $tahun ?>"><?= $tahun ?></option>
-      <?php } ?>
-    </select>
-    <hr>
-    <label for="swal-select-jenis-perkara">Pilih Jenis Perkara</label>
-    <select name="jenis-perkara" id="swal-select-jenis-perkara" class="form-control form-control-lg">
-      <option value="" selected disabled>--- Tekan Disini Untuk Pilih ---</option>
-      <option value="Pdt.G">Pdt.G</option>
-      <option value="Pdt.P">Pdt.P</option>
-      <option value="Pdt.Eks">Pdt.Eks</option>
-    </select>
-  </swal-html> -->
   <swal-html>
     <h5>Pilih Tahun Perkara</h5>
     <div class="form-check radio radio-primary ps-0">
@@ -347,8 +323,6 @@
       </ol>
     </div>
   </swal-html>
-  <!-- <swal-input type="text" autofocus="false" id="swal-input-tahun-perkara" /> -->
-  <!-- <swal-input type="text" autofocus="false" id="swal-input-jenis-perkara" /> -->
   <swal-button type="confirm">
     Ok, Lanjut..
   </swal-button>

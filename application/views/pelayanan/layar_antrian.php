@@ -484,9 +484,7 @@
       susunanAudio.push(huruf[char])
     })
 
-    console.log(terbilang(loket.antrian.nomor_urutan))
-
-    susunanAudio.push(new Audio("<?= base_url() ?>audio/nomor_antrian/" + loket.file_audio));
+    susunanAudio.push(new Audio("<?= base_url() ?>audio/loket/" + loket.file_audio));
 
     audioQueue.push(susunanAudio);
     if (!isPlaying) {
