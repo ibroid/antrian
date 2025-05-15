@@ -112,7 +112,7 @@
   </div>
 </nav>
 
-<div class="container-fluid">
+<!-- <div class="container-fluid">
   <div class="row mt-2">
     <div class="col-6">
       <div class="p-1 shadow bg-black bg-opacity-50">
@@ -144,7 +144,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <div class="container-fluid m-5">
   <hr class="text-center text-white">

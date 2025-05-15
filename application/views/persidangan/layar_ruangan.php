@@ -104,18 +104,15 @@
 <div class="container-fluid">
   <div class="row mt-2">
     <div class="col-6">
-      <div class="p-1 shadow bg-black bg-opacity-50">
-        <div class="card-body">
+      <div class="shadow bg-transparent rounded rounded-5 border border-light border-3">
+        <div class="card-body text-center">
+          <h1 class="text-dark bg-white rounded rounded-5 mb-2">TV Publik</h1>
           <div class="text-center">
-            <h1 class="text-warning">Informasi Dan Pengumuman</h1>
+            <iframe id="tvplayer" width="720" height="450" src="https://www.youtube.com/embed/yNKvkPJl-tg?si=7fQq7qJbRJ32JUu7&amp;controls=1&mute=1&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+            </iframe>
           </div>
-          <div class="carousel slide" style="min-height: 360px;" id="carouselExampleInterval" data-bs-ride="carousel">
-            <div class="carousel-inner">
-              <div class="carousel-item active" data-bs-interval="10000"><img class="d-block w-100" src="<?= base_url('/uploads/images/Loading.gif') ?>" alt="drawing-room"></div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span></button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span></button>
-          </div>
+          <ul id="channelTvList" class="pagination pagination-primary pagin-border-primary justify-content-center mb-2">
+          </ul>
         </div>
       </div>
     </div>
@@ -149,6 +146,14 @@
 
   window.addEventListener("load", function() {
 
+    fetchTablePersidangan({
+      nomor_ruang: <?= $ruang_sidang->kode ?>,
+      nama_ruang: "<?= $ruang_sidang->nama ?>",
+      nomor_perkara: "<?= $ruang_sidang->antrian->nomor_perkara ?>",
+      nomor_urutan: "<?= $ruang_sidang->antrian->nomor_urutan ?>",
+      majelis_hakim: "<?= $ruang_sidang->antrian->majelis_hakim ?>"
+    })
+
     fetchAllPageContent()
 
     const elementWithColorChanged = [
@@ -180,6 +185,27 @@
    */
   function fetchAllPageContent() {
 
+    fetchDataChannelTvList().then(function(result) {
+      /**
+       * @type {
+       *   status: bool,
+       *   data: {
+       *     nama_channel: string,
+       *     url: string,
+       *     status: number,
+       *   }[]
+       * }
+       */
+      const {
+        status,
+        data
+      } = JSON.parse(result)
+
+      if (status) {
+        renderChannelTvList(data)
+      }
+    })
+
     fetchAnnouncementList().then(function(result) {
       /**
        * @type {
@@ -207,14 +233,6 @@
       })
     })
 
-    fetchDataBanner().then(function(result) {
-      const {
-        status,
-        data
-      } = result
-
-      data.forEach(renderBannerContent)
-    })
   }
 
   /**
@@ -328,5 +346,55 @@
         $("#ruangan-container").html(`<div class="text-center"><h3>Terjadi kesalahaan saat memproses informasi tabel loket pelayanan. ${err.statusText ?? err.responseJSON }</h3></div>`)
       }
     })
+  }
+
+  /**
+   * Fungsi untuk mengambil data channel tv list.
+   * @returns {Promise<string[]>}
+   */
+  function fetchDataChannelTvList() {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: "<?= base_url("layar/fetch_data_channel_tv_list") ?>",
+        headers: {
+          "Accept": "application/json"
+        },
+        success: function(data) {
+          resolve(data)
+        },
+        error: function(err) {
+          reject(err)
+        }
+      })
+    })
+  }
+
+  /**
+   * Fungsi untuk merender button data channel tv list.
+   * @param {{
+   *   nama_channel: string,
+   *   url: string,
+   *   status: number,
+   * }[]} data
+   */
+  function renderChannelTvList(data) {
+    data.forEach(d => {
+      const elementList = $("<li>").addClass("page-item")
+      const elementLink = $("<a>").attr("href", "javascript:void(0)").addClass("page-link").text(d.nama_channel)
+      elementList.append(elementLink)
+      elementList.click(() => {
+        changeIFrameVideoSource(d.url)
+      })
+      $("#channelTvList").append(elementList)
+    })
+  }
+
+  /**
+   * Fungsi untuk mengganti link video tv player.
+   * @param {string} source
+   */
+  function changeIFrameVideoSource(source) {
+    const iframe = document.querySelector("#tvplayer")
+    iframe.setAttribute("src", source + "&amp;controls=1&autoplay=1")
   }
 </script>

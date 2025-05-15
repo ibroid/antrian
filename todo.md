@@ -39,3 +39,6 @@ Senin 03-14-2025
 Jumat 02-05-2025
 - [&check;] Buat halaman pengambilan pelayanan
 - [&check;] Buat halaman pengambilan sidang
+Jumat 15-05-2025
+- [&check;] Fix bug layar antrian per ruangan sidang
+- [&check;] Buat fitur play youtube di layar ruangan sidang

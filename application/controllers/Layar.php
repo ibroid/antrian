@@ -215,9 +215,18 @@ class Layar extends CI_Controller
 
   public function ruangan($id = null)
   {
-    $ruang_sidang = Eloquent::connection("sipp")->table("ruangan_sidang")->where("id", Cypher::urlsafe_decrypt($id))->first();
+    $ruang_id = Cypher::urlsafe_decrypt($id);
+    $ruang_sidang = Eloquent::connection("sipp")->table("ruangan_sidang")->where("id", $ruang_id)->first();
     if (!$ruang_sidang) {
       show_404();
+    }
+
+    $dalam_persidangan = DalamPersidangan::where("nomor_ruang", $ruang_id)->whereDate("tanggal_panggil", date("Y-m-d"))->first();
+
+    if (!$dalam_persidangan) {
+      $ruang_sidang->antrian = AntrianPersidangan::where("nomor_ruang", $ruang_id)->whereDate("tanggal_sidang", date("Y-m-d"))->latest()->limit(1)->first();
+    } else {
+      $ruang_sidang->antrian = $dalam_persidangan->antrian_persidangan;
     }
 
     $this->load->page("persidangan/layar_ruangan",  [
