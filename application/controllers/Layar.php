@@ -225,12 +225,20 @@ class Layar extends CI_Controller
 
     if (!$dalam_persidangan) {
       $ruang_sidang->antrian = AntrianPersidangan::where("nomor_ruang", $ruang_id)->whereDate("tanggal_sidang", date("Y-m-d"))->latest()->limit(1)->first();
+      if (!$ruang_sidang->antrian) {
+        $ruang_sidang->antrian = new class {};
+
+        $ruang_sidang->antrian->nomor_perkara = "XX/Pdt.X/" . date("Y") . "/" . $this->sysconf->KodePN;
+        $ruang_sidang->antrian->nomor_urutan = 0;
+        $ruang_sidang->antrian->majelis_hakim = "Belum Ditentukan";
+      }
     } else {
       $ruang_sidang->antrian = $dalam_persidangan->antrian_persidangan;
     }
 
     $this->load->page("persidangan/layar_ruangan",  [
-      "ruang_sidang" => $ruang_sidang
+      "ruang_sidang" => $ruang_sidang,
+      "youtube_link" => $this->settings->link_youtube_inovasi
     ])->layout("auth_layout");
   }
 

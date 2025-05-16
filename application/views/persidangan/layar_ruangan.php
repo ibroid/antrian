@@ -108,11 +108,9 @@
         <div class="card-body text-center">
           <h1 class="text-dark bg-white rounded rounded-5 mb-2">TV Publik</h1>
           <div class="text-center">
-            <iframe id="tvplayer" width="720" height="450" src="https://www.youtube.com/embed/yNKvkPJl-tg?si=7fQq7qJbRJ32JUu7&amp;controls=1&mute=1&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+            <iframe id="tvplayer" width="840" height="550" src="<?= $youtube_link ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
             </iframe>
           </div>
-          <ul id="channelTvList" class="pagination pagination-primary pagin-border-primary justify-content-center mb-2">
-          </ul>
         </div>
       </div>
     </div>
@@ -184,27 +182,6 @@
    * @returns {Promise<void>}
    */
   function fetchAllPageContent() {
-
-    fetchDataChannelTvList().then(function(result) {
-      /**
-       * @type {
-       *   status: bool,
-       *   data: {
-       *     nama_channel: string,
-       *     url: string,
-       *     status: number,
-       *   }[]
-       * }
-       */
-      const {
-        status,
-        data
-      } = JSON.parse(result)
-
-      if (status) {
-        renderChannelTvList(data)
-      }
-    })
 
     fetchAnnouncementList().then(function(result) {
       /**
