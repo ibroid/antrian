@@ -29,8 +29,14 @@ class Beranda extends R_MobileController
   public function detail_list_antrian_ptsp()
   {
     try {
+      if (R_Input::gett("kode") == "C") {
+        $kode = ["C"];
+      } else {
+        $kode = ["A", "B", "D", "E", "F"];
+      }
+
       $this->pageRender("components/detail_list_antrian_ptsp", [
-        "antrian" => AntrianPtsp::where('kode', R_Input::gett("kode"))->whereDate("created_at", date("Y-m-d"))->latest()->get()
+        "antrian" => AntrianPtsp::whereIn('kode', $kode)->whereDate("created_at", "2025-05-21")->latest()->get()
       ]);
     } catch (\Throwable $th) {
       echo "Terjadi Kesalahan. " . $th->getMessage() . " Silahkan coba lagi nanti";

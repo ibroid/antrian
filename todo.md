@@ -49,4 +49,5 @@ Jumat 15-05-2025
 ---
 Rabu 21-05-2025
 - [&check;] Fix bug static year informasi prodeo
+- [&check;] Fix bug beranda antrian ptsp mobile 
 - [&check;] Change limit row tabel ambil antrian sidang to 100
