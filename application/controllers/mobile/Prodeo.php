@@ -8,7 +8,7 @@ class Prodeo extends R_MobileController
 
     $this->load->library('InformasiApi');
 
-    $infoApi = $this->informasiapi::make("kuota_prodeo/records?filter=(tahun='2024')");
+    $infoApi = $this->informasiapi::make("kuota_prodeo/records?filter=(tahun='" . date("Y") . "')");
 
     $this->fullRender("prodeo_page", [
       'kuota' => $data,
@@ -26,7 +26,7 @@ class Prodeo extends R_MobileController
 
     $this->load->library('InformasiApi');
 
-    $infoApi = $this->informasiapi::make("kuota_prodeo/records?filter=(tahun='2024')");
+    $infoApi = $this->informasiapi::make("kuota_prodeo/records?filter=(tahun='" . date("Y") . "')");
 
     $this->pageRender("prodeo_page", [
       'kuota' => $data,

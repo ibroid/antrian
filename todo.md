@@ -30,15 +30,23 @@ Senin 19-02-2025
 - [&check;] Manage Ruang Sidang
 - [&check;] Hubungkan ruang sidang dengan antrian
 - [&check;] Fix admin pelayanan ptsp
+---
 Senin 03-03-2025
 - [&check;] Fix bug alamat PN
 - [&check;] Alayar antrian per ruangan sidang
+---
 Senin 03-14-2025
 - [&check;] Fix bug audio pemanggilan jenis loket
 - [&check;] Add bridge thermal print API
+---
 Jumat 02-05-2025
 - [&check;] Buat halaman pengambilan pelayanan
 - [&check;] Buat halaman pengambilan sidang
+---
 Jumat 15-05-2025
 - [&check;] Fix bug layar antrian per ruangan sidang
 - [&check;] Buat fitur play youtube di layar ruangan sidang
+---
+Rabu 21-05-2025
+- [&check;] Fix bug static year informasi prodeo
+- [&check;] Change limit row tabel ambil antrian sidang to 100

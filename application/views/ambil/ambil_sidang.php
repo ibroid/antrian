@@ -261,6 +261,7 @@
   let checkInModal;
   window.addEventListener("load", function() {
     $("#table-sidang").DataTable({
+      pageLength: 100,
       language: {
         "search": "Cari :"
       }
