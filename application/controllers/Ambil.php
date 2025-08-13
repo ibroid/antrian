@@ -126,6 +126,11 @@ class Ambil extends R_Controller
       $id = R_Input::pos("id");
       $this->eloquent->connection("default")->beginTransaction();
       $selectedLayanan = JenisPelayanan::findOrFail(Cypher::urlsafe_decrypt($id));
+      if ($selectedLayanan->kode_layanan == "A") {
+        if (date("H") >= 12) {
+          throw new Exception("Maaf, Pendaftaran ditutup pukul 12 siang", 1);
+        }
+      }
 
       $lastNomorAntrianPtsp = AntrianPtsp::where([
         "kode" => $selectedLayanan->kode_layanan

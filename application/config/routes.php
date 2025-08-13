@@ -53,3 +53,5 @@ $route['default_controller'] = 'Auth';
 $route['mobile'] = 'mobile/beranda';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+$route['api/running_text_ptsp/(:num)'] = "api/RunningTextPtsp/index/$1";

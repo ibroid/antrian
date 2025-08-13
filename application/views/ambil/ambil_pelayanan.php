@@ -718,16 +718,21 @@
         })
       },
       error(err) {
+        let resp = null;
+        try {
+          resp = JSON.parse(err.responseText)
+        } catch (error) {
+          console.error("Tidak bisa parse err json:" + error.message)
+        }
         Swal.fire({
           title: "Terjadi Kesalahan. Silahkan Coba lagi",
-          text: err.responseText && err.message,
+          text: resp?.message ?? err.message,
           icon: "error",
           timer: 6000,
           timerProgressBar: true,
         })
       },
       complete(data) {
-        console.log(data)
         if (callback) {
           callback(data)
         }
