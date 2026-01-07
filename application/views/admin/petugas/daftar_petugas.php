@@ -22,6 +22,7 @@
             <th>Nama Petugas</th>
             <th>Jenis Petugas</th>
             <th>Penempatan</th>
+            <th>Pengguna</th>
             <th>Aksi</th>
           </tr>
         </thead>
@@ -33,6 +34,7 @@
               <td><?= $p->nama_petugas ?></td>
               <td><?= $p->jenis_petugas ?></td>
               <td><?= $p->loket->nama_loket ?? null ?></td>
+              <td><?= $p->user->name . " (" . $p->user->identifier . ")" ?></td>
               <td>
                 <a class="btn btn-warning btn-sm" href="<?= base_url('/petugas_pelayanan/edit/' . Cypher::urlsafe_encrypt($p->id)) ?>">
                   <i class="fa fa-pencil"></i> Ubah</a>
