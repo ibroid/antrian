@@ -14,7 +14,8 @@ class Admin extends R_Controller
         "<script src=\"$flatpickerResourceJs\"></script>\n"
       ],
       "css" => [
-        "<link rel=\"stylesheet\"  type=\"text/css\" href=\"$flatpickerResourceCss\">"
+        "<link rel=\"stylesheet\"  type=\"text/css\" href=\"$flatpickerResourceCss\">",
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css\" />",
       ]
     ]);
 
@@ -22,6 +23,8 @@ class Admin extends R_Controller
       "js" => [
         "<script src=\"$baseUrl/assets/js/chart/apex-chart/apex-chart.js\"></script>
         <script src=\"$baseUrl/assets/js/chart/apex-chart/stock-prices.js\"></script>",
+        "<script type=\"text/javascript\" src=\"https://cdn.jsdelivr.net/momentjs/latest/moment.min.js\"></script>",
+        "<script type=\"text/javascript\" src=\"https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js\"></script>",
         "<script src=\"$baseUrl/package/htmx/htm.js\"></script>"
       ]
     ]);
@@ -45,5 +48,37 @@ class Admin extends R_Controller
       "title" => "Dashboard Admin",
       "nav" => $this->load->component("layout/nav_admin")
     ]);
+  }
+
+  public function monitoring_ptsp()
+  {
+    $this->load->page("admin/monitoring_ptsp")->layout("dashboard_layout", [
+      "title" => "Monitoring PTSP",
+      "nav" => $this->load->component("layout/nav_admin")
+    ]);
+  }
+
+  public function statistik_monitoring_loket()
+  {
+    $jenisPelayanan = JenisPelayanan::all();
+    // prindie($jenisPelayanan);
+    $q = AntrianPtsp::select('*');
+    if ($this->input->post('dateend')) {
+      $q->whereBetween('created_at', [
+        $this->input->post('datestart') . ' 00:00:00',
+        $this->input->post('dateend') . ' 23:59:59'
+      ]);
+    } else {
+      $q->whereDate('created_at', $this->input->post('datestart'));
+    }
+    $antrian = $q->get();
+    $dataContainer = $jenisPelayanan->map(function ($item) use ($antrian) {
+      $jenisAntrian = $antrian->where('jenis_pelayanan_id', $item->id);
+      return [
+        'nama_loket' => $item->nama_layanan,
+        'total_antrian' => $jenisAntrian->count(),
+      ];
+    });
+    $this->output->set_content_type('application/json')->set_output(json_encode($dataContainer));
   }
 }

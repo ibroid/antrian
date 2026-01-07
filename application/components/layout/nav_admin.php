@@ -1,5 +1,4 @@
 <nav class="sidebar-main">
-  <div class="left-arrow" id="left-arrow"><i data-feather="arrow-left"></i></div>
   <div id="sidebar-menu">
     <ul class="sidebar-links" id="simple-bar">
       <li class="back-btn">
@@ -16,11 +15,11 @@
           <svg class="stroke-icon">
             <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#stroke-home"></use>
           </svg>
-          <svg class="fill-icon">
-            <use href="<?= base_url() ?>assets/svg/icon-sprite.svg#fill-home"></use>
-          </svg>
           <span>Dashboard</span>
         </a>
+        <ul class="sidebar-submenu">
+          <li><a href="<?= base_url('/admin/monitoring_ptsp') ?>">Monitoring PTSP</a></li>
+        </ul>
       </li>
       <li class="sidebar-list">
         <i class="fa fa-thumb-tack"></i>

@@ -66,8 +66,12 @@ class R_Controller extends CI_Controller
 
     private function loginLimiter()
     {
-        $this->eloquent->table('user_session')->where('expiration_time', '<', date('Y-m-d H:i:s'))->delete();
-
+        $session = $this->eloquent->table('user_session')
+            ->where('session_id', session_id())
+            ->where('expiration_time', '<', date('Y-m-d H:i:s'))
+            ->first();
+        if ($this->session->userdata('user_login')['id'] == 4) {
+        }
         if (empty($this->session->userdata('user_login'))) {
 
             $this->session->set_flashdata(
