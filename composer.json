@@ -20,7 +20,8 @@
 		"pusher/pusher-php-server": "^7.2",
 		"phpoffice/phpword": "^1.2",
 		"claudye/php-crypter": "^1.0",
-		"hashids/hashids": "^4.1"
+		"hashids/hashids": "^4.1",
+		"chillerlan/php-qrcode": "^5.0"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

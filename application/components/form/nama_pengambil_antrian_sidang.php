@@ -1,6 +1,7 @@
 <form
-  hx-post=<?= base_url('/ambil/ambil_antrian_sidang?secondary=true') ?>"
-  hx-targe="#hasil-print"
+  hx-post="<?= base_url('/ambil/ambil_antrian_sidang?secondary=true&use_qr=true') ?>"
+  hx-target="#modal-sidang-content"
+  hx-on::before-request="$(this).html('<h4>Mohon Tunggu ...</h4>');"
   style="width: 500px;"
   class="my-3">
   <input type="hidden" name="perkara_id" value="<?= $data->perkara_id ?>">

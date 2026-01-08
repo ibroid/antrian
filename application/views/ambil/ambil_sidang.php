@@ -72,6 +72,7 @@
     /* Biar teksnya juga rapi di tengah */
   }
 </style>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
   <div class="container-fluid d-flex px-4">
@@ -224,7 +225,6 @@
                 class="btn btn-lg btn-primary"
                 data-bs-toggle="modal"
                 data-bs-target="#checkInModal"
-                hx-on::after-request="changeGlobalAudio('<?= base_url("/audio/intruction-antrian-sidang-1.mp3") ?>')"
                 hx-vals='{"sidang_id": <?= $ds->id ?>}'
                 hx-target="#checkInModal-body">
                 <p>Ambil Antrian</p>
@@ -256,7 +256,7 @@
   </div>
 </div>
 
-
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script>
   let checkInModal;
   window.addEventListener("load", function() {
@@ -293,7 +293,7 @@
       },
       success(html) {
         $("#checkInModal-body").html(html)
-        changeGlobalAudio("<?= base_url("/audio/intruction-antrian-sidang-1.mp3") ?>")
+        // changeGlobalAudio("<?= base_url("/audio/intruction-antrian-sidang-1.mp3") ?>")
       },
       error(err) {
         $("#checkInModal-body").html(err.responseText && err.message)
@@ -492,5 +492,3 @@
     }).showToast();
   })
 </script>
-
-<?= $this->session->flashdata('print_error') ?>

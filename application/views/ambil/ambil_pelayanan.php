@@ -675,7 +675,8 @@
         const {
           antrian,
           message,
-          print_status
+          print_status,
+          qr_code
         } = JSON.parse(data);
 
         (async function() {
@@ -709,6 +710,7 @@
         } else {
           swal_response['confirmButtonText'] = "Cetak melalui USB";
           swal_response['showCancelButton'] = true;
+          swal_response['html'] += "<img src='" + qr_code + "' alt='QR Code' /><br/>Silahkan Scan QR Code untuk mencetak antrian melalui smartphone anda.";
         }
 
         Swal.fire(swal_response).then((result) => {

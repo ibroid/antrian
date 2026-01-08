@@ -1,8 +1,7 @@
 <?php
 
 
-use Mike42\Escpos\Printer;
-use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
+use chillerlan\QRCode\{QRCode, QROptions};
 
 include_once APPPATH . "/traits/CetakThermalHelper.php";
 
@@ -93,12 +92,19 @@ class Ambil extends R_Controller
       $res = $this->print_antrian_sidang($data, $printer->ip_address, $printer->port);
       if ($res[0] == false) {
         $this->session->set_flashdata("print_error", $this->load->component("print_sidang_error", ["data" => $data]));
+        // $this->session->set_flashdata("qr_code", (new QRCode)->render(base_url("/mobile?antrian_sidang=" . Cypher::urlsafe_encrypt($data->id))));
       }
 
       if (isset($this->input->request_headers()["Hx-Request"])) {
-        header("HX-Trigger: after_print");
-        echo  $this->load->component(Constanta::ALERT_SUCCESS, ["message" => "Berhasil Mencetak Antrian"]);
-        exit;
+        if (isset($_GET["use_qr"])) {
+          $qr = (new QRCode)->render(base_url("/mobile?antrian_sidang=" . Cypher::urlsafe_encrypt($data->id)));
+          echo $this->load->component("ambil/show_qr_sidang", ["data" => $data, "qr_code" => $qr]);
+          exit;
+        } else {
+          header("HX-Trigger: after_print");
+          echo  $this->load->component(Constanta::ALERT_SUCCESS, ["message" => "Berhasil Mencetak Antrian"]);
+          exit;
+        }
       }
     } catch (\Throwable $th) {
       $this->session->set_flashdata("flash_error", $this->load->component(Constanta::ALERT_ERROR, ["message" => $th->getMessage()]));
@@ -159,13 +165,23 @@ class Ambil extends R_Controller
         $printer->port
       );
 
+      $qr = "";
+      if (!$cetak[0]) {
+        $data   = base_url("/mobile?antrian_ptsp=" . Cypher::urlsafe_encrypt($newAntrianPtsp->id));
+        $qr .= (new QRCode)->render($data);
+
+        // default output is a base64 encoded data URI
+        // printf('<img src="%s" alt="QR Code" />', $qrcode);
+      }
+
       $this->eloquent->connection("default")->commit();
 
       if ($this->input->request_headers()["Accept"] == "application/json") {
         echo json_encode([
           "message" => $cetak[1],
           "antrian" => $newAntrianPtsp,
-          "print_status" => $cetak[0]
+          "print_status" => $cetak[0],
+          "qr_code" => $qr
         ]);
         exit;
       }
