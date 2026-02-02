@@ -267,9 +267,9 @@ class Pengguna extends R_Controller
     R_Input::mustPost();
     try {
       $user = Users::findOrFail(Cypher::urlsafe_decrypt($user_id));
-      if (!password_verify(R_Input::pos('password_lama') . $user->salt, $user->password)) {
-        throw new Exception("Password Lama Salah", 1);
-      }
+      // if (!password_verify(R_Input::pos('password_lama') . $user->salt, $user->password)) {
+      //   throw new Exception("Password Lama Salah", 1);
+      // }
 
       $user->update([
         "password" => R_Input::pos('password_baru'),

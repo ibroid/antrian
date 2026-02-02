@@ -62,6 +62,11 @@ class Ambil extends R_Controller
 
       $data = AntrianPersidangan::where('nomor_perkara', R_Input::pos("nomor_perkara"))->whereDate('created_at', date("Y-m-d"))->first();
 
+      $nomor_ruang = R_Input::pos("nomor_ruang");
+      if (!$nomor_ruang) {
+        throw new Exception("Perkara ini belum ditentukan ruangan sidangnya. Silahkan Hubungi Panitera Pengganti");
+      }
+
       if (!$data) {
         $data = AntrianPersidangan::create(
           [
@@ -78,7 +83,6 @@ class Ambil extends R_Controller
       } else {
         $data->setKehadiranSetelahAmbilAntrian();
       }
-
 
       $this->session->set_flashdata("flash_alert", $this->load->component(Constanta::ALERT_SUCCESS, ["message" => "Nomor Antrian Anda : $data->nomor_urutan. Di ruangan : $data->nama_ruang. Silahkan Ambil Tiket Antrian nya"]));
 

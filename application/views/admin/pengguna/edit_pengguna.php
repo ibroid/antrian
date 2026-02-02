@@ -32,16 +32,17 @@
                 <option value="<?= $pengguna->petugas->id ?? '' ?>"><?= $pengguna->petugas->jenis_petugas ?? 'Tidak Dalam Tugas Pelayanan' ?></option>
                 <option value="-">--- Pilih hanya jika level adalah petugas ---</option>
                 <?php foreach ((function () {
-                  return [
-                    'Petugas PTSP',
-                    'Petugas Sidang',
-                    'Petugas Produk',
-                    'Kasir',
-                    'Petugas Antrian',
-                    'Petugas Akta',
-                    'Petugas Posbakum',
-                  ];
-                })() as $p) : ?>
+                    return [
+                      'Petugas PTSP',
+                      'Petugas Sidang',
+                      'Petugas Produk',
+                      'Kasir',
+                      'Petugas Antrian',
+                      'Petugas Akta',
+                      'Petugas Posbakum',
+                    ];
+                  })() as $p
+                ) : ?>
                   <option><?= $p ?></option>
                 <?php endforeach; ?>
               </select>
@@ -86,10 +87,6 @@
         </div>
         <div class="card-body">
           <form class="needs-validation" action="<?= base_url('pengguna/change_password/' . Cypher::urlsafe_encrypt($pengguna->id)) ?>" method="post" novalidate autocomplete="off">
-            <div class="form-group">
-              <label for="password_lama">Password Lama</label>
-              <input type="password" name="password_lama" id="password_lama" class="form-control" style="margin-bottom:10px;" required>
-            </div>
             <div class="form-group">
               <label for="password_baru">Password Baru</label>
               <input type="password" name="password_baru" id="password_baru" class="form-control" style="margin-bottom:10px;" required>
