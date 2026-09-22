@@ -140,7 +140,33 @@ class Ambil extends R_Controller
         if (date("H") >= 12) {
           throw new Exception("Maaf, Pendaftaran ditutup pukul 12 siang", 1);
         }
+
+        $currentTotalPendaftaran = AntrianPtsp::where([
+          "kode" => "A"
+        ])->whereDate("created_at", date("Y-m-d"))->count();
+
+        if (date('N') === '5') {
+          if ($currentTotalPendaftaran >= 15) {
+            throw new Exception("Maaf, jumlah pendaftaran hari ini sudah mencapai batas maksimum", 1);
+          }
+        } else {
+          if ($currentTotalPendaftaran >= 20) {
+            throw new Exception("Maaf, jumlah pendaftaran hari ini sudah mencapai batas maksimum", 1);
+          }
+        }
       }
+
+      if ($selectedLayanan->kode_layanan == "C") {
+        $currentTotalPosbakum = AntrianPtsp::where([
+          "kode" => "C"
+        ])->whereDate("created_at", date("Y-m-d"))->count();
+
+        if ($currentTotalPosbakum >= 30) {
+          throw new Exception("Maaf, jumlah Posbakum hari ini sudah mencapai batas maksimum", 1);
+        }
+      }
+
+
 
       $lastNomorAntrianPtsp = AntrianPtsp::where([
         "kode" => $selectedLayanan->kode_layanan

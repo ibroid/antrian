@@ -80,6 +80,10 @@ class RuangSidang extends R_Controller
       $dalamPanggilan->ruang_sidang = Eloquent::connection("sipp")->table("ruangan_sidang")->where("kode", $dalamPanggilan->nomor_ruang)->first();
 
       Broadcast::pusher()->trigger("antrian-channel", "update-persidangan", $dalamPanggilan);
+      $this->load->library('WebsocketEmiter');
+      $ok = $this->websocketemiter
+        ->endpoint('antrian_persidangan/emit')
+        ->emit('masuk_ke_ruang_sidang', $dalamPanggilan->antrian_persidangan->toArray());
 
       $this->session->set_flashdata("flash_alert", $this->load->component(
         Constanta::ALERT_SUCCESS,

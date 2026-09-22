@@ -1,41 +1,58 @@
-<div class="row">
-	<div class="col-xl-12 p-0">
-		<div class="login-card login-dark">
-			<div <?= $_ENV['IP_VALIDATOR'] == "1" ? null : "hidden" ?> id="loading-container" class="login-main">
-				<div class="text-center">
-					<h3>Mohon Tunggu ...</h3>
+<?php if (true) { ?>
+	<div class="row">
+		<div class="col-xl-12 p-0">
+			<div class="login-card login-dark">
+
+				<div id="login-container" <?= $_ENV['IP_VALIDATOR'] == "1" ? "hidden" : null ?> class="login-main text-center">
+					<h3>Sekarang Pindah Kesini ya bapak ibu 😁😁😁</h3>
+					<a href="https://admin-pasti.pajakartautara.id">Aplikasi Antrian Baru</a>
+
 				</div>
 			</div>
-			<div id="login-container" <?= $_ENV['IP_VALIDATOR'] == "1" ? "hidden" : null ?> class="login-main">
-				<?= $this->session->flashdata('flash_error') ?>
-				<form class="theme-form" autocomplete="off" method="POST" action="<?= base_url('auth/login') ?>">
-					<input type="hidden" value="<?= $_ENV['IP_VALIDATOR'] == "0" ? "192.168.0.111" : null ?>" id="input-hidden-ip" name="remote_addr">
-					<h4>Masuk Sebelum melanjutkan</h4>
-					<p>Aplikasi Antrian Persidangan dan Pelayanan <?= $this->sysconf->NamaPN ?></p>
-					<div class="form-group">
-						<label class="col-form-label">Identifier</label>
-						<input class="form-control" name="login[identifier]" type="text" required="Harap Isi Bidang ini" placeholder="username">
-					</div>
-					<div class="form-group">
-						<label class="col-form-label">Password</label>
-						<div class="form-input position-relative">
-							<input class="form-control" type="password" name="login[password]" required="" placeholder="*********">
-							<div class="show-hide"><span class="show"> </span></div>
-						</div>
-					</div>
-					<div class="form-group mb-0">
-						<div class="checkbox p-0">
-							<input id="checkbox1" name="login[remember]" type="checkbox">
-							<label class="text-muted" for="checkbox1">Remember password</label>
-						</div>
-						<button type="submit" class="btn btn-primary btn-block w-100">Sign in</button>
-					</div>
-				</form>
-			</div>
+			<p class=" text-center">Crafted By<a class="ms-2" target="_blank" href="https://mmaliki.my.id">Mmaliki</a></p>
 		</div>
-		<p class=" text-center">Crafted By<a class="ms-2" target="_blank" href="https://mmaliki.my.id">Mmaliki</a></p>
 	</div>
-</div>
+<?php } else { ?>
+	<div class="row">
+		<div class="col-xl-12 p-0">
+			<div class="login-card login-dark">
+				<div <?= $_ENV['IP_VALIDATOR'] == "1" ? null : "hidden" ?> id="loading-container" class="login-main">
+					<div class="text-center">
+						<h3>Mohon Tunggu ...</h3>
+					</div>
+				</div>
+				<div id="login-container" <?= $_ENV['IP_VALIDATOR'] == "1" ? "hidden" : null ?> class="login-main">
+					<?= $this->session->flashdata('flash_error') ?>
+					<form class="theme-form" autocomplete="off" method="POST" action="<?= base_url('auth/login') ?>">
+						<input type="hidden" value="<?= $_ENV['IP_VALIDATOR'] == "0" ? "192.168.0.111" : null ?>" id="input-hidden-ip" name="remote_addr">
+						<h4>Masuk Sebelum melanjutkan</h4>
+						<p>Aplikasi Antrian Persidangan dan Pelayanan <?= $this->sysconf->NamaPN ?></p>
+						<div class="form-group">
+							<label class="col-form-label">Identifier</label>
+							<input class="form-control" name="login[identifier]" type="text" required="Harap Isi Bidang ini" placeholder="username">
+						</div>
+						<div class="form-group">
+							<label class="col-form-label">Password</label>
+							<div class="form-input position-relative">
+								<input class="form-control" type="password" name="login[password]" required="" placeholder="*********">
+								<div class="show-hide"><span class="show"> </span></div>
+							</div>
+						</div>
+						<div class="form-group mb-0">
+							<div class="checkbox p-0">
+								<input id="checkbox1" name="login[remember]" type="checkbox">
+								<label class="text-muted" for="checkbox1">Remember password</label>
+							</div>
+							<button type="submit" class="btn btn-primary btn-block w-100">Sign in</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			<p class=" text-center">Crafted By<a class="ms-2" target="_blank" href="https://mmaliki.my.id">Mmaliki</a></p>
+		</div>
+	</div>
+<?php }  ?>
+
 
 <?php if ($_ENV['IP_VALIDATOR'] == "1") { ?>
 	<script>
